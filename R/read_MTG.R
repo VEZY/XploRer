@@ -30,6 +30,8 @@ read_MTG = function(file) {
   description = parse_MTG_description(MTG_file)
   features = parse_MTG_features(MTG_file)
 
+  MTG = parse_MTG_MTG(MTG,classes,description,features)
+
   decomp = c('NONE', 'FREE', 'CONNECTED', 'NOTCONNECTED', 'LINEAR', 'PURELINEAR', '<-LINEAR', '+-LINEAR')
 
 }
@@ -212,37 +214,149 @@ parse_MTG_features = function(MTG){
 #' @description Parse the MTG section from an MTG file
 #'
 #' @param MTG A pre-formatted MTG
-#' @param features the MTG features, see details
+#' @param classes The MTG classes
+#' @param description The MTG description
+#' @param features The MTG features
 #'
-#' @details If the features argument is empty, the function uses `[parse_MTG_features()]`
-#' to find it.
 #'
-#' @return A data.frame with the classes
+#' @return A parsed MTG
 #' @keywords internal
 #'
-parse_MTG_MTG = function(MTG,features=NULL){
-
-  if(is.null(features)){
-    features = parse_MTG_features(MTG)
-  }
+parse_MTG_MTG = function(MTG,classes,description,features){
 
   section_begin = grep("MTG:", MTG)
   section_header = split_at_blank(MTG[section_begin+1])
+
+  if(section_header[1] != "ENTITY-CODE" && section_header[1] != "TOPO"){
+    stop("Neither ENTITY-CODE or TOPO were found in the MTG header")
+  }
 
   common_features= section_header[-1] %in% features$NAME
   if(!all(common_features)){
     stop("unknown ENTITY-CODE in MTG: ",section_header[!common_features])
   }
 
-  if(!all(section_header %in% header)){
-    if(allow_empty && all(section_header == next_section)){
-      # The section is empty, no constraints:
-      return(data.frame())
-    }else{
-      stop("The header of the MTG ",section_name," section is different than:\n",
-           header)
-    }
-  }
+  nb_features = length(section_header[-1])
+  MTG_code = MTG[(section_begin+2):length(MTG)]
+  MTG= parse_MTG_lines(MTG_code,features)
 }
 
+
+#' Parse MTG lines
+#'
+#' @description Parse the MTG lines (called from [parse_MTG_MTG()])
+#'
+#' @param MTG A pre-formatted MTG
+#' @param classes The MTG classes
+#' @param description The MTG description
+#' @param features The MTG features
+#'
+#'
+#' @return A parsed MTG
+#' @keywords internal
+#'
+parse_MTG_lines = function(MTG_code,classes,description,features){
+
+  # Splitting columns:
+  splitted_MTG= strsplit(MTG_code,"[[:blank:]]")
+
+  # AMAPStudio always adds an unnecessary Scene as the root of the MTG,
+  # we ignore it:
+  if(grepl("/Scene",splitted_MTG[[1]])){
+    splitted_MTG= splitted_MTG[-1]
+    if(strtrim(splitted_MTG[[1]][1],1) == "^"){
+      splitted_MTG[[1]][1] = stringr::str_sub(splitted_MTG[[1]][1],2)
+    }
+  }
+
+  # Getting the root node:
+  root_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
+  root_element = parse_MTG_node(root_node)
+
+  root = data.tree::Node$new(name = root_element$name)
+
+  for(i in seq_len(length(splitted_MTG))){
+
+    node_data= splitted_MTG[[i]]
+    node_attr = parse_MTG_node_attr(node_data,features)
+
+    node= split_MTG_elements(node_data[1])[[1]]
+    lapply(node, parse_MTG_node)
+
+    if(node[1] == "^"){
+      # Here we have to define the case where the line continues relative to the
+      # last line of code given in the same column. Hence, we have to keep track
+      # of the last node position to be able to retreive it, and this for all newly
+      # defined column in the topology
+    }
+    # strsplit(x = "+A1/U1<U2+S1", "(?<=.)(?=[</+])",perl = TRUE)
+  }
+
+
+
+}
+
+#' Split MTG line
+#'
+#' @description Split the elements (e.g. inter-node, growth unit...) in an MTG line
+#'
+#' @param MTG_line An MTG line (e.g. "/P1/A1")
+#'
+#' @return A vector of elements (keeping their link, e.g. + or <)
+#'
+#' @keywords internal
+#'
+split_MTG_elements = function(MTG_line){
+  strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)
+}
+
+#' Parse MTG node attributes
+#'
+#' @description Parse the attributes names, values and type
+#'
+#' @param MTG_line An MTG line (e.g. "/P1/A1")
+#'
+#' @return A list of attributes
+#'
+#' @keywords internal
+#'
+parse_MTG_node_attr = function(node_data,features){
+  node_attr= vector(length = nrow(features))
+  node_attr = as.list(node_data[-1])
+  names(node_attr) = features[seq_along(node_data[-1]),1]
+  node_attr[stringr::str_length(node_attr) == 0] = NA
+
+  node_type = features[seq_along(node_data[-1]),2]
+
+  if(any(node_type == "INT")){
+    node_attr[node_type == "INT"] =
+      as.integer(node_attr[node_type == "INT"])
+  }
+
+  if(any(node_type == "REAL")){
+    node_attr[node_type == "REAL"] =
+      as.numeric(node_attr[node_type == "REAL"])
+  }
+  node_attr
+}
+
+#' Parse MTG node
+#'
+#' @description Parse MTG nodes (called from [parse_MTG_lines()])
+#'
+#' @param MTG_node An MTG node (e.g. "/Individual0")
+#'
+#' @return A parsed node in the form of a list of three:
+#' - the link
+#' - the name
+#' - and the index
+#'
+#' @keywords internal
+#'
+parse_MTG_node = function(MTG_node){
+  node = stringr::str_sub(MTG_node,c(1,2,-1),c(1,-2,-1))
+  node = setNames(as.list(node),c("link","name","index"))
+  node[3] = as.numeric(node[3])
+  node
+}
 

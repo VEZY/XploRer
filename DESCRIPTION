@@ -13,6 +13,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports: 
     stringr,
-    magrittr
+    magrittr,
+    data.tree
 Suggests: 
     testthat
