@@ -2,6 +2,7 @@
 
 export("%>%")
 export(read_MTG)
+export(split_at_blank)
 export(strip_comments)
 export(strip_empty_lines)
 importFrom(magrittr,"%>%")
