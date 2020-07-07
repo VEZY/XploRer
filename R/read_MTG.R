@@ -30,7 +30,7 @@ read_MTG = function(file) {
   description = parse_MTG_description(MTG_file)
   features = parse_MTG_features(MTG_file)
 
-  MTG = parse_MTG_MTG(MTG,classes,description,features)
+  MTG = parse_MTG_MTG(MTG_file,classes,description,features)
 
   decomp = c('NONE', 'FREE', 'CONNECTED', 'NOTCONNECTED', 'LINEAR', 'PURELINEAR', '<-LINEAR', '+-LINEAR')
 
@@ -238,7 +238,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 
   nb_features = length(section_header[-1])
   MTG_code = MTG[(section_begin+2):length(MTG)]
-  MTG= parse_MTG_lines(MTG_code,features)
+  MTG = parse_MTG_lines(MTG_code,classes, description, features)
 }
 
 
@@ -269,31 +269,79 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
     }
   }
 
+  # Initialize the unique node id:
+  node_id = 1
+
   # Getting the root node:
-  root_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
-  root_element = parse_MTG_node(root_node)
+  node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
+  node_1_element = parse_MTG_node(node_1_node)
+  node_1_attr= c(parse_MTG_node_attr(splitted_MTG[[1]],features),
+                 .link = node_1_element$link,
+                 .symbol = node_1_element$symbol,
+                 .index = node_1_element$index)
 
-  root = data.tree::Node$new(name = root_element$name)
+  # Initializing "last_node_column". Will be used to remember the last node
+  # built for any given column (help to connect new nodes to the right node)
+  max_columns = max(unlist(lapply(splitted_MTG, length)))
+  last_node_column = c(1,rep(NA_integer_, max_columns - 1))
 
-  for(i in seq_len(length(splitted_MTG))){
+  # Create the root node (the first one):
+  node_1 = data.tree::Node$new(name = paste0("node_",node_id))
 
+  # Assign the attributes to the root :
+  for(i in names(node_1_attr)){
+    node_1[[i]] = node_1_attr[[i]]
+  }
+
+  for(i in seq_len(length(splitted_MTG))[-1]){
+    node_id = node_id + 1
+    node_name = paste0("node_",node_id)
     node_data= splitted_MTG[[i]]
-    node_attr = parse_MTG_node_attr(node_data,features)
+    node_column = find_MTG_node_column(node_data)
+    node_data = node_data[node_column:length(node_data)]
 
-    node= split_MTG_elements(node_data[1])[[1]]
-    lapply(node, parse_MTG_node)
+    node = split_MTG_elements(node_data[1])[[1]]
+
+    node_element = lapply(node, parse_MTG_node)
+    node_attr= c(parse_MTG_node_attr(node_data,features),
+                 .link = node_1_element$link,
+                 .symbol = node_1_element$symbol,
+                 .index = node_1_element$index)
+
+    # Declare a new node as object (because the methods associated to nodes are OO):
+    assign(node_name, data.tree::Node$new(node_name))
 
     if(node[1] == "^"){
-      # Here we have to define the case where the line continues relative to the
-      # last line of code given in the same column. Hence, we have to keep track
-      # of the last node position to be able to retreive it, and this for all newly
-      # defined column in the topology
+      # The parent node is the last one built on the same column
+      parent_column = last_node_column[node_column]
+      if(is.na(parent_column)){
+        stop("Node defined at line ",i," uses the '<' notation but is the first on its column")
+      }
+    }else{
+      # The parent node is the last one built on column - 1.
+      parent_column = last_node_column[node_column - 1]
+
+      if(is.na(parent_column)){
+        stop("Can't find the parent of Node defined at line ",i,
+             ". It may be defined on a column that is too far right.")
+      }
+    }
+
+    parent_node = paste0("node_",parent_column)
+
+    last_node_column[node_column] = node_id
+
+    # Call the "AddChild" method from the parent to add our new node as its child:
+    eval(parse(text=parent_node))[["AddChild"]](node_name)
+
+    # Assign the attributes to the current node :
+    for(j in names(node_attr)){
+      assign(j, node_attr[[j]], j, eval(parse(text=node_name)))
     }
     # strsplit(x = "+A1/U1<U2+S1", "(?<=.)(?=[</+])",perl = TRUE)
   }
 
-
-
+  node_1
 }
 
 #' Split MTG line
@@ -322,11 +370,14 @@ split_MTG_elements = function(MTG_line){
 #'
 parse_MTG_node_attr = function(node_data,features){
   node_attr= vector(length = nrow(features))
-  node_attr = as.list(node_data[-1])
-  names(node_attr) = features[seq_along(node_data[-1]),1]
+  node_data_attr = node_data[-c(1,2)]
+  node_attr = as.list(node_data_attr)
+  # NB: -c(1,2) because the first one is the node topology, and the second one
+  # is used to separate the topology from the attributes
+  names(node_attr) = features[seq_along(node_data_attr),1]
   node_attr[stringr::str_length(node_attr) == 0] = NA
 
-  node_type = features[seq_along(node_data[-1]),2]
+  node_type = features[seq_along(node_data_attr),2]
 
   if(any(node_type == "INT")){
     node_attr[node_type == "INT"] =
@@ -348,15 +399,40 @@ parse_MTG_node_attr = function(node_data,features){
 #'
 #' @return A parsed node in the form of a list of three:
 #' - the link
-#' - the name
+#' - the symbol
 #' - and the index
 #'
 #' @keywords internal
 #'
 parse_MTG_node = function(MTG_node){
   node = stringr::str_sub(MTG_node,c(1,2,-1),c(1,-2,-1))
-  node = setNames(as.list(node),c("link","name","index"))
+  node = setNames(as.list(node),c("link","symbol","index"))
   node[3] = as.numeric(node[3])
   node
 }
 
+
+
+
+#' Find MTG node column
+#'
+#' @description Find the position of a node in the MTG (which column it belongs to)
+#'
+#' @param MTG_node An MTG node (e.g. "/Individual0")
+#'
+#' @return A parsed node in the form of a list of three:
+#' - the link
+#' - the name
+#' - and the index
+#'
+#' @keywords internal
+#'
+#' @examples
+#' # First column (last column is missing):
+#' find_MTG_node_column(c("/P1","/A1",""))
+#' # Node starts at column 2:
+#' find_MTG_node_column(c("","/U1","<U2"))
+#'
+find_MTG_node_column = function(MTG_node){
+  which(stringr::str_length(MTG_node) > 0)[1]
+}

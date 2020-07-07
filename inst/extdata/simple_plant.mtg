@@ -10,9 +10,9 @@ Leaf	2	FREE	FREE	IMPLICIT
 Axis	2	FREE	FREE	IMPLICIT # you can add comments anywhere
 
 DESCRIPTION:
-LEFT    RIGHT   RELTYPE MAX
-Internode   Internode,Leaf +   ?
-Internode   Internode,Leaf <   ?
+LEFT	RIGHT	RELTYPE	MAX
+Internode	Internode,Leaf	+	?
+Internode	Internode,Leaf	<	?
 
 FEATURES:
 NAME	TYPE

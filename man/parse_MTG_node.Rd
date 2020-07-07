@@ -13,7 +13,7 @@ parse_MTG_node(MTG_node)
 A parsed node in the form of a list of three:
 \itemize{
 \item the link
-\item the name
+\item the symbol
 \item and the index
 }
 }
