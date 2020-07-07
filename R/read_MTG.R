@@ -7,7 +7,8 @@
 #' [OpenAlea webpage](http://openalea.gforge.inria.fr/doc/vplants/newmtg/doc/_build/html/user/intro.html#mtg-a-plant-architecture-databases)
 #'  for further details.
 #'
-#' @return An MTG tree graph
+#' @return A named list of four sections: the MTG classes, description, features,
+#' and MTG. The MTG is a [data.tree] data structure.
 #'
 #' @export
 #'
@@ -32,8 +33,8 @@ read_MTG = function(file) {
 
   MTG = parse_MTG_MTG(MTG_file,classes,description,features)
 
-  decomp = c('NONE', 'FREE', 'CONNECTED', 'NOTCONNECTED', 'LINEAR', 'PURELINEAR', '<-LINEAR', '+-LINEAR')
-
+  return(list(classes = classes, description = description,
+              features = features,MTG = MTG))
 }
 
 #' Check sections from MTG
@@ -182,7 +183,9 @@ parse_MTG_description = function(MTG){
   description_df= parse_MTG_section(MTG,"DESCRIPTION:",
                                    c("LEFT", "RIGHT", "RELTYPE", "MAX"),
                                    "FEATURES:",TRUE)
-
+  if(nrow(description_df) == 0){
+    return(description_df)
+  }
   description_df$RIGHT= strsplit(description_df$RIGHT, ",")
   if(!all(description_df$RELTYPE %in% c("+","<"))){
     stop("Unknown relation type(s): ",
@@ -275,7 +278,7 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
   # Getting the root node:
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
-  node_1_attr= c(parse_MTG_node_attr(splitted_MTG[[1]],features),
+  node_1_attr= c(parse_MTG_node_attr(node_data = splitted_MTG[[1]],features),
                  .link = node_1_element$link,
                  .symbol = node_1_element$symbol,
                  .index = node_1_element$index)
@@ -309,7 +312,7 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
                  .index = node_1_element$index)
 
     # Declare a new node as object (because the methods associated to nodes are OO):
-    assign(node_name, data.tree::Node$new(node_name))
+    # assign(node_name, data.tree::Node$new(node_name))
 
     if(node[1] == "^"){
       # The parent node is the last one built on the same column
@@ -332,7 +335,8 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
     last_node_column[node_column] = node_id
 
     # Call the "AddChild" method from the parent to add our new node as its child:
-    eval(parse(text=parent_node))[["AddChild"]](node_name)
+    # eval(parse(text=parent_node))[["AddChild"]](node_name)
+    assign(node_name,eval(parse(text=parent_node))[["AddChild"]](node_name))
 
     # Assign the attributes to the current node :
     for(j in names(node_attr)){
@@ -405,6 +409,9 @@ parse_MTG_node_attr = function(node_data,features){
 #' @keywords internal
 #'
 parse_MTG_node = function(MTG_node){
+  if(MTG_node == "^"){
+    return("^")
+  }
   node = stringr::str_sub(MTG_node,c(1,2,-1),c(1,-2,-1))
   node = setNames(as.list(node),c("link","symbol","index"))
   node[3] = as.numeric(node[3])

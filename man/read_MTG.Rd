@@ -10,7 +10,8 @@ read_MTG(file)
 \item{file}{The path to the MTG file}
 }
 \value{
-An MTG tree graph
+A named list of four sections: the MTG classes, description, features,
+and MTG. The MTG is a \link{data.tree} data structure.
 }
 \description{
 Read an MTG file.
