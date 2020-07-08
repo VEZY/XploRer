@@ -305,11 +305,22 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
 
     node = split_MTG_elements(node_data[1])[[1]]
 
-    node_element = lapply(node, parse_MTG_node)
-    node_attr= c(parse_MTG_node_attr(node_data,features),
-                 .link = node_1_element$link,
-                 .symbol = node_1_element$symbol,
-                 .index = node_1_element$index)
+    for(k in seq_along(node)){
+      if(node[k]$link %in% c("^","<.","+.")){
+        next()
+      }
+      node_element = parse_MTG_node(node[k])
+
+      node_attr = parse_MTG_node_attr(node_data,features)
+
+      # NB: if several nodes are declared on the same line, the attributes are defined
+      # for the last node only
+      node_attr= c(node_attr,
+                   .link = node_element$link,
+                   .symbol = node_element$symbol,
+                   .index = node_element$index)
+
+    }
 
     # Declare a new node as object (because the methods associated to nodes are OO):
     # assign(node_name, data.tree::Node$new(node_name))
@@ -357,10 +368,55 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
 #' @return A vector of elements (keeping their link, e.g. + or <)
 #'
 #' @keywords internal
+#' @examples
+#' split_MTG_elements("/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100")
 #'
 split_MTG_elements = function(MTG_line){
-  strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)
+  # MTG_line = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100", "(?<=.)(?=[</+])",perl = TRUE)[[1]]
+  MTG_line =  strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)[[1]]
+
+  expand_node(MTG_line)
 }
+
+#' Expand MTG line
+#'
+#' @description Expand the elements denoted by the syntactic sugar "<<", "<.<", "++" or "+.+"
+#'
+#' @param x A split MTG line (e.g. c("/P1","/A1"))
+#'
+#' @return A split MTG line with explicitly all nodes
+#'
+#' @keywords internal
+#' @examples
+#' MTG_line = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
+#' "(?<=.)(?=[</+])",perl = TRUE)[[1]]
+#' expand_node(MTG_line)
+#'
+expand_node = function(x){
+  node_to_expand = which(x %in% c("<","<.","+","+."))
+
+  if(length(node_to_expand) > 0){
+    MTG_node_parsed = lapply(x, function(x) parse_MTG_node(x))
+    symbol = unlist(lapply(MTG_node_parsed, function(x) x$symbol))
+    index = unlist(lapply(MTG_node_parsed, function(x) x$index))
+    link = unlist(lapply(MTG_node_parsed, function(x) x$link))
+
+    for(i in seq_along(x[node_to_expand])){
+      expanded_index =
+        (index[node_to_expand - 1][i]+1):
+        (index[node_to_expand + 1][i] - 1)
+
+      expanded_nodes = paste0(gsub("\\.","",link[node_to_expand[i]]),
+                              symbol[node_to_expand[i] - 1],
+                              expanded_index)
+
+      x[node_to_expand[i]] = list(expanded_nodes)
+    }
+    x = unlist(x)
+  }
+  x
+}
+
 
 #' Parse MTG node attributes
 #'
@@ -409,13 +465,13 @@ parse_MTG_node_attr = function(node_data,features){
 #' @keywords internal
 #'
 parse_MTG_node = function(MTG_node){
-  if(MTG_node == "^"){
-    return("^")
+  if(MTG_node %in% c("^","<.","+.")){
+    return(list(link = MTG_node, symbol = NA, index = NA))
   }
-  node = stringr::str_sub(MTG_node,c(1,2,-1),c(1,-2,-1))
-  node = setNames(as.list(node),c("link","symbol","index"))
-  node[3] = as.numeric(node[3])
-  node
+  link = stringr::str_sub(MTG_node,1,1)
+  symbol = gsub("[^[:alpha:]]","",MTG_node)
+  index = gsub("[^[:digit:]]","",MTG_node)
+  list(link = link, symbol = symbol, index = as.numeric(index))
 }
 
 
