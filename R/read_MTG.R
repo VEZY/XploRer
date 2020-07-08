@@ -272,9 +272,6 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
     }
   }
 
-  # Initialize the unique node id:
-  node_id = 1
-
   # Getting the root node:
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
@@ -289,38 +286,26 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
   last_node_column = c(1,rep(NA_integer_, max_columns - 1))
 
   # Create the root node (the first one):
-  node_1 = data.tree::Node$new(name = paste0("node_",node_id))
+  node_1 = data.tree::Node$new(name = paste0("node_",1))
 
   # Assign the attributes to the root :
   for(i in names(node_1_attr)){
     node_1[[i]] = node_1_attr[[i]]
   }
 
+  node_id = 2
+
   for(i in seq_len(length(splitted_MTG))[-1]){
-    node_id = node_id + 1
     node_name = paste0("node_",node_id)
     node_data= splitted_MTG[[i]]
     node_column = find_MTG_node_column(node_data)
     node_data = node_data[node_column:length(node_data)]
 
-    node = split_MTG_elements(node_data[1])[[1]]
+    node = split_MTG_elements(node_data[1])
+    node = expand_node(node)
 
-    for(k in seq_along(node)){
-      if(node[k]$link %in% c("^","<.","+.")){
-        next()
-      }
-      node_element = parse_MTG_node(node[k])
-
-      node_attr = parse_MTG_node_attr(node_data,features)
-
-      # NB: if several nodes are declared on the same line, the attributes are defined
-      # for the last node only
-      node_attr= c(node_attr,
-                   .link = node_element$link,
-                   .symbol = node_element$symbol,
-                   .index = node_element$index)
-
-    }
+    # Get node attributes:
+    node_attr = parse_MTG_node_attr(node_data,features)
 
     # Declare a new node as object (because the methods associated to nodes are OO):
     # assign(node_name, data.tree::Node$new(node_name))
@@ -341,19 +326,40 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
       }
     }
 
-    parent_node = paste0("node_",parent_column)
+    building_nodes = seq_along(node)[node != "^"]
+    for(k in building_nodes){
+      node_element = parse_MTG_node(node[k])
 
-    last_node_column[node_column] = node_id
+      # NB: if several nodes are declared on the same line, the attributes are defined
+      # for the last node only, unless "<.<" or "+.+" are used
+      if(k == length(node) || k %in% attr(x,"shared")){
+        node_k_attr= c(node_attr,
+                       .link = node_element$link,
+                       .symbol = node_element$symbol,
+                       .index = node_element$index)
+      }else{
+        node_k_attr= c(.link = node_element$link,
+                       .symbol = node_element$symbol,
+                       .index = node_element$index)
+      }
+      if(k == min(building_nodes)){
+        parent_node = paste0("node_",parent_column)
+      }else{
+        parent_node = paste0("node_",node_id-1)
+      }
+      node_name = paste0("node_",node_id)
 
-    # Call the "AddChild" method from the parent to add our new node as its child:
-    # eval(parse(text=parent_node))[["AddChild"]](node_name)
-    assign(node_name,eval(parse(text=parent_node))[["AddChild"]](node_name))
+      # Call the "AddChild" method from the parent to add our new node as its child:
+      # eval(parse(text=parent_node))[["AddChild"]](node_name)
+      assign(node_name,eval(parse(text=parent_node))[["AddChild"]](node_name))
+      # Assign the attributes to the current node :
+      for(j in names(node_attr)){
+        assign(j, node_attr[[j]], j, eval(parse(text=node_name)))
+      }
 
-    # Assign the attributes to the current node :
-    for(j in names(node_attr)){
-      assign(j, node_attr[[j]], j, eval(parse(text=node_name)))
+      last_node_column[node_column] = node_id
+      node_id = node_id + 1
     }
-    # strsplit(x = "+A1/U1<U2+S1", "(?<=.)(?=[</+])",perl = TRUE)
   }
 
   node_1
@@ -372,10 +378,7 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
 #' split_MTG_elements("/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100")
 #'
 split_MTG_elements = function(MTG_line){
-  # MTG_line = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100", "(?<=.)(?=[</+])",perl = TRUE)[[1]]
-  MTG_line =  strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)[[1]]
-
-  expand_node(MTG_line)
+  strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)[[1]]
 }
 
 #' Expand MTG line
@@ -388,11 +391,16 @@ split_MTG_elements = function(MTG_line){
 #'
 #' @keywords internal
 #' @examples
-#' MTG_line = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
+#' x = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
 #' "(?<=.)(?=[</+])",perl = TRUE)[[1]]
-#' expand_node(MTG_line)
+#' expand_node(x)
 #'
 expand_node = function(x){
+  if(any(x %in% c("<.","+."))){
+    shared = TRUE
+  }else{
+    shared = FALSE
+  }
   node_to_expand = which(x %in% c("<","<.","+","+."))
 
   if(length(node_to_expand) > 0){
@@ -412,11 +420,20 @@ expand_node = function(x){
 
       x[node_to_expand[i]] = list(expanded_nodes)
     }
+    if(shared){
+      shared = unlist(c(x[node_to_expand[i] - 1], x[node_to_expand[i] + 1]))
+    }
     x = unlist(x)
+  }
+
+  shared_index = which(x %in% shared)
+  if(length(shared_index) > 0){
+    attr(x,"shared") = seq(shared_index[1],shared_index[2])
+  }else{
+    attr(x,"shared") = NULL
   }
   x
 }
-
 
 #' Parse MTG node attributes
 #'

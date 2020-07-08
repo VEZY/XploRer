@@ -2,23 +2,23 @@
 % Please edit documentation in R/read_MTG.R
 \name{expand_node}
 \alias{expand_node}
-\title{Split MTG line}
+\title{Expand MTG line}
 \usage{
-expand_node(MTG_line)
+expand_node(x)
 }
 \arguments{
-\item{MTG_line}{An MTG line (e.g. "/P1/A1")}
+\item{x}{A split MTG line (e.g. c("/P1","/A1"))}
 }
 \value{
-A vector of elements (keeping their link, e.g. + or <)
+A split MTG line with explicitly all nodes
 }
 \description{
-Split the elements (e.g. inter-node, growth unit...) in an MTG line
+Expand the elements denoted by the syntactic sugar "<<", "<.<", "++" or "+.+"
 }
 \examples{
-MTG_line = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
+x = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
 "(?<=.)(?=[</+])",perl = TRUE)[[1]]
-expand_node(MTG_line)
+expand_node(x)
 
 }
 \keyword{internal}
