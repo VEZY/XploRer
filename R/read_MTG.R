@@ -332,7 +332,7 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
 
       # NB: if several nodes are declared on the same line, the attributes are defined
       # for the last node only, unless "<.<" or "+.+" are used
-      if(k == length(node) || k %in% attr(x,"shared")){
+      if(k == length(node) || k %in% attr(node,"shared")){
         node_k_attr= c(node_attr,
                        .link = node_element$link,
                        .symbol = node_element$symbol,
@@ -353,8 +353,8 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
       # eval(parse(text=parent_node))[["AddChild"]](node_name)
       assign(node_name,eval(parse(text=parent_node))[["AddChild"]](node_name))
       # Assign the attributes to the current node :
-      for(j in names(node_attr)){
-        assign(j, node_attr[[j]], j, eval(parse(text=node_name)))
+      for(j in names(node_k_attr)){
+        assign(j, node_k_attr[[j]], j, eval(parse(text=node_name)))
       }
 
       last_node_column[node_column] = node_id
@@ -447,7 +447,7 @@ expand_node = function(x){
 #'
 parse_MTG_node_attr = function(node_data,features){
   node_attr= vector(length = nrow(features))
-  node_data_attr = node_data[-c(1,2)]
+  node_data_attr = node_data[-1]
   node_attr = as.list(node_data_attr)
   # NB: -c(1,2) because the first one is the node topology, and the second one
   # is used to separate the topology from the attributes
