@@ -4,9 +4,13 @@
 \alias{parse_MTG_node_attr}
 \title{Parse MTG node attributes}
 \usage{
-parse_MTG_node_attr(node_data, features)
+parse_MTG_node_attr(node_data, features, attr_column_start)
 }
 \arguments{
+\item{features}{The features data.frame}
+
+\item{attr_column_start}{The index of the column of the first attribute}
+
 \item{MTG_line}{An MTG line (e.g. "/P1/A1")}
 }
 \value{

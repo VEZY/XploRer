@@ -32,9 +32,9 @@ strip_empty_lines = function(str){
   str[!grepl("^[[:blank:]]*$",str)]
 }
 
-#' Split string at blank
+#' Split string at tab
 #'
-#' @description Split a string using blank characters (i.e. one or more tab or space)
+#' @description Split a string using tabulation characters
 #'
 #' @param str A character string
 #'
@@ -42,9 +42,8 @@ strip_empty_lines = function(str){
 #' @export
 #'
 #' @examples
-#' split_at_blank(c("word1 word2   word3  word4"))
-#' # NB: first separation uses one space, second two spaces, third a tabulation
-split_at_blank = function(str){
-  strsplit(str, "\t+")[[1]]
+#' split_at_tab(c("word1\tword2"))
+split_at_tab = function(str){
+  strsplit(str, "\t")
 }
 

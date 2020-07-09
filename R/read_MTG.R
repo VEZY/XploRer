@@ -98,7 +98,7 @@ check_sections = function(MTG_file){
 parse_MTG_section = function(MTG,section_name,header,next_section,allow_empty){
   section_begin = grep(section_name, MTG)
 
-  section_header = split_at_blank(MTG[section_begin+1])
+  section_header = strsplit(MTG[section_begin+1], "\t+")[[1]]
 
   if(!all(section_header %in% header)){
     if(allow_empty && all(section_header == next_section)){
@@ -228,40 +228,23 @@ parse_MTG_features = function(MTG){
 parse_MTG_MTG = function(MTG,classes,description,features){
 
   section_begin = grep("MTG", MTG)
-  section_header = split_at_blank(MTG[section_begin+1])
+  section_header = split_at_tab(MTG[section_begin+1])[[1]]
 
   if(section_header[1] != "ENTITY-CODE" && section_header[1] != "TOPO"){
     stop("Neither ENTITY-CODE or TOPO were found in the MTG header")
   }
 
-  common_features= section_header[-1] %in% features$NAME
+  common_features= section_header[section_header != ""][-1] %in% features$NAME
   if(!all(common_features)){
     stop("unknown ENTITY-CODE in MTG: ",section_header[!common_features])
   }
 
-  nb_features = length(section_header[-1])
+  attr_column_start = which(section_header != "")[-1][1]
+
   MTG_code = MTG[(section_begin+2):length(MTG)]
-  MTG = parse_MTG_lines(MTG_code,classes, description, features)
-}
-
-
-#' Parse MTG lines
-#'
-#' @description Parse the MTG lines (called from [parse_MTG_MTG()])
-#'
-#' @param MTG A pre-formatted MTG
-#' @param classes The MTG classes
-#' @param description The MTG description
-#' @param features The MTG features
-#'
-#'
-#' @return A parsed MTG
-#' @keywords internal
-#'
-parse_MTG_lines = function(MTG_code,classes,description,features){
 
   # Splitting columns:
-  splitted_MTG= strsplit(MTG_code,"\t+")
+  splitted_MTG= strsplit(MTG_code,"\t")
 
   # AMAPStudio always adds an unnecessary Scene as the root of the MTG,
   # we ignore it:
@@ -275,7 +258,8 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
   # Getting the root node:
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
-  node_1_attr= c(parse_MTG_node_attr(node_data = splitted_MTG[[1]],features),
+  node_1_attr= c(parse_MTG_node_attr(node_data = splitted_MTG[[1]],features,
+                                     attr_column_start),
                  .link = node_1_element$link,
                  .symbol = node_1_element$symbol,
                  .index = node_1_element$index)
@@ -301,11 +285,12 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
     node_column = find_MTG_node_column(node_data)
     node_data = node_data[node_column:length(node_data)]
 
+    node_attr_column_start = attr_column_start - node_column + 1
     node = split_MTG_elements(node_data[1])
     node = expand_node(node)
 
     # Get node attributes:
-    node_attr = parse_MTG_node_attr(node_data,features)
+    node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start)
 
     # Declare a new node as object (because the methods associated to nodes are OO):
     # assign(node_name, data.tree::Node$new(node_name))
@@ -440,14 +425,16 @@ expand_node = function(x){
 #' @description Parse the attributes names, values and type
 #'
 #' @param MTG_line An MTG line (e.g. "/P1/A1")
+#' @param features The features data.frame
+#' @param attr_column_start The index of the column of the first attribute
 #'
 #' @return A list of attributes
 #'
 #' @keywords internal
 #'
-parse_MTG_node_attr = function(node_data,features){
+parse_MTG_node_attr = function(node_data,features,attr_column_start){
   node_attr= vector(length = nrow(features))
-  node_data_attr = node_data[-1]
+  node_data_attr = node_data[-c(1:(attr_column_start-1))]
   node_attr = as.list(node_data_attr)
   # NB: -c(1,2) because the first one is the node topology, and the second one
   # is used to separate the topology from the attributes
