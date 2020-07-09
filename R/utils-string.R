@@ -45,6 +45,6 @@ strip_empty_lines = function(str){
 #' split_at_blank(c("word1 word2   word3  word4"))
 #' # NB: first separation uses one space, second two spaces, third a tabulation
 split_at_blank = function(str){
-  strsplit(str, "[[:blank:]]+")[[1]]
+  strsplit(str, "\t+")[[1]]
 }
 

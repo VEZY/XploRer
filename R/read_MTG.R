@@ -261,7 +261,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 parse_MTG_lines = function(MTG_code,classes,description,features){
 
   # Splitting columns:
-  splitted_MTG= strsplit(MTG_code,"[[:blank:]]")
+  splitted_MTG= strsplit(MTG_code,"\t+")
 
   # AMAPStudio always adds an unnecessary Scene as the root of the MTG,
   # we ignore it:
@@ -457,11 +457,16 @@ parse_MTG_node_attr = function(node_data,features){
   node_type = features[seq_along(node_data_attr),2]
 
   if(any(node_type == "INT")){
+    node_attr[node_type == "INT" && node_attr == ""] =
+      NA_integer_
     node_attr[node_type == "INT"] =
       as.integer(node_attr[node_type == "INT"])
   }
 
   if(any(node_type == "REAL")){
+    node_attr[node_type == "REAL" && node_attr == ""] =
+      NA_real_
+
     node_attr[node_type == "REAL"] =
       as.numeric(node_attr[node_type == "REAL"])
   }
