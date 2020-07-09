@@ -227,7 +227,7 @@ parse_MTG_features = function(MTG){
 #'
 parse_MTG_MTG = function(MTG,classes,description,features){
 
-  section_begin = grep("MTG:", MTG)
+  section_begin = grep("MTG", MTG)
   section_header = split_at_blank(MTG[section_begin+1])
 
   if(section_header[1] != "ENTITY-CODE" && section_header[1] != "TOPO"){
@@ -265,7 +265,7 @@ parse_MTG_lines = function(MTG_code,classes,description,features){
 
   # AMAPStudio always adds an unnecessary Scene as the root of the MTG,
   # we ignore it:
-  if(grepl("/Scene",splitted_MTG[[1]])){
+  if(grepl("/Scene",splitted_MTG[[1]][1])){
     splitted_MTG= splitted_MTG[-1]
     if(strtrim(splitted_MTG[[1]][1],1) == "^"){
       splitted_MTG[[1]][1] = stringr::str_sub(splitted_MTG[[1]][1],2)
