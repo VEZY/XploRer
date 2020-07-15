@@ -4,12 +4,14 @@
 \alias{plot_MTG}
 \title{Plot an MTG}
 \usage{
-plot_MTG(MTG, scale = NULL)
+plot_MTG(MTG, scale = NULL, angle = 45)
 }
 \arguments{
 \item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
 
 \item{scale}{The scale required for plotting}
+
+\item{angle}{Insertion angle when branching}
 }
 \value{
 A ggplot of the MTG
