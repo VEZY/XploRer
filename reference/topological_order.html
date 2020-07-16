@@ -115,7 +115,7 @@
     <p>Compute the topological order of a tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>topological_order</span>(<span class='no'>MTG</span>)</pre>
+    <pre class="usage"><span class='fu'>topological_order</span>(<span class='no'>MTG</span>, <span class='kw'>ascend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -123,6 +123,10 @@
     <tr>
       <th>MTG</th>
       <td><p>An MTG tree as from <code><a href='read_MTG.html'>read_MTG()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>ascend</th>
+      <td><p>Is the order computed from the base (<code>TRUE</code>), or the tip (<code>FALSE</code>) ?</p></td>
     </tr>
     </table>
 
@@ -136,12 +140,12 @@ topological order of each node</p>
 <span class='no'>MTG</span><span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)
 <span class='fu'>topological_order</span>(<span class='no'>MTG</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"topological_order"</span>)</div><div class='output co'>#&gt;                levelName topological_order
-#&gt; 1 node_1                                 1
-#&gt; 2  °--node_2                             1
-#&gt; 3      °--node_3                         1
-#&gt; 4          ¦--node_4                     2
-#&gt; 5          °--node_5                     1
-#&gt; 6              °--node_6                 2</div></pre>
+#&gt; 1 node_1                                 2
+#&gt; 2  °--node_2                             2
+#&gt; 3      °--node_3                         2
+#&gt; 4          ¦--node_4                     1
+#&gt; 5          °--node_5                     2
+#&gt; 6              °--node_6                 1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
