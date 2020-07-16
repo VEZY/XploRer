@@ -4,10 +4,12 @@
 \alias{topological_order}
 \title{Topological order}
 \usage{
-topological_order(MTG)
+topological_order(MTG, ascend = FALSE)
 }
 \arguments{
 \item{MTG}{An MTG tree as from \code{\link[=read_MTG]{read_MTG()}}}
+
+\item{ascend}{Is the order computed from the base (\code{TRUE}), or the tip (\code{FALSE}) ?}
 }
 \value{
 Nothing, update the values of the MTG in-place. The MTG is enriched with the

@@ -21,6 +21,12 @@ A ggplot of the MTG
 \description{
 Plot an MTG
 }
+\details{
+The function needs the topological orders as attributes in the MTG. If they
+are not present, it uses \code{\link[=topological_order]{topological_order()}} to compute it with descending order.
+If you need ascending order, please use \code{topological_order(MTG, ascend = TRUE)} before
+plotting.
+}
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG= read_MTG(filepath)
