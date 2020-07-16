@@ -4,7 +4,7 @@
 \name{XploRer-package}
 \alias{XploRer}
 \alias{XploRer-package}
-\title{XploRer: What the Package Does (Title Case)}
+\title{XploRer: Read, Write, Plot and Analyze MTG (Mutli-scale Tree Graph) files}
 \description{
 More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.

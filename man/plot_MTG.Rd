@@ -12,6 +12,8 @@ plot_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE)
 \item{scale}{The scale required for plotting}
 
 \item{angle}{Insertion angle when branching}
+
+\item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
 }
 \value{
 A ggplot of the MTG
@@ -22,6 +24,6 @@ Plot an MTG
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG= read_MTG(filepath)
-plot(MTG)
+plot_MTG(MTG)
 
 }

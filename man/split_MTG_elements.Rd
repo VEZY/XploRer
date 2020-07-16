@@ -16,7 +16,8 @@ A vector of elements (keeping their link, e.g. + or <)
 Split the elements (e.g. inter-node, growth unit...) in an MTG line
 }
 \examples{
+\donttest{
 split_MTG_elements("/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100")
-
+}
 }
 \keyword{internal}

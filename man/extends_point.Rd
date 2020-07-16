@@ -24,6 +24,8 @@ The new coordinates for the point
 Extends coordinate
 }
 \examples{
-rotate_point(0,0,1,0,90)
+\donttest{
+extends_point(0,0,1,0,90)
+}
 }
 \keyword{internal}

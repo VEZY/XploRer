@@ -3,14 +3,17 @@
 #' @param MTG An MTG, as from [read_MTG()]
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
+#' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
 #'
 #' @return A ggplot of the MTG
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
-#' plot(MTG)
+#' plot_MTG(MTG)
 #'
 plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
   # NB: scale will be used to add information about nodes only for the nodes of the
@@ -22,7 +25,7 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
   }
 
   tree_df =
-    ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index", "topological_order")%>%
+    data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index", "topological_order")%>%
     dplyr::left_join(data.frame(SYMBOL = MTG$classes$SYMBOL, SCALE = MTG$classes$SCALE,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
@@ -78,10 +81,10 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
     tree_df$y_from[i] = tree_df$y[tree_df$from_index[i]]
   }
 
-  ggplot2::ggplot(tree_df, ggplot2::aes(x = x, y = y))+
+  ggplot2::ggplot(tree_df, ggplot2::aes(x = .data$x, y = .data$y))+
     ggplot2::geom_point()+
-    ggplot2::geom_segment(ggplot2::aes(xend = x_from, yend = y_from,
-                                       color = as.factor(topological_order)))+
+    ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from,
+                                       color = as.factor(.data$topological_order)))+
     ggplot2::labs(color = "Topological order")
 }
 
@@ -99,6 +102,7 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
 #' @keywords internal
 #'
 #' @examples
+#' \donttest{
 #' rotate_point(0,0,1,0,90)
 #'
 #' # Example with a plot:
@@ -106,6 +110,7 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
 #' plot(c(x0,x1),c(y0,y1), type="l", ylim = c(0,3), xlim = c(0,3))
 #' segments(x1,y1,x3,y3, col= 2)
 #' segments(x1,y1,rotate_point(x1,y1,x3,y3, 45)[1],rotate_point(x1,y1,x3,y3, 45)[2], col= 3)
+#' }
 rotate_point = function(x0,y0,x1,y1,angle){
     angle = - angle * pi / 180
     x1 = x1 - x0
@@ -130,7 +135,9 @@ rotate_point = function(x0,y0,x1,y1,angle){
 #' @keywords internal
 #'
 #' @examples
-#' rotate_point(0,0,1,0,90)
+#' \donttest{
+#' extends_point(0,0,1,0,90)
+#' }
 extends_point = function(x0,y0,x1,y1,extend_length){
   lengthAB = sqrt((x0 - x1)^2 + (y0 - y1)^2)
   x = x1 + (x1 - x0) / lengthAB * extend_length

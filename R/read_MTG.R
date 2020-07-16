@@ -360,8 +360,9 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 #'
 #' @keywords internal
 #' @examples
+#' \donttest{
 #' split_MTG_elements("/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100")
-#'
+#'}
 split_MTG_elements = function(MTG_line){
   strsplit(x = MTG_line, "(?<=.)(?=[</+])",perl = TRUE)[[1]]
 }
@@ -376,9 +377,11 @@ split_MTG_elements = function(MTG_line){
 #'
 #' @keywords internal
 #' @examples
+#' \donttest{
 #' x = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
 #' "(?<=.)(?=[</+])",perl = TRUE)[[1]]
 #' expand_node(x)
+#' }
 #'
 expand_node = function(x){
   if(any(x %in% c("<.","+."))){
@@ -444,25 +447,25 @@ parse_MTG_node_attr = function(node_data,features,attr_column_start){
   node_type = features[seq_along(node_data_attr),2]
 
   if(any(node_type == "INT")){
-    node_attr[node_type == "INT" && node_attr == ""] =
+    node_attr[node_type == "INT" & node_attr == ""] =
       NA_integer_
-    node_attr[node_type == "INT"] =
-      as.integer(node_attr[node_type == "INT"])
+    node_attr[node_type == "INT" & node_attr != ""] =
+      as.integer(node_attr[node_type == "INT" & node_attr != ""])
   }
 
   if(any(node_type == "REAL")){
-    node_attr[node_type == "REAL" && node_attr == ""] =
+    node_attr[node_type == "REAL" & node_attr == ""] =
       NA_real_
 
-    node_attr[node_type == "REAL"] =
-      as.numeric(node_attr[node_type == "REAL"])
+    node_attr[node_type == "REAL" & node_attr != ""] =
+      as.numeric(node_attr[node_type == "REAL" & node_attr != ""])
   }
   node_attr
 }
 
 #' Parse MTG node
 #'
-#' @description Parse MTG nodes (called from [parse_MTG_lines()])
+#' @description Parse MTG nodes (called from [parse_MTG_MTG()])
 #'
 #' @param MTG_node An MTG node (e.g. "/Individual0")
 #'
@@ -500,11 +503,12 @@ parse_MTG_node = function(MTG_node){
 #' @keywords internal
 #'
 #' @examples
+#' \donttest{
 #' # First column (last column is missing):
 #' find_MTG_node_column(c("/P1","/A1",""))
 #' # Node starts at column 2:
 #' find_MTG_node_column(c("","/U1","<U2"))
-#'
+#'}
 find_MTG_node_column = function(MTG_node){
   which(stringr::str_length(MTG_node) > 0)[1]
 }

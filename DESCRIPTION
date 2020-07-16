@@ -1,11 +1,9 @@
 Package: XploRer
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Read, Write, Plot and Analyze MTG (Mutli-scale Tree Graph) files 
+Version: 0.1.1
+Authors@R: person(given = "Remi", family = "Vezy", email = "remi.vezy@cirad.fr", role = c("aut", "cre"),comment = c(ORCID = "0000-0002-0808-1461"))
+Description: A package to manage plant topology data in the form of MTG. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -16,6 +14,7 @@ Imports:
     magrittr,
     data.tree,
     dplyr,
-    ggplot2
+    ggplot2,
+    rlang
 Suggests: 
     testthat

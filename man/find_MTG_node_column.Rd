@@ -21,10 +21,11 @@ A parsed node in the form of a list of three:
 Find the position of a node in the MTG (which column it belongs to)
 }
 \examples{
+\donttest{
 # First column (last column is missing):
 find_MTG_node_column(c("/P1","/A1",""))
 # Node starts at column 2:
 find_MTG_node_column(c("","/U1","<U2"))
-
+}
 }
 \keyword{internal}

@@ -24,6 +24,7 @@ The new coordinates for the point
 Rotate coordinates
 }
 \examples{
+\donttest{
 rotate_point(0,0,1,0,90)
 
 # Example with a plot:
@@ -31,5 +32,6 @@ x0 = 1 ; y0 = 1 ; x1= 2 ; y1= 2 ;x3= 3 ; y3= 3
 plot(c(x0,x1),c(y0,y1), type="l", ylim = c(0,3), xlim = c(0,3))
 segments(x1,y1,x3,y3, col= 2)
 segments(x1,y1,rotate_point(x1,y1,x3,y3, 45)[1],rotate_point(x1,y1,x3,y3, 45)[2], col= 3)
+}
 }
 \keyword{internal}

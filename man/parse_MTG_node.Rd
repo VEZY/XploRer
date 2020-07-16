@@ -18,6 +18,6 @@ A parsed node in the form of a list of three:
 }
 }
 \description{
-Parse MTG nodes (called from \code{\link[=parse_MTG_lines]{parse_MTG_lines()}})
+Parse MTG nodes (called from \code{\link[=parse_MTG_MTG]{parse_MTG_MTG()}})
 }
 \keyword{internal}
