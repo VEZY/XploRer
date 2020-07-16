@@ -6,7 +6,10 @@
 \alias{XploRer-package}
 \title{XploRer: Read, Write, Plot and Analyze MTG (Mutli-scale Tree Graph) files}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+A package to manage plant topology data in the form of MTG.
+}
+\author{
+\strong{Maintainer}: Remi Vezy \email{remi.vezy@cirad.fr} (\href{https://orcid.org/0000-0002-0808-1461}{ORCID})
+
 }
 \keyword{internal}

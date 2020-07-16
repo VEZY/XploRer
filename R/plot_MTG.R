@@ -14,7 +14,6 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' plot_MTG(MTG)
-#'
 plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
@@ -80,15 +79,41 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
     tree_df$x_from[i] = tree_df$x[tree_df$from_index[i]]
     tree_df$y_from[i] = tree_df$y[tree_df$from_index[i]]
   }
-
-  ggplot2::ggplot(tree_df, ggplot2::aes(x = .data$x, y = .data$y))+
-    ggplot2::geom_point()+
+  mtg_plot=
+    tree_df%>%
+    dplyr::ungroup()%>%
+    dplyr::mutate(topological_order = as.factor(.data$topological_order))%>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y))+
+    ggplot2::geom_point(ggplot2::aes(color = .data$topological_order,
+                                     name = .data$name, link= .data$.link,
+                                     symbol = .data$.symbol, index = .data$.index))+
     ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from,
-                                       color = as.factor(.data$topological_order)))+
+                                       color = .data$topological_order))+
     ggplot2::labs(color = "Topological order")
+
+  suppressWarnings(print(mtg_plot))
+
+  invisible(mtg_plot)
 }
 
-
+#' Plot an interactive MTG
+#'
+#' @param MTG An MTG, as from [read_MTG()]
+#' @param scale The scale required for plotting
+#' @param angle Insertion angle when branching
+#' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
+#'
+#' @return A [plotly] object of the MTG
+#' @export
+#'
+#' @examples
+#' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
+#' MTG= read_MTG(filepath)
+#' plotly_MTG(MTG)
+plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
+  mtg_plot = plot_MTG(MTG, scale, angle, phylotaxy)
+  plotly::ggplotly(mtg_plot, tooltip= c("name", ".link", ".symbol", ".index"))
+}
 
 #' Rotate coordinates
 #'

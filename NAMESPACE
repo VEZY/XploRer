@@ -2,6 +2,7 @@
 
 export("%>%")
 export(plot_MTG)
+export(plotly_MTG)
 export(read_MTG)
 export(split_at_tab)
 export(strip_comments)
