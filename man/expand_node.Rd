@@ -16,7 +16,7 @@ A split MTG line with explicitly all nodes
 Expand the elements denoted by the syntactic sugar "<<", "<.<", "++" or "+.+"
 }
 \examples{
-\donttest{
+\dontrun{
 x = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
 "(?<=.)(?=[</+])",perl = TRUE)[[1]]
 expand_node(x)

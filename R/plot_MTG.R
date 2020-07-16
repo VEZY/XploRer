@@ -125,7 +125,7 @@ plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
 #' @keywords internal
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' rotate_point(0,0,1,0,90)
 #'
 #' # Example with a plot:
@@ -158,7 +158,7 @@ rotate_point = function(x0,y0,x1,y1,angle){
 #' @keywords internal
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' extends_point(0,0,1,0,90)
 #' }
 extends_point = function(x0,y0,x1,y1,extend_length){

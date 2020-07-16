@@ -360,7 +360,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 #'
 #' @keywords internal
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' split_MTG_elements("/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100")
 #'}
 split_MTG_elements = function(MTG_line){
@@ -377,7 +377,7 @@ split_MTG_elements = function(MTG_line){
 #'
 #' @keywords internal
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' x = strsplit(x = "/A1+U85/U86<U87<.<U93<U94<.<U96<U97+.+U100",
 #' "(?<=.)(?=[</+])",perl = TRUE)[[1]]
 #' expand_node(x)
@@ -503,7 +503,7 @@ parse_MTG_node = function(MTG_node){
 #' @keywords internal
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # First column (last column is missing):
 #' find_MTG_node_column(c("/P1","/A1",""))
 #' # Node starts at column 2:

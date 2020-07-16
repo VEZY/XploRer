@@ -24,7 +24,7 @@ The new coordinates for the point
 Extends coordinate
 }
 \examples{
-\donttest{
+\dontrun{
 extends_point(0,0,1,0,90)
 }
 }

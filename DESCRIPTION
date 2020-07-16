@@ -1,9 +1,9 @@
 Package: XploRer
 Type: Package
-Title: Read, Write, Plot and Analyze MTG (Mutli-scale Tree Graph) files 
+Title: Read, Write, Plot and Analyze MTG (Mutli-Scale Tree Graph) Files
 Version: 0.1.1
 Authors@R: person(given = "Remi", family = "Vezy", email = "remi.vezy@cirad.fr", role = c("aut", "cre"),comment = c(ORCID = "0000-0002-0808-1461"))
-Description: A package to manage plant topology data in the form of MTG. 
+Description: Manage plant topology data from MTG files. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -24,7 +24,7 @@ The new coordinates for the point
 Rotate coordinates
 }
 \examples{
-\donttest{
+\dontrun{
 rotate_point(0,0,1,0,90)
 
 # Example with a plot:
