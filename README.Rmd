@@ -97,10 +97,7 @@ The same plot can be rendered as an interactive plot using:
 plotly_MTG(MTG)
 ```
 
-```{r echo=FALSE}
-knitr::include_graphics("www/plotly_MTG.gif")
-```
-
+![Interactive plot](https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif)
 
 `plotly_MTG()` uses the [plotly API](https://plotly.com/) under the hood. 
 
