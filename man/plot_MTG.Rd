@@ -4,7 +4,7 @@
 \alias{plot_MTG}
 \title{Plot an MTG}
 \usage{
-plot_MTG(MTG, scale = NULL, angle = 45)
+plot_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE)
 }
 \arguments{
 \item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}

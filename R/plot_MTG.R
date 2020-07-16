@@ -12,24 +12,34 @@
 #' MTG= read_MTG(filepath)
 #' plot(MTG)
 #'
-plot_MTG = function(MTG,scale= NULL,angle= 45){
+plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
+
+  # Compute the topological order if missing from the MTG:
+  if(!"topological_order" %in% MTG$MTG$fieldsAll){
+    topological_order(MTG)
+  }
+
   tree_df =
-    ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index")%>%
+    ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index", "topological_order")%>%
     dplyr::left_join(data.frame(SYMBOL = MTG$classes$SYMBOL, SCALE = MTG$classes$SCALE,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
-    dplyr::mutate(x_inc = 0, y_inc = 0, x = 0, y = 0, x_from = 0, y_from = 0)%>%
-    dplyr::mutate(x_inc = dplyr::if_else(.data$.link %in% c("+"), .data$x_inc + 1, .data$x_inc),
-                  y_inc = dplyr::if_else(.data$.link %in% c("<","+"), .data$y_inc + 1, .data$y_inc))
+    dplyr::group_by(.data$topological_order)%>%
+    dplyr::mutate(phylotaxy = seq_along(topological_order) %% 2)
+  # phylotaxy is first computed as a sequence along the topology, and then it is
+  # set to 0 for each even number, and to 1 for uneven ones.It allows to altern the
+  # phylotaxy along the axis.
 
+  tree_df$phylotaxy[tree_df$phylotaxy == 0] = -1 # all 0 replaced by -1 (either 1 or -1 now)
   tree_df$from_index = match(tree_df$from, tree_df$to)
 
-  tree_df$x[1] = 0
+  tree_df$x = 0
+  tree_df$y = 0
+  tree_df$x_from = 0
+  tree_df$y_from = 0
   tree_df$y[1] = 1
-  tree_df$x_from[1] = 0
-  tree_df$y_from[1] = 0
 
   for(i in 2:nrow(tree_df)){
     if(tree_df$.link[i] == "+"){
@@ -44,7 +54,7 @@ plot_MTG = function(MTG,scale= NULL,angle= 45){
                           y0 = tree_df$y[tree_df$from_index[i]],
                           x1 = point[1],
                           y1 = point[2],
-                          angle = angle)
+                          angle = tree_df$phylotaxy[i] * angle)
 
     }else if(tree_df$.link[i] == "<"){
       point= extends_point(x0 = tree_df$x_from[tree_df$from_index[i]],
@@ -70,7 +80,9 @@ plot_MTG = function(MTG,scale= NULL,angle= 45){
 
   ggplot2::ggplot(tree_df, ggplot2::aes(x = x, y = y))+
     ggplot2::geom_point()+
-    ggplot2::geom_segment(ggplot2::aes(xend = x_from, yend = y_from))
+    ggplot2::geom_segment(ggplot2::aes(xend = x_from, yend = y_from,
+                                       color = as.factor(topological_order)))+
+    ggplot2::labs(color = "Topological order")
 }
 
 
