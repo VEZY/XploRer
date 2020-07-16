@@ -79,21 +79,19 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
     tree_df$x_from[i] = tree_df$x[tree_df$from_index[i]]
     tree_df$y_from[i] = tree_df$y[tree_df$from_index[i]]
   }
-  mtg_plot=
-    tree_df%>%
+
+  tree_df%>%
     dplyr::ungroup()%>%
     dplyr::mutate(topological_order = as.factor(.data$topological_order))%>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y))+
-    ggplot2::geom_point(ggplot2::aes(color = .data$topological_order,
-                                     name = .data$name, link= .data$.link,
-                                     symbol = .data$.symbol, index = .data$.index))+
-    ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from,
-                                       color = .data$topological_order))+
+    ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
+                                 color = .data$topological_order,
+                                 name = .data$name,
+                                 link= .data$.link,
+                                 symbol = .data$.symbol,
+                                 index = .data$.index))+
+    ggplot2::geom_point()+
+    ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from))+
     ggplot2::labs(color = "Topological order")
-
-  suppressWarnings(print(mtg_plot))
-
-  invisible(mtg_plot)
 }
 
 #' Plot an interactive MTG

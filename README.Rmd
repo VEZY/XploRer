@@ -81,11 +81,28 @@ The `read_MTG()` function returns a list of 4:
 
 ### 2.2 Plotting a plant
 
+#### 2.2.1 Static plot
+
 The plant topology can be plotted using the `plot_MTG()` function:
 
 ```{r}
 plot_MTG(MTG)
 ```
+
+#### 2.2.2 Interactive plot
+
+The same plot can be rendered as an interactive plot using: 
+
+```{r eval=FALSE}
+plotly_MTG(MTG)
+```
+
+```{r echo=FALSE}
+knitr::include_graphics("www/plotly_MTG.gif")
+```
+
+
+`plotly_MTG()` uses the [plotly API](https://plotly.com/) under the hood. 
 
 ## 3. Help
 

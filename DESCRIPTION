@@ -15,6 +15,7 @@ Imports:
     data.tree,
     dplyr,
     ggplot2,
-    rlang
+    rlang,
+    plotly
 Suggests: 
     testthat
