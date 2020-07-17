@@ -16,5 +16,8 @@ The character string stripped from empty lines
 Remove empty lines from a string, such as "" or "  "
 }
 \examples{
+\dontrun{
 strip_empty_lines(c("test","", "  "))
 }
+}
+\keyword{internal}

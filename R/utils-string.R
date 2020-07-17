@@ -7,10 +7,12 @@
 #'
 #' @return The character string stripped from its comments
 
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' strip_comments(c("test","test2 # with a comment", "# just a comment"))
+#' }
 strip_comments <- function(str){
   gsub(pattern = "#[^\\\n]*", replacement = "", x = str)
   # Or code from [www.rosettacode.org](https://www.rosettacode.org/wiki/Strip_comments_from_a_string#R)
@@ -24,10 +26,12 @@ strip_comments <- function(str){
 #' @param str A character string
 #'
 #' @return The character string stripped from empty lines
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' strip_empty_lines(c("test","", "  "))
+#' }
 strip_empty_lines = function(str){
   str[!grepl("^[[:blank:]]*$",str)]
 }
@@ -39,10 +43,12 @@ strip_empty_lines = function(str){
 #' @param str A character string
 #'
 #' @return A vector of strings
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' split_at_tab(c("word1\tword2"))
+#' }
 split_at_tab = function(str){
   strsplit(str, "\t")
 }

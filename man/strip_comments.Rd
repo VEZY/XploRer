@@ -16,5 +16,8 @@ The character string stripped from its comments
 Remove comments from a string
 }
 \examples{
+\dontrun{
 strip_comments(c("test","test2 # with a comment", "# just a comment"))
 }
+}
+\keyword{internal}

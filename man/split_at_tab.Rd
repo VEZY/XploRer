@@ -16,5 +16,8 @@ A vector of strings
 Split a string using tabulation characters
 }
 \examples{
+\dontrun{
 split_at_tab(c("word1\tword2"))
 }
+}
+\keyword{internal}
