@@ -1,0 +1,19 @@
+url: https://vezy.github.io/XploRer
+
+reference:
+- title: "IO"
+  desc: "Functions for reading / writing MTG files"
+- contents:
+  - read_MTG
+- title: "Plots"
+  desc: "Functions for plotting the MTG"
+- contents:
+  - starts_with("plot")
+- title: "Compute"
+  desc: "Functions for computing/extracting data from the MTG"
+- contents:
+  - topological_order
+# - title: "Analyze"
+#   desc: "Functions for plotting the MTG"
+# - contents:
+#   - starts_with("plot")
