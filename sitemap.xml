@@ -22,7 +22,7 @@
     <loc>https://vezy.github.io/XploRer/reference/get_parent_value.html</loc>
   </url>
   <url>
-    <loc>https://vezy.github.io/XploRer/reference/mtg_apply.html</loc>
+    <loc>https://vezy.github.io/XploRer/reference/mutate_mtg.html</loc>
   </url>
   <url>
     <loc>https://vezy.github.io/XploRer/reference/parse_MTG_MTG.html</loc>
@@ -52,7 +52,7 @@
     <loc>https://vezy.github.io/XploRer/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://vezy.github.io/XploRer/reference/plot_MTG.html</loc>
+    <loc>https://vezy.github.io/XploRer/reference/plot.mtg.html</loc>
   </url>
   <url>
     <loc>https://vezy.github.io/XploRer/reference/plotly_MTG.html</loc>

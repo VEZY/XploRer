@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Get parent value — get_parent_value" />
 <meta property="og:description" content="Get the value of one or several variables from the parent node. This is a helper
-function that is usually used as input to mtg_apply() to get the values of the parent node
+function that is usually used as input to mutate_mtg() to get the values of the parent node
 for all nodes." />
 
 
@@ -115,11 +115,11 @@ for all nodes." />
 
     <div class="ref-description">
     <p>Get the value of one or several variables from the parent node. This is a helper
-function that is usually used as input to <code><a href='mtg_apply.html'>mtg_apply()</a></code> to get the values of the parent node
+function that is usually used as input to <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> to get the values of the parent node
 for all nodes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parent_value</span>(<span class='no'>...</span>, <span class='no'>node</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_parent_value</span>(<span class='no'>...</span>, <span class='no'>node</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,7 +130,7 @@ for all nodes.</p>
     </tr>
     <tr>
       <th>node</th>
-      <td><p>The node (do not put something when used from <code><a href='mtg_apply.html'>mtg_apply()</a></code>)</p></td>
+      <td><p>The node (do not put something when used from <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>)</p></td>
     </tr>
     <tr>
       <th>.scale</th>
@@ -144,7 +144,7 @@ for all nodes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function returns the values of any attribute of the parent of a node. It is
-mainly intended to be used in a call to <code><a href='mtg_apply.html'>mtg_apply()</a></code> (see examples).</p>
+mainly intended to be used in a call to <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> (see <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> doc for examples).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
