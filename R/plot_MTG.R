@@ -1,6 +1,6 @@
 #' Plot an MTG
 #'
-#' @param MTG An MTG, as from [read_MTG()]
+#' @param ... An MTG, as from [read_MTG()]
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
 #' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
@@ -18,11 +18,16 @@
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
-#' plot_MTG(MTG)
-plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
+#' plot(MTG)
+plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
+  dot_args = list(...)
 
+  MTG = dot_args[[1]]
+  if(!inherits(MTG,"mtg")){
+    stop("The ... arguments should be an MTG as returned by read_MTG()")
+  }
   # Compute the topological order if missing from the MTG:
   if(!"topological_order" %in% MTG$MTG$fieldsAll){
     topological_order(MTG)
@@ -93,8 +98,7 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
                                  name = .data$name,
                                  link= .data$.link,
                                  symbol = .data$.symbol,
-                                 index = .data$.index,
-                                 ...))+
+                                 index = .data$.index))+
     ggplot2::geom_point()+
     ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from))+
     ggplot2::labs(color = "Topological order")
