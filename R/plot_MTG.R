@@ -98,7 +98,8 @@ plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
                                  name = .data$name,
                                  link= .data$.link,
                                  symbol = .data$.symbol,
-                                 index = .data$.index))+
+                                 index = .data$.index,
+                                 dot_args[[-1]]))+
     ggplot2::geom_point()+
     ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from))+
     ggplot2::labs(color = "Topological order")
@@ -110,16 +111,22 @@ plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
 #' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
+#' @param ... Names of the variables to be added to the tooltip.
 #'
 #' @return A [plotly] object of the MTG
 #' @export
+#'
+#' @importFrom graphics plot
 #'
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' plotly_MTG(MTG)
 plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
-  mtg_plot = plot_MTG(MTG, scale, angle, phylotaxy,...)
+  dot_args = list(...)
+  mtg_plot = do.call(plot, c(dot_args, scale = scale, angle = angle,
+                             phylotaxy = phylotaxy))
+
   plotly::ggplotly(mtg_plot, tooltip= c("name", ".link", ".symbol", ".index"))
 }
 

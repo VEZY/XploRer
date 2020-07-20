@@ -4,12 +4,12 @@
 \alias{get_parent_value}
 \title{Get parent value}
 \usage{
-get_parent_value(..., node, .scale = NULL, .type = NULL)
+get_parent_value(..., node, .scale = NULL)
 }
 \arguments{
 \item{...}{Any node attribute (as a character)}
 
-\item{node}{The node (do not put something when used from \code{\link[=mtg_apply]{mtg_apply()}})}
+\item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
 \item{.scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
 }
@@ -18,12 +18,12 @@ The values of the attributes for the parent of the node
 }
 \description{
 Get the value of one or several variables from the parent node. This is a helper
-function that is usually used as input to \code{\link[=mtg_apply]{mtg_apply()}} to get the values of the parent node
+function that is usually used as input to \code{\link[=mutate_mtg]{mutate_mtg()}} to get the values of the parent node
 for all nodes.
 }
 \details{
 This function returns the values of any attribute of the parent of a node. It is
-mainly intended to be used in a call to \code{\link[=mtg_apply]{mtg_apply()}} (see examples).
+mainly intended to be used in a call to \code{\link[=mutate_mtg]{mutate_mtg()}} (see \code{\link[=mutate_mtg]{mutate_mtg()}} doc for examples).
 }
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")

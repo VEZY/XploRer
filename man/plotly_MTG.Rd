@@ -14,6 +14,8 @@ plotly_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
 \item{angle}{Insertion angle when branching}
 
 \item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
+
+\item{...}{Names of the variables to be added to the tooltip.}
 }
 \value{
 A \link{plotly} object of the MTG

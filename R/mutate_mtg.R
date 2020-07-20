@@ -46,9 +46,10 @@
 #' ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
 #'
 mutate_mtg = function(data,...){
-  dots = enexprs(...)
+  node = NULL # To avoid CRAN notes
+  dots = rlang::enexprs(...)
   dots_names = names(dots)
-  auto_named_dots <- names(enquos(..., .named = TRUE))
+  auto_named_dots <- names(rlang::enquos(..., .named = TRUE))
 
   if (length(dots) == 0L) {
     return(NULL)
@@ -70,7 +71,7 @@ mutate_mtg = function(data,...){
       # expr(`$`(node, !!dots_names[i]))
 
       # Building the functions:
-      dot_funs[[i]] = rlang::new_function(pairlist2(node= node), body = dot_call)
+      dot_funs[[i]] = rlang::new_function(rlang::pairlist2(node= node), body = dot_call)
     }
   }
 
