@@ -33,8 +33,10 @@ read_MTG = function(file) {
 
   MTG = parse_MTG_MTG(MTG_file,classes,description,features)
 
-  return(list(classes = classes, description = description,
-              features = features,MTG = MTG))
+  MTG = list(classes = classes, description = description,
+             features = features,MTG = MTG)
+  class(MTG) = append(class(MTG), "mtg")
+  return(MTG)
 }
 
 #' Check sections from MTG
@@ -459,6 +461,16 @@ parse_MTG_node_attr = function(node_data,features,attr_column_start){
 
     node_attr[node_type == "REAL" & node_attr != ""] =
       as.numeric(node_attr[node_type == "REAL" & node_attr != ""])
+  }
+
+  if(any(node_type == "ALPHA")){
+    special_attr = names(node_attr) %in% c("Width","Length")
+    special_attr = special_attr & node_type == "ALPHA"
+    node_attr[special_attr & node_attr == ""] =
+      NA_real_
+
+    node_attr[special_attr & node_attr != ""] =
+      as.numeric(node_attr[special_attr & node_attr != ""])
   }
   node_attr
 }
