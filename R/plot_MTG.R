@@ -19,7 +19,7 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' plot_MTG(MTG)
-plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
+plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
 
@@ -93,7 +93,8 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
                                  name = .data$name,
                                  link= .data$.link,
                                  symbol = .data$.symbol,
-                                 index = .data$.index))+
+                                 index = .data$.index,
+                                 ...))+
     ggplot2::geom_point()+
     ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from))+
     ggplot2::labs(color = "Topological order")
@@ -113,8 +114,8 @@ plot_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' plotly_MTG(MTG)
-plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE){
-  mtg_plot = plot_MTG(MTG, scale, angle, phylotaxy)
+plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
+  mtg_plot = plot_MTG(MTG, scale, angle, phylotaxy,...)
   plotly::ggplotly(mtg_plot, tooltip= c("name", ".link", ".symbol", ".index"))
 }
 

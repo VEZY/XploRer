@@ -4,7 +4,7 @@
 \alias{plotly_MTG}
 \title{Plot an interactive MTG}
 \usage{
-plotly_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE)
+plotly_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
 }
 \arguments{
 \item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
