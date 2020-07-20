@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot an MTG — plot_MTG • XploRer</title>
+<title>Apply function to tree — mtg_apply • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Plot an MTG — plot_MTG" />
-<meta property="og:description" content="Plot an MTG" />
+<meta property="og:title" content="Apply function to tree — mtg_apply" />
+<meta property="og:description" content="Apply function to tree" />
 
 
 
@@ -106,52 +106,77 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot an MTG</h1>
+    <h1>Apply function to tree</h1>
     
-    <div class="hidden name"><code>plot_MTG.Rd</code></div>
+    <div class="hidden name"><code>mtg_apply.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot an MTG</p>
+    <p>Apply function to tree</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_MTG</span>(<span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>mtg_apply</span>(
+  <span class='no'>data</span>,
+  <span class='no'>fun</span>,
+  <span class='no'>scale</span>,
+  <span class='kw'>traversal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pre-order"</span>, <span class='st'>"post-order"</span>, <span class='st'>"in-order"</span>, <span class='st'>"level"</span>, <span class='st'>"ancestor"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>MTG</th>
-      <td><p>An MTG, as from <code><a href='read_MTG.html'>read_MTG()</a></code></p></td>
+      <th>data</th>
+      <td><p>The input MTG, as from <code><a href='read_MTG.html'>read_MTG()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>fun</th>
+      <td><p>The function to apply (see details)</p></td>
     </tr>
     <tr>
       <th>scale</th>
-      <td><p>The scale required for plotting</p></td>
+      <td><p>The scale to apply the function to.</p></td>
     </tr>
     <tr>
-      <th>angle</th>
-      <td><p>Insertion angle when branching</p></td>
-    </tr>
-    <tr>
-      <th>phylotaxy</th>
-      <td><p>Is phylotaxy required ? Uses 180 degrees if <code>TRUE</code>.</p></td>
+      <th>traversal</th>
+      <td><p>The traversal order of the tree. Can be any of 'pre-order',
+'post-order', 'in-order', 'level', 'ancestor', or a custom function (see details)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot of the MTG</p>
+    <p>Nothing. The MTG is modified in place.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function needs the topological orders as attributes in the MTG. If they
-are not present, it uses <code><a href='topological_order.html'>topological_order()</a></code> to compute it with descending order.
-If you need ascending order, please use <code><a href='topological_order.html'>topological_order(MTG, ascend = TRUE)</a></code> before
-plotting.</p>
+    <p>The traversal is as in <code><a href='https://rdrr.io/pkg/data.tree/man/Traverse.html'>data.tree::Traverse()</a></code>. Here's its documentation:</p>
+<p>The traversal order is as follows. (Note that these descriptions are not precise and complete. They are meant for quick reference only. See the data.tree vignette for a more detailed description).</p><ul>
+<li><p>pre-order: Go to first child, then to its first child, etc.</p></li>
+<li><p>post-order: Go to the first branch's leaf, then to its siblings, and work your way back to the root</p></li>
+<li><p>in-order:Go to the first branch's leaf, then to its parent, and only then to the leaf's sibling</p></li>
+<li><p>level: Collect root, then level 2, then level 3, etc.</p></li>
+<li><p>ancestor: Take a node, then the node's parent, then that node's parent in turn, etc. This ignores the pruneFun</p></li>
+<li><p>function: You can also provide a function, whose sole parameter is a Node object. The function is expected to return the node's next node, a list of the node's next nodes, or NULL.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>The filter on scale is supposed to happen in <code>fun</code>. This approach gives the user more freedom.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span><span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)
-<span class='fu'>plot_MTG</span>(<span class='no'>MTG</span>)</div><div class='img'><img src='plot_MTG-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)
+
+<span class='co'># Defining the function to apply, here we compute the cross-section surface:</span>
+
+<span class='no'>Width</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'Width' not found</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>node</span>) {
+<span class='no'>node</span>$<span class='no'>section_surface_parent</span> <span class='kw'>=</span> <span class='fu'><a href='get_parent_value.html'>get_parent_value</a></span>(<span class='st'>"Length"</span>,<span class='st'>"Width"</span>,  <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node</span>)
+}
+
+<span class='co'># Applying the function to the MTG:</span>
+  <span class='fu'>mtg_apply</span>(<span class='kw'>MTG</span> <span class='kw'>=</span> <span class='no'>MTG</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>)</div><div class='output co'>#&gt; <span class='error'>Error in mtg_apply(MTG = MTG, fun = fun): unused argument (MTG = MTG)</span></div><div class='input'>
+<span class='co'># Checking it worked:</span>
+  <span class='no'>mtg_df</span> <span class='kw'>=</span> <span class='fu'>ToDataFrameTree</span>(<span class='no'>mtg</span>$<span class='no'>MTG</span>,<span class='st'>"length"</span>,<span class='st'>"diameter"</span>,<span class='st'>"topological_order"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"section_surface_childs"</span>,<span class='st'>"section_surface_parent"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ToDataFrameTree(mtg$MTG, "length", "diameter", "topological_order",     "section_surface", "section_surface_childs", "section_surface_parent"): could not find function "ToDataFrameTree"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
