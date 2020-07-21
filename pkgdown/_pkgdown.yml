@@ -12,7 +12,9 @@ reference:
 - title: "Compute"
   desc: "Functions for computing/extracting data from the MTG"
 - contents:
+  - mutate_mtg
   - topological_order
+  - get_parent_value
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:
