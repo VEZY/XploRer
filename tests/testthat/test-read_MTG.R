@@ -37,7 +37,7 @@ test_that("Parse features", {
 
 test_that("Parse MTG", {
   MTG = parse_MTG_MTG(MTG_file,classes,description,features)
-  expect_known_hash(MTG, hash = "33f0328ef1")
+  expect_known_hash(MTG, hash = "b6a55f4b86")
 })
 
 test_that("Read MTG file", {
