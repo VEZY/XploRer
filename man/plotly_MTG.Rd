@@ -4,18 +4,18 @@
 \alias{plotly_MTG}
 \title{Plot an interactive MTG}
 \usage{
-plotly_MTG(MTG, ..., scale = NULL, angle = 45, phylotaxy = TRUE)
+plotly_MTG(MTG, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE)
 }
 \arguments{
 \item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
 
 \item{...}{Names of the variables to be added to the tooltip (see details and examples).}
 
-\item{scale}{The scale required for plotting}
+\item{.scale}{The scale required for plotting}
 
-\item{angle}{Insertion angle when branching}
+\item{.angle}{Insertion angle when branching}
 
-\item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
+\item{.phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
 }
 \value{
 A \link{plotly} object of the MTG
@@ -42,4 +42,7 @@ plotly_MTG(MTG, Length)
 plotly_MTG(MTG, node_width = Width)
 # Here the tooltip will show the Width, labeled as "node_width"
 
+}
+\seealso{
+\code{\link[=mutate_mtg]{mutate_mtg()}} to compute variables and add it to the tooltip with \code{...}.
 }

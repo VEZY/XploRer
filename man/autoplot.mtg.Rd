@@ -4,16 +4,18 @@
 \alias{autoplot.mtg}
 \title{Plot an MTG}
 \usage{
-\method{autoplot}{mtg}(MTG, ..., scale = NULL, angle = 45, phylotaxy = TRUE)
+\method{autoplot}{mtg}(MTG, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
 }
 \arguments{
-\item{...}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
+\item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
 
 \item{scale}{The scale required for plotting}
 
 \item{angle}{Insertion angle when branching}
 
 \item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
+
+\item{...}{Further arguments. \code{\link[=plotly_MTG]{plotly_MTG()}} uses this to add variables to the output data.}
 }
 \value{
 A ggplot of the MTG

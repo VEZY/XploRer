@@ -1,9 +1,10 @@
 #' Plot an MTG
 #'
-#' @param ... An MTG, as from [read_MTG()]
+#' @param MTG An MTG, as from [read_MTG()]
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
 #' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
+#' @param ... Further arguments. [plotly_MTG()] uses this to add variables to the output data.
 #'
 #' @details The function needs the topological orders as attributes in the MTG. If they
 #' are not present, it uses [topological_order()] to compute it with descending order.
@@ -20,7 +21,7 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' autoplot(MTG)
-autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
+autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
 
@@ -57,7 +58,7 @@ autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
     # the column in the data and the mapping to match the names given by the user...
     dots =
       mapply(function(x,y){
-        x = sym(y)
+        x = rlang::sym(y)
       },dots,dot_names)
   }
 
@@ -136,10 +137,10 @@ autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
 #' Plot an interactive MTG
 #'
 #' @param MTG An MTG, as from [read_MTG()]
-#' @param scale The scale required for plotting
-#' @param angle Insertion angle when branching
-#' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
 #' @param ... Names of the variables to be added to the tooltip (see details and examples).
+#' @param .scale The scale required for plotting
+#' @param .angle Insertion angle when branching
+#' @param .phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
 #'
 #' @details The name of each argument in `...` will be the name of a the variable given in the tooltip,
 #' and the value will be the value of the corresponding variable given as value. The arguments in `...` are
@@ -147,6 +148,7 @@ autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
 #' the chapter about [metaprogramming](https://adv-r.hadley.nz/metaprogramming.html) in the book "Advanced R"
 #' from H. Wickham for an introduction to these concepts.
 #'
+#' @seealso [mutate_mtg()] to compute variables and add it to the tooltip with `...`.
 #' @return A [plotly] object of the MTG
 #' @export
 #'
@@ -164,8 +166,8 @@ autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
 #' plotly_MTG(MTG, node_width = Width)
 #' # Here the tooltip will show the Width, labeled as "node_width"
 #'
-plotly_MTG = function(MTG, ..., scale = NULL, angle = 45, phylotaxy = TRUE){
-  mtg_plot = autoplot.mtg(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE)
+plotly_MTG = function(MTG, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
+  mtg_plot = autoplot.mtg(MTG, scale = .scale, angle = .angle, phylotaxy = .phylotaxy,...)
 
   dots = rlang::enexprs(...)
   dot_names = names(dots)
