@@ -13,7 +13,7 @@
 #' \dontrun{
 #' strip_comments(c("test","test2 # with a comment", "# just a comment"))
 #' }
-strip_comments <- function(str){
+strip_comments = function(str){
   gsub(pattern = "#[^\\\n]*", replacement = "", x = str)
   # Or code from [www.rosettacode.org](https://www.rosettacode.org/wiki/Strip_comments_from_a_string#R)
   # stingr::str_trim(stingr::str_split_fixed(str, "#", 2)[, 1])

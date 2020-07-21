@@ -2,7 +2,7 @@ context("'Get' functions")
 
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_MTG(filepath)
-node_5 = FindNode(MTG$MTG, "node_5")
+node_5 = data.tree::FindNode(MTG$MTG, "node_5")
 
 test_that("get_parent_value: requesting one attribute", {
   test = get_parent_value("Length", node = node_5)

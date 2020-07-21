@@ -16,25 +16,53 @@
 #' @importFrom rlang .data
 #'
 #' @examples
+#' library(ggplot2)
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
-#' plot(MTG)
-plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
+#' autoplot(MTG)
+autoplot.mtg = function(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
-  dot_args = list(...)
 
-  MTG = dot_args[[1]]
   if(!inherits(MTG,"mtg")){
-    stop("The ... arguments should be an MTG as returned by read_MTG()")
+    stop("The ... arguments should start with an MTG as returned by read_MTG()")
   }
+
+  dots = rlang::enexprs(...)
+  dot_names = names(dots)
+  auto_named_dots = names(rlang::enquos(..., .named = TRUE))
+  not_named = unlist(lapply(dot_names, function(x) (is.null(x) || x == "")))
+  dot_names[not_named] = auto_named_dots[not_named]
+  names(dots) = dot_names
+
   # Compute the topological order if missing from the MTG:
   if(!"topological_order" %in% MTG$MTG$fieldsAll){
     topological_order(MTG)
   }
 
+  if(length(dots) == 0){
+    tree_df =
+      data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index",
+                                    "topological_order")
+  }else{
+    name_list = as.character(dots)
+    names(name_list) = dot_names
+    tree_df =
+      data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index",
+                                    "topological_order",as.character(dots))%>%
+      dplyr::rename(!!!name_list)
+
+    # NB : all these tricks because ggplotly outputs the name of the variable in the data
+    # for the tooltip instead of the name of the mapping... So what we do here is to rename
+    # the column in the data and the mapping to match the names given by the user...
+    dots =
+      mapply(function(x,y){
+        x = sym(y)
+      },dots,dot_names)
+  }
+
   tree_df =
-    data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index", "topological_order")%>%
+    tree_df%>%
     dplyr::left_join(data.frame(SYMBOL = MTG$classes$SYMBOL, SCALE = MTG$classes$SCALE,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
@@ -99,7 +127,7 @@ plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
                                  link= .data$.link,
                                  symbol = .data$.symbol,
                                  index = .data$.index,
-                                 dot_args[[-1]]))+
+                                 !!!dots))+
     ggplot2::geom_point()+
     ggplot2::geom_segment(ggplot2::aes(xend = .data$x_from, yend = .data$y_from))+
     ggplot2::labs(color = "Topological order")
@@ -111,23 +139,41 @@ plot.mtg = function(..., scale = NULL, angle = 45, phylotaxy = TRUE){
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
 #' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.
-#' @param ... Names of the variables to be added to the tooltip.
+#' @param ... Names of the variables to be added to the tooltip (see details and examples).
+#'
+#' @details The name of each argument in `...` will be the name of a the variable given in the tooltip,
+#' and the value will be the value of the corresponding variable given as value. The arguments in `...` are
+#' automatically quoted and evaluated in the context of the `mtg`. They support unquoting and splicing. See
+#' the chapter about [metaprogramming](https://adv-r.hadley.nz/metaprogramming.html) in the book "Advanced R"
+#' from H. Wickham for an introduction to these concepts.
 #'
 #' @return A [plotly] object of the MTG
 #' @export
 #'
-#' @importFrom graphics plot
+#' @importFrom ggplot2 autoplot
 #'
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_MTG(filepath)
 #' plotly_MTG(MTG)
-plotly_MTG = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
-  dot_args = list(...)
-  mtg_plot = do.call(plot, c(dot_args, scale = scale, angle = angle,
-                             phylotaxy = phylotaxy))
+#'
+#' # We can add more information to the tooltip, e.g. the values of the Length column:
+#' plotly_MTG(MTG, Length)
+#'
+#' # We can also use custom names for the variable in the tooltip:
+#' plotly_MTG(MTG, node_width = Width)
+#' # Here the tooltip will show the Width, labeled as "node_width"
+#'
+plotly_MTG = function(MTG, ..., scale = NULL, angle = 45, phylotaxy = TRUE){
+  mtg_plot = autoplot.mtg(MTG,..., scale = NULL, angle = 45, phylotaxy = TRUE)
 
-  plotly::ggplotly(mtg_plot, tooltip= c("name", ".link", ".symbol", ".index"))
+  dots = rlang::enexprs(...)
+  dot_names = names(dots)
+  auto_named_dots = names(rlang::enquos(..., .named = TRUE))
+  not_named = unlist(lapply(dot_names, function(x) (is.null(x) || x == "")))
+  dot_names[not_named] = auto_named_dots[not_named]
+
+  plotly::ggplotly(p = mtg_plot, tooltip= c("name", ".link", ".symbol", ".index",dot_names))
 }
 
 #' Rotate coordinates

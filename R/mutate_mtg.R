@@ -43,13 +43,13 @@
 #'
 #' mutate_mtg(MTG, Width_parent = get_parent_value("Width",  node = node))
 #'
-#' ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
+#' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
 #'
 mutate_mtg = function(data,...){
   node = NULL # To avoid CRAN notes
   dots = rlang::enexprs(...)
   dots_names = names(dots)
-  auto_named_dots <- names(rlang::enquos(..., .named = TRUE))
+  auto_named_dots = names(rlang::enquos(..., .named = TRUE))
 
   if (length(dots) == 0L) {
     return(NULL)
@@ -58,7 +58,7 @@ mutate_mtg = function(data,...){
   dot_funs = vector(mode = "list", length = length(dots))
 
   for (i in seq_along(dots)) {
-    not_named <- (is.null(dots_names) || dots_names[i] == "")
+    not_named = (is.null(dots_names) || dots_names[i] == "")
 
     if(not_named){
       dots_names[i] = auto_named_dots[i]

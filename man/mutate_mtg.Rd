@@ -52,6 +52,6 @@ read_MTG(filepath)\%>\%
 
 mutate_mtg(MTG, Width_parent = get_parent_value("Width",  node = node))
 
-ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
+data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
 
 }

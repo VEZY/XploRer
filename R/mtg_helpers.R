@@ -19,8 +19,8 @@
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_MTG(filepath)
-#' get_parent_value("Length","Width",  node = FindNode(MTG$MTG, "node_5"))
-get_parent_value <- function(..., node, .scale = NULL) {
+#' get_parent_value("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+get_parent_value = function(..., node, .scale = NULL) {
   parent = node$parent
   dot_args = list(...)
 
