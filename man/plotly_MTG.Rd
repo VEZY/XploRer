@@ -4,18 +4,18 @@
 \alias{plotly_MTG}
 \title{Plot an interactive MTG}
 \usage{
-plotly_MTG(MTG, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
+plotly_MTG(MTG, ..., scale = NULL, angle = 45, phylotaxy = TRUE)
 }
 \arguments{
 \item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
+
+\item{...}{Names of the variables to be added to the tooltip (see details and examples).}
 
 \item{scale}{The scale required for plotting}
 
 \item{angle}{Insertion angle when branching}
 
 \item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
-
-\item{...}{Names of the variables to be added to the tooltip.}
 }
 \value{
 A \link{plotly} object of the MTG
@@ -23,8 +23,23 @@ A \link{plotly} object of the MTG
 \description{
 Plot an interactive MTG
 }
+\details{
+The name of each argument in \code{...} will be the name of a the variable given in the tooltip,
+and the value will be the value of the corresponding variable given as value. The arguments in \code{...} are
+automatically quoted and evaluated in the context of the \code{mtg}. They support unquoting and splicing. See
+the chapter about \href{https://adv-r.hadley.nz/metaprogramming.html}{metaprogramming} in the book "Advanced R"
+from H. Wickham for an introduction to these concepts.
+}
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG= read_MTG(filepath)
 plotly_MTG(MTG)
+
+# We can add more information to the tooltip, e.g. the values of the Length column:
+plotly_MTG(MTG, Length)
+
+# We can also use custom names for the variable in the tooltip:
+plotly_MTG(MTG, node_width = Width)
+# Here the tooltip will show the Width, labeled as "node_width"
+
 }
