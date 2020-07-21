@@ -169,7 +169,13 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 
 <span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Width_parent</span> <span class='kw'>=</span> <span class='fu'><a href='get_parent_value.html'>get_parent_value</a></span>(<span class='st'>"Width"</span>,  <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node</span>))
 
-<span class='fu'>ToDataFrameTree</span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in ToDataFrameTree(MTG$MTG, "Length", "Length2", "Length3"): could not find function "ToDataFrameTree"</span></div><div class='input'>
+<span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>)</div><div class='output co'>#&gt;                levelName Length Length2 Length3
+#&gt; 1 node_1                     NA      NA      NA
+#&gt; 2  °--node_2                 NA      NA      NA
+#&gt; 3      °--node_3              4       6      12
+#&gt; 4          ¦--node_4         10      12      24
+#&gt; 5          °--node_5          6       8      16
+#&gt; 6              °--node_6     12      14      28</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
