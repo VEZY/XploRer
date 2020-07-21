@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • XploRer</title>
+<title>Plot an MTG — autoplot.mtg • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Plot an MTG — autoplot.mtg" />
+<meta property="og:description" content="Plot an MTG" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -103,80 +104,61 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Plot an MTG</h1>
+    
+    <div class="hidden name"><code>autoplot.mtg.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Plot an MTG</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='co'># S3 method for mtg</span>
+<span class='fu'>autoplot</span>(<span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-io" class="hasAnchor"><a href="#section-io" class="anchor"></a>IO</h2>
-          <p class="section-desc"><p>Functions for reading / writing MTG files</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="read_MTG.html">read_MTG()</a></code> </p>
-        </td>
-        <td><p>Read MTG</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-plots" class="hasAnchor"><a href="#section-plots" class="anchor"></a>Plots</h2>
-          <p class="section-desc"><p>Functions for plotting the MTG</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="plotly_MTG.html">plotly_MTG()</a></code> </p>
-        </td>
-        <td><p>Plot an interactive MTG</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-compute" class="hasAnchor"><a href="#section-compute" class="anchor"></a>Compute</h2>
-          <p class="section-desc"><p>Functions for computing/extracting data from the MTG</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="topological_order.html">topological_order()</a></code> </p>
-        </td>
-        <td><p>Topological order</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>MTG</th>
+      <td><p>An MTG, as from <code><a href='read_MTG.html'>read_MTG()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>scale</th>
+      <td><p>The scale required for plotting</p></td>
+    </tr>
+    <tr>
+      <th>angle</th>
+      <td><p>Insertion angle when branching</p></td>
+    </tr>
+    <tr>
+      <th>phylotaxy</th>
+      <td><p>Is phylotaxy required ? Uses 180 degrees if <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments. <code><a href='plotly_MTG.html'>plotly_MTG()</a></code> uses this to add variables to the output data.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A ggplot of the MTG</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The function needs the topological orders as attributes in the MTG. If they
+are not present, it uses <code><a href='topological_order.html'>topological_order()</a></code> to compute it with descending order.
+If you need ascending order, please use <code><a href='topological_order.html'>topological_order(MTG, ascend = TRUE)</a></code> before
+plotting.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+<span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
+<span class='no'>MTG</span><span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>MTG</span>)</div><div class='img'><img src='autoplot.mtg-1.png' alt='' width='700' height='433' /></div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

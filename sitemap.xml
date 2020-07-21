@@ -7,6 +7,9 @@
     <loc>https://vezy.github.io/XploRer/reference/XploRer-package.html</loc>
   </url>
   <url>
+    <loc>https://vezy.github.io/XploRer/reference/autoplot.mtg.html</loc>
+  </url>
+  <url>
     <loc>https://vezy.github.io/XploRer/reference/check_sections.html</loc>
   </url>
   <url>
@@ -50,9 +53,6 @@
   </url>
   <url>
     <loc>https://vezy.github.io/XploRer/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://vezy.github.io/XploRer/reference/plot.mtg.html</loc>
   </url>
   <url>
     <loc>https://vezy.github.io/XploRer/reference/plotly_MTG.html</loc>
