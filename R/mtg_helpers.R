@@ -37,19 +37,19 @@ get_parent_value = function(..., node, .scale = NULL) {
 
 #' Get children value
 #'
-#' @description Get the value of one or several variables from the children of a node.
-#' This is a helper function that is usually used as input to [mutate_mtg()].
+#' @description Get attribute values from the children of a node.
 #'
-#' @param ... Any node attribute (as a character)
+#' @param attribute Any node attribute (as a character)
 #' @param node The node (do not put something when used from [mutate_mtg()])
 #' @param .scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
 #' @param .recursive If a child is not of the right `.scale`, continue until the `.scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
-#' @details This function returns the values of any attribute of the parent of a node. It is
-#' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
+#' @details This function returns the values of any attribute of the children of
+#' a node. It is mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()]
+#' doc for examples).
 #'
-#' @return The values of the attributes for the parent of the node
+#' @return The attribute values from the children of the node
 #'
 #' @export
 #'
@@ -58,43 +58,47 @@ get_parent_value = function(..., node, .scale = NULL) {
 #' MTG = read_mtg(filepath)
 #'
 #' # node_5 has one child:
-#' get_child_values("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+#' get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_5"))
 #'
-#' # node_5 has two children:
-#' get_child_values("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_3"))
+#' # node_3 has two children, returns two values:
+#' get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+#' # To get the names of those children:
+#' get_children_values("name", node = data.tree::FindNode(MTG$MTG, "node_3"))
 #'
-get_child_values = function(..., node, .scale = NULL, .recursive = TRUE) {
+#' # To get the values of the children of each node:
+#' mutate_mtg(MTG, children_width = get_children_values("Width", node = node))
+#' print(MTG$MTG, "Width", "children_width")
+#'
+get_children_values = function(attribute, node, .scale = NULL, .recursive = TRUE) {
   children = node$children
-  dot_args = list(...)
-
+  if(length(children) == 0) return(NA)
   children_in_scale =
     unlist(lapply(children, function(x){
       is.null(.scale) || x$.symbol %in% .scale
     }))
 
-  # Initializing the values list:
-  vals = lapply(dot_args, function(x){rep(NA, length(children))})
-  names(vals) = unlist(dot_args)
-  # NB: important to initialize as growing objects is bad practice in R.
-  # microbenchmarking shows it is 30% longer without init.
+  # Initializing the values as a vector:
+  vals = rep(NA, length(children))
 
-  # Assigning the values read from the childs:
-  for (j in seq_along(children)){
-    if(!children_in_scale[j] && .recursive){
+  # Assigning the values read from the children:
+  for (i in seq_along(children)){
+    if(!children_in_scale[i] && .recursive){
       # If the child is not of the requested scale, try its children until
       # meeting the right scale
-      vals_ = get_child_values(...,node = children[i], .scale = .scale,
+      vals_ = get_children_values(attribute,node = children[i], .scale = .scale,
                                .recursive= .recursive)
-      for(i in seq_along(dot_args)){
-        # Else, just return its values
-        vals[[i]][[j]] = vals_
+      if(length(vals_) > 1){
+        stop("Several childs found passing a scale: expected 'follow', got 'branch'")
+        # Only 'follow' is accepted after crossing a scale (it is either before or after)
       }
     }else{
-      for(i in seq_along(dot_args)){
-        # Else, just return its values
-        vals[[i]][j] = children[[j]][[dot_args[[i]]]]
-      }
+      # Else, just return its values
+      vals_ = children[[i]][[attribute]]
     }
+
+    if(is.null(vals_) || length(vals_) == 0) vals_ = NA
+
+    vals[[i]] = vals_
   }
   vals
 }

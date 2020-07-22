@@ -7,7 +7,7 @@
 mutate_mtg(data, ...)
 }
 \arguments{
-\item{data}{A \code{mtg}, as returned by \code{\link[=read_MTG]{read_MTG()}}.}
+\item{data}{A \code{mtg}, as returned by \code{\link[=read_mtg]{read_mtg()}}.}
 
 \item{...}{Name-value pairs of expressions, each with length 1. To access a variable from the mtg,
 use \code{node$var} instead of \code{var}. \
@@ -33,25 +33,34 @@ evaluation (NSE). It also returns the \code{mtg} so it can be used with pipes.
 \examples{
 # Import the MTG:
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-MTG = read_MTG(filepath)
+MTG = read_mtg(filepath)
 
 # And mutate it by adding two new variables, Length2 and Length3:
 mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
 
-# note two thing here:
+# note two things here:
 # 1/ We use "node$" to access the values of a variable inside the mtg;
 # 2/ Length3 uses the results of Length2 before it even exist. This is because
 # The variables are constructed sequentially.
 
 # We can also use pipes:
 \dontrun{
-read_MTG(filepath)\%>\%
+read_mtg(filepath)\%>\%
   mutate_mtg(Length2 = node$Length + 2)\%>\%
   plot(.)
 }
 
+# Or even function:
 mutate_mtg(MTG, Width_parent = get_parent_value("Width",  node = node))
 
-data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
+# And more complex associations. Here is an example were we need the sum of
+# the section_surface of children of each node:
+mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+           s_surf_child_sum = sum(get_children_values("section_surface",
+                                  node = node),na.rm=TRUE))
+
+
+data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
+"Width_parent","section_surface","s_surf_child_sum")
 
 }

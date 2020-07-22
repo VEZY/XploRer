@@ -7,7 +7,7 @@
 topological_order(MTG, ascend = FALSE)
 }
 \arguments{
-\item{MTG}{An MTG tree as from \code{\link[=read_MTG]{read_MTG()}}}
+\item{MTG}{An MTG tree as from \code{\link[=read_mtg]{read_mtg()}}}
 
 \item{ascend}{Is the order computed from the base (\code{TRUE}), or the tip (\code{FALSE}) ?}
 }
@@ -20,7 +20,7 @@ Compute the topological order of a tree
 }
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-MTG= read_MTG(filepath)
+MTG= read_mtg(filepath)
 topological_order(MTG)
 print(MTG$MTG, "topological_order")
 }

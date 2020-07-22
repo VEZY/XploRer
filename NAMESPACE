@@ -2,10 +2,11 @@
 
 S3method(autoplot,mtg)
 export("%>%")
+export(get_children_values)
 export(get_parent_value)
 export(mutate_mtg)
-export(plotly_MTG)
-export(read_MTG)
+export(plotly_mtg)
+export(read_mtg)
 export(topological_order)
 importFrom(ggplot2,autoplot)
 importFrom(magrittr,"%>%")

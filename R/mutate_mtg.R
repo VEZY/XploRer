@@ -29,7 +29,7 @@
 #' # And mutate it by adding two new variables, Length2 and Length3:
 #' mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
 #'
-#' # note two thing here:
+#' # note two things here:
 #' # 1/ We use "node$" to access the values of a variable inside the mtg;
 #' # 2/ Length3 uses the results of Length2 before it even exist. This is because
 #' # The variables are constructed sequentially.
@@ -41,9 +41,18 @@
 #'   plot(.)
 #' }
 #'
+#' # Or even function:
 #' mutate_mtg(MTG, Width_parent = get_parent_value("Width",  node = node))
 #'
-#' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3")
+#' # And more complex associations. Here is an example were we need the sum of
+#' # the section_surface of children of each node:
+#' mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+#'            s_surf_child_sum = sum(get_children_values("section_surface",
+#'                                   node = node),na.rm=TRUE))
+#'
+#'
+#' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
+#' "Width_parent","section_surface","s_surf_child_sum")
 #'
 mutate_mtg = function(data,...){
   node = NULL # To avoid CRAN notes

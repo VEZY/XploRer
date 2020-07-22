@@ -27,6 +27,6 @@ mainly intended to be used in a call to \code{\link[=mutate_mtg]{mutate_mtg()}} 
 }
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-MTG = read_MTG(filepath)
+MTG = read_mtg(filepath)
 get_parent_value("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 }

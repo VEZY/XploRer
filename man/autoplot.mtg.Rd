@@ -7,7 +7,7 @@
 \method{autoplot}{mtg}(MTG, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
 }
 \arguments{
-\item{MTG}{An MTG, as from \code{\link[=read_MTG]{read_MTG()}}}
+\item{MTG}{An MTG, as from \code{\link[=read_mtg]{read_mtg()}}}
 
 \item{scale}{The scale required for plotting}
 
@@ -15,7 +15,7 @@
 
 \item{phylotaxy}{Is phylotaxy required ? Uses 180 degrees if \code{TRUE}.}
 
-\item{...}{Further arguments. \code{\link[=plotly_MTG]{plotly_MTG()}} uses this to add variables to the output data.}
+\item{...}{Further arguments. \code{\link[=plotly_mtg]{plotly_mtg()}} uses this to add variables to the output data.}
 }
 \value{
 A ggplot of the MTG
@@ -32,6 +32,6 @@ plotting.
 \examples{
 library(ggplot2)
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-MTG= read_MTG(filepath)
+MTG= read_mtg(filepath)
 autoplot(MTG)
 }
