@@ -26,7 +26,8 @@ Tree Graph) files. These files describe the plant topology
   - [1. Installation](#1-installation)
   - [2. Examples](#2-examples)
       - [2.1 Reading a file](#21-reading-a-file)
-      - [2.2 Plot](#22-plotting-a-plant)
+      - [2.2 Mutate](#22-mutate-the-mtg)
+      - [2.3 Plot](#22-plotting-a-plant)
   - [3. Help](#3-help)
 
 ## 1\. Installation
@@ -47,10 +48,11 @@ Read a simple MTG file:
 
 ``` r
 library(XploRer)
-MTG = read_MTG("https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg")
+
+MTG = read_mtg("https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg")
 ```
 
-The `read_MTG()` function returns a list of 4:
+The `read_mtg()` function returns a list of 4:
 
   - classes: a `data.frame` that holds information about the type of
     nodes used in the MTG (e.g. Internode, Leaf, etc…), the MTG scale
@@ -94,7 +96,7 @@ The `read_MTG()` function returns a list of 4:
     #> 7   XEuler  REAL
     ```
 
-  - MTG: a `data.tree` strucuture defining all nodes, their attributes
+  - MTG: a `data.tree` structure defining all nodes, their attributes
     and their relationships:
     
     ``` r
@@ -108,20 +110,116 @@ The `read_MTG()` function returns a list of 4:
     #> 6              °--node_6
     ```
 
-### 2.2 Plotting a plant
+### 2.2 Mutate the MTG
 
-#### 2.2.1 Static plot
+The attributes (also known as features or variables) of the MTG can be
+mutated using `mutate_mtg()`. It allows to compute new variables, or
+modify the existing ones.
 
-The plant topology can be plotted using the `plot_MTG()` function:
+#### Compute new variables
+
+`mutate_mtg()` borrows its grammar from `dplyr`. We can compute a new
+variable based on the values of others:
 
 ``` r
-plot_MTG(MTG)
-#> Warning: Ignoring unknown aesthetics: name, link, symbol, index
+# Import the MTG:
+filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
+MTG = read_mtg(filepath)
+
+# And mutate it by adding two new variables, Length2 and Length3:
+mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+We can note two things here:
 
-#### 2.2.2 Interactive plot
+1.  We use `node$` to access the values of a variable inside the MTG.
+    This is done to avoid any conflicts between variables from the MTG,
+    and variables from your environment;
+
+2.  `Length3` uses the results of `Length2` before it even exist. This
+    is very powerful to construct many new variables at once. It is
+    allowed thanks to a sequential construction of the variables.
+
+As with `dplyr` main functions, `mutate_mtg()` can be used with pipes:
+
+``` r
+read_mtg(filepath)%>%
+  mutate_mtg(Length2 = node$Length + 2)
+```
+
+This is allowed because the function returns the results invisibly. Note
+that it is mutating the MTG in place though, so no need to assign the
+results of `mutate_mtg()` to a variable.
+
+You can also use functions inside the call of the function. Some helpers
+are provided by the package to compute variables based on the parents or
+children of the node (see `get_parent_value()` and
+`get_children_value()`). Here is an example were we define a new
+variable called `Length_parent` that is the length of the node’s parent:
+
+``` r
+mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
+```
+
+We can also make more complex associations. Here is an example were we
+need the sum of the surface of the section of all children for the
+nodes:
+
+``` r
+mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+           s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
+```
+
+We first compute the surface of the section of each node, and then we
+sum the values for all children of the nodes. This is helpful to check
+if our MTG follows the pipe model.
+
+The results can be viewed using the functions from the `data.tree`
+package:
+
+``` r
+data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3","Length_parent","section_surface","s_surf_child_sum")
+#>                levelName Length Length2 Length3 Length_parent section_surface
+#> 1 node_1                     NA      NA      NA            NA              NA
+#> 2  °--node_2                 NA      NA      NA            NA              NA
+#> 3      °--node_3              4       6      12            NA       0.7853982
+#> 4          ¦--node_4         10      12      24             4      28.2743339
+#> 5          °--node_5          6       8      16             4              NA
+#> 6              °--node_6     12      14      28             6      38.4845100
+#>   s_surf_child_sum
+#> 1                0
+#> 2                0
+#> 3                0
+#> 4                0
+#> 5                0
+#> 6                0
+```
+
+### 2.3 Plotting a plant
+
+#### 2.3.1 Static plot
+
+The plant topology can be plotted using the `autoplot()` function. This
+function is implemented by `ggplot2` so you’ll need to load this package
+before-hand:
+
+``` r
+library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 3.6.3
+autoplot(MTG)
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+
+The function can be used in a pipe, such as:
+
+``` r
+read_mtg(filepath)%>%
+  mutate_mtg(Length2 = node$Length + 2)%>%
+  autoplot(.)
+```
+
+#### 2.3.2 Interactive plot
 
 The same plot can be rendered as an interactive plot using:
 
@@ -129,10 +227,19 @@ The same plot can be rendered as an interactive plot using:
 plotly_MTG(MTG)
 ```
 
-<img src="www/plotly_MTG.gif" width="100%" />
+![Interactive
+plot](https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif)
 
 `plotly_MTG()` uses the [plotly API](https://plotly.com/) under the
 hood.
+
+It is also possible to add any variable in the tooltip appearing on
+hover of a node by adding it to the call. For example if we need the
+`Length` and the `Width` of the nodes, we would write:
+
+``` r
+plotly_mtg(MTG, Length, Width)
+```
 
 ## 3\. Help
 

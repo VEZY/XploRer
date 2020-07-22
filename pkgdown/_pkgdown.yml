@@ -16,6 +16,7 @@ reference:
   - mutate_mtg
   - topological_order
   - get_parent_value
+  - get_children_values
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:

@@ -4,33 +4,45 @@
 #' function that is usually used as input to [mutate_mtg()] to get the values of the parent node
 #' for all nodes.
 #'
-#' @param ... Any node attribute (as a character)
+#' @param attribute Any node attribute (as a character)
 #' @param node The node (do not put something when used from [mutate_mtg()])
 #' @param .scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
 #'
 #' @details This function returns the values of any attribute of the parent of a node. It is
 #' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
 #'
-#' @return The values of the attributes for the parent of the node
+#' @return The attribute values from the parent of a node
 #'
 #' @export
 #'
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
-#' get_parent_value("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
-get_parent_value = function(..., node, .scale = NULL) {
+#' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+get_parent_value = function(attribute, node = NULL, .scale = NULL) {
+
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_parent_value()' is used interactively")
+    }
+  }
+
   parent = node$parent
-  dot_args = list(...)
 
   if(node$isRoot){
-    vals = vector(mode = "list", length = length(dot_args))
+    vals = NA
   } else if(is.null(.scale) || parent$.symbol %in% .scale){
-    vals = lapply(dot_args, function(x) parent[[x]])
+    vals = parent[[attribute]]
   }else{
-    vals = get_parent_value(...,node = parent, .scale = .scale)
+    vals = get_parent_value(attribute, node = parent, .scale = .scale)
   }
-  names(vals) = dot_args
+  if(is.null(vals)) vals = NA
+
   vals
 }
 
@@ -40,14 +52,13 @@ get_parent_value = function(..., node, .scale = NULL) {
 #' @description Get attribute values from the children of a node.
 #'
 #' @param attribute Any node attribute (as a character)
-#' @param node The node (do not put something when used from [mutate_mtg()])
-#' @param .scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
+#' @param node The MTG node
+#' @param .scale The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)
 #' @param .recursive If a child is not of the right `.scale`, continue until the `.scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
-#' @details This function returns the values of any attribute of the children of
-#' a node. It is mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()]
-#' doc for examples).
+#' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
+#' the `node` argument can be left empty (or you can put `node = node` equivalently).
 #'
 #' @return The attribute values from the children of the node
 #'
@@ -66,10 +77,22 @@ get_parent_value = function(..., node, .scale = NULL) {
 #' get_children_values("name", node = data.tree::FindNode(MTG$MTG, "node_3"))
 #'
 #' # To get the values of the children of each node:
-#' mutate_mtg(MTG, children_width = get_children_values("Width", node = node))
+#' mutate_mtg(MTG, children_width = get_children_values("Width"))
 #' print(MTG$MTG, "Width", "children_width")
 #'
-get_children_values = function(attribute, node, .scale = NULL, .recursive = TRUE) {
+get_children_values = function(attribute, node = NULL, .scale = NULL, .recursive = TRUE) {
+
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_children_values()' is used interactively")
+    }
+  }
+
   children = node$children
   if(length(children) == 0) return(NA)
   children_in_scale =

@@ -4,17 +4,17 @@
 \alias{get_parent_value}
 \title{Get parent value}
 \usage{
-get_parent_value(..., node, .scale = NULL)
+get_parent_value(attribute, node = NULL, .scale = NULL)
 }
 \arguments{
-\item{...}{Any node attribute (as a character)}
+\item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
 \item{.scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
 }
 \value{
-The values of the attributes for the parent of the node
+The attribute values from the parent of a node
 }
 \description{
 Get the value of one or several variables from the parent node. This is a helper
@@ -28,5 +28,5 @@ mainly intended to be used in a call to \code{\link[=mutate_mtg]{mutate_mtg()}} 
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
-get_parent_value("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 }

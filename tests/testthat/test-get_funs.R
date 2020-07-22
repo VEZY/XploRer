@@ -4,25 +4,29 @@ filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 node_5 = data.tree::FindNode(MTG$MTG, "node_5")
 
-test_that("get_parent_value: requesting one attribute", {
+test_that("get_parent_value: requesting an attribute", {
   test = get_parent_value("Length", node = node_5)
-  expect_equal(test,list(Length = 4.0))
+  expect_equal(test,4.0)
 })
 
-test_that("get_parent_value: requesting two attributes", {
-  test = get_parent_value("Length", "Width", node = node_5)
-  expect_equal(test,list(Length = 4.0, Width = 1.0))
-})
-
-test_that("get_parent_value: requesting two attributes, one is absent", {
-  test = get_parent_value("Length", "test", node = node_5)
-  expect_null(test$test)
+test_that("get_parent_value: requesting an attributes that is missing", {
+  test = get_parent_value("test", node = node_5)
+  expect_true(is.na(test))
 })
 
 test_that("get_parent_value: test root node", {
-  test = get_parent_value("Length", "test", node = MTG$MTG)
-  expect_length(test, 2)
-  expect_null(test$test)
-  expect_null(test$Length)
+  test = get_parent_value("Length", node = MTG$MTG)
+  expect_length(test, 1)
+  expect_true(is.na(test))
+})
+
+test_that("get_children_values: requesting an attribute", {
+  test = get_children_values("Length", node = node_5)
+  expect_equal(test,12.0)
+})
+
+test_that("get_children_values: requesting an attributes that is missing", {
+  test = get_children_values("test", node = node_5)
+  expect_true(is.na(test))
 })
 

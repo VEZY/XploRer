@@ -47,20 +47,18 @@ mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
 \dontrun{
 read_mtg(filepath)\%>\%
   mutate_mtg(Length2 = node$Length + 2)\%>\%
-  plot(.)
+  autoplot(.)
 }
 
 # Or even function:
-mutate_mtg(MTG, Width_parent = get_parent_value("Width",  node = node))
+mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
 
 # And more complex associations. Here is an example were we need the sum of
 # the section_surface of children of each node:
 mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
-           s_surf_child_sum = sum(get_children_values("section_surface",
-                                  node = node),na.rm=TRUE))
+           s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
 
 
 data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
-"Width_parent","section_surface","s_surf_child_sum")
-
+"Length_parent","section_surface","s_surf_child_sum")
 }

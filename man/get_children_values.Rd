@@ -4,14 +4,14 @@
 \alias{get_children_values}
 \title{Get children value}
 \usage{
-get_children_values(attribute, node, .scale = NULL, .recursive = TRUE)
+get_children_values(attribute, node = NULL, .scale = NULL, .recursive = TRUE)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
-\item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
+\item{node}{The MTG node}
 
-\item{.scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
+\item{.scale}{The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)}
 
 \item{.recursive}{If a child is not of the right \code{.scale}, continue until the \code{.scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
@@ -23,9 +23,8 @@ The attribute values from the children of the node
 Get attribute values from the children of a node.
 }
 \details{
-This function returns the values of any attribute of the children of
-a node. It is mainly intended to be used in a call to \code{\link[=mutate_mtg]{mutate_mtg()}} (see \code{\link[=mutate_mtg]{mutate_mtg()}}
-doc for examples).
+This function is mainly intended to be used with \code{\link[=mutate_mtg]{mutate_mtg()}}. In this case,
+the \code{node} argument can be left empty (or you can put \code{node = node} equivalently).
 }
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
@@ -40,7 +39,7 @@ get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
 get_children_values("name", node = data.tree::FindNode(MTG$MTG, "node_3"))
 
 # To get the values of the children of each node:
-mutate_mtg(MTG, children_width = get_children_values("Width", node = node))
+mutate_mtg(MTG, children_width = get_children_values("Width"))
 print(MTG$MTG, "Width", "children_width")
 
 }
