@@ -118,7 +118,7 @@ modify the existing ones.
 
 #### Compute new variables
 
-`mutate_mtg()` borrows its grammar from `dplyr`. We can compute a new
+`mutate_mtg()` borrows its syntax from `dplyr`. We can compute a new
 variable based on the values of others:
 
 ``` r

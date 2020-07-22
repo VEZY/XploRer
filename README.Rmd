@@ -87,7 +87,7 @@ The attributes (also known as features or variables) of the MTG can be mutated u
 
 #### Compute new variables
 
-`mutate_mtg()` borrows its grammar from `dplyr`. We can compute a new variable based on the values of others: 
+`mutate_mtg()` borrows its syntax from `dplyr`. We can compute a new variable based on the values of others: 
 ```{r}
 # Import the MTG:
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
