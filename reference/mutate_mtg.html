@@ -73,7 +73,7 @@ the same name." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -124,7 +124,7 @@ the same name.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A <code>mtg</code>, as returned by <code><a href='read_MTG.html'>read_MTG()</a></code>.</p></td>
+      <td><p>A <code>mtg</code>, as returned by <code><a href='read_MTG.html'>read_mtg()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -150,33 +150,47 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Import the MTG:</span>
 <span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)
+<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
 
 <span class='co'># And mutate it by adding two new variables, Length2 and Length3:</span>
 <span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Length2</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length</span> + <span class='fl'>2</span>, <span class='kw'>Length3</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length2</span> * <span class='fl'>2</span>)
 
-<span class='co'># note two thing here:</span>
+<span class='co'># note two things here:</span>
 <span class='co'># 1/ We use "node$" to access the values of a variable inside the mtg;</span>
 <span class='co'># 2/ Length3 uses the results of Length2 before it even exist. This is because</span>
 <span class='co'># The variables are constructed sequentially.</span>
 
 <span class='co'># We can also use pipes:</span>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='read_MTG.html'>read_MTG</a></span>(<span class='no'>filepath</span>)<span class='kw'>%&gt;%</span>
+<span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)<span class='kw'>%&gt;%</span>
   <span class='fu'>mutate_mtg</span>(<span class='kw'>Length2</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length</span> + <span class='fl'>2</span>)<span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>.</span>)
+  <span class='fu'>autoplot</span>(<span class='no'>.</span>)
 }
 
-<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Width_parent</span> <span class='kw'>=</span> <span class='fu'><a href='get_parent_value.html'>get_parent_value</a></span>(<span class='st'>"Width"</span>,  <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node</span>))
+<span class='co'># Or even function:</span>
+<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Length_parent</span> <span class='kw'>=</span> <span class='fu'><a href='get_parent_value.html'>get_parent_value</a></span>(<span class='st'>"Length"</span>))
 
-<span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>)</div><div class='output co'>#&gt;                levelName Length Length2 Length3
-#&gt; 1 node_1                     NA      NA      NA
-#&gt; 2  °--node_2                 NA      NA      NA
-#&gt; 3      °--node_3              4       6      12
-#&gt; 4          ¦--node_4         10      12      24
-#&gt; 5          °--node_5          6       8      16
-#&gt; 6              °--node_6     12      14      28</div><div class='input'>
-</div></pre>
+<span class='co'># And more complex associations. Here is an example were we need the sum of</span>
+<span class='co'># the section_surface of children of each node:</span>
+<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>section_surface</span> <span class='kw'>=</span> <span class='no'>pi</span> * ((<span class='no'>node</span>$<span class='no'>Width</span> / <span class='fl'>2</span>)^<span class='fl'>2</span>),
+           <span class='kw'>s_surf_child_sum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='get_children_values.html'>get_children_values</a></span>(<span class='st'>"section_surface"</span>),<span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+
+
+<span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>,
+<span class='st'>"Length_parent"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"s_surf_child_sum"</span>)</div><div class='output co'>#&gt;                levelName Length Length2 Length3 Length_parent section_surface
+#&gt; 1 node_1                     NA      NA      NA            NA              NA
+#&gt; 2  °--node_2                 NA      NA      NA            NA              NA
+#&gt; 3      °--node_3              4       6      12            NA       0.7853982
+#&gt; 4          ¦--node_4         10      12      24             4      28.2743339
+#&gt; 5          °--node_5          6       8      16             4              NA
+#&gt; 6              °--node_6     12      14      28             6      38.4845100
+#&gt;   s_surf_child_sum
+#&gt; 1                0
+#&gt; 2                0
+#&gt; 3                0
+#&gt; 4                0
+#&gt; 5                0
+#&gt; 6                0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

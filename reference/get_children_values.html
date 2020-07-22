@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parse MTG node attributes — parse_MTG_node_attr • XploRer</title>
+<title>Get children value — get_children_values • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Parse MTG node attributes — parse_MTG_node_attr" />
-<meta property="og:description" content="Parse the attributes names, values and type" />
+<meta property="og:title" content="Get children value — get_children_values" />
+<meta property="og:description" content="Get attribute values from the children of a node." />
 
 
 
@@ -106,38 +106,66 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Parse MTG node attributes</h1>
+    <h1>Get children value</h1>
     
-    <div class="hidden name"><code>parse_MTG_node_attr.Rd</code></div>
+    <div class="hidden name"><code>get_children_values.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Parse the attributes names, values and type</p>
+    <p>Get attribute values from the children of a node.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parse_MTG_node_attr</span>(<span class='no'>node_data</span>, <span class='no'>features</span>, <span class='no'>attr_column_start</span>)</pre>
+    <pre class="usage"><span class='fu'>get_children_values</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>features</th>
-      <td><p>The features data.frame</p></td>
+      <th>attribute</th>
+      <td><p>Any node attribute (as a character)</p></td>
     </tr>
     <tr>
-      <th>attr_column_start</th>
-      <td><p>The index of the column of the first attribute</p></td>
+      <th>node</th>
+      <td><p>The MTG node</p></td>
     </tr>
     <tr>
-      <th>MTG_line</th>
-      <td><p>An MTG line (e.g. "/P1/A1")</p></td>
+      <th>.scale</th>
+      <td><p>The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)</p></td>
+    </tr>
+    <tr>
+      <th>.recursive</th>
+      <td><p>If a child is not of the right <code>.scale</code>, continue until the <code>.scale</code>
+required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of attributes</p>
+    <p>The attribute values from the children of the node</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>This function is mainly intended to be used with <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>. In this case,
+the <code>node</code> argument can be left empty (or you can put <code>node = node</code> equivalently).</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
+<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
+
+<span class='co'># node_5 has one child:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_5"</span>))</div><div class='output co'>#&gt; [1] 12</div><div class='input'>
+<span class='co'># node_3 has two children, returns two values:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_3"</span>))</div><div class='output co'>#&gt; [1] 10  6</div><div class='input'><span class='co'># To get the names of those children:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"name"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_3"</span>))</div><div class='output co'>#&gt; [1] "node_4" "node_5"</div><div class='input'>
+<span class='co'># To get the values of the children of each node:</span>
+<span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width</span> <span class='kw'>=</span> <span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width"</span>)</div><div class='output co'>#&gt;                levelName Width children_width
+#&gt; 1 node_1                    NA               
+#&gt; 2  °--node_2                NA              1
+#&gt; 3      °--node_3             1          6, NA
+#&gt; 4          ¦--node_4         6               
+#&gt; 5          °--node_5        NA              7
+#&gt; 6              °--node_6     7               </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -80,7 +80,8 @@
 <a href="#2-examples">2. Examples</a>
 <ul>
 <li><a href="#21-reading-a-file">2.1 Reading a file</a></li>
-<li><a href="#22-plotting-a-plant">2.2 Plot</a></li>
+<li><a href="#22-mutate-the-mtg">2.2 Mutate</a></li>
+<li><a href="#22-plotting-a-plant">2.3 Plot</a></li>
 </ul>
 </li>
 <li><a href="#3-help">3. Help</a></li>
@@ -101,8 +102,9 @@
 <a href="#21-reading-a-file" class="anchor"></a>2.1 Reading a file</h3>
 <p>Read a simple MTG file:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">XploRer</span>)
-<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="reference/read_MTG.html">read_MTG</a></span>(<span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span>)</pre></div>
-<p>The <code><a href="reference/read_MTG.html">read_MTG()</a></code> function returns a list of 4:</p>
+
+<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span>)</pre></div>
+<p>The <code><a href="reference/read_MTG.html">read_mtg()</a></code> function returns a list of 4:</p>
 <ul>
 <li>
 <p>classes: a <code>data.frame</code> that holds information about the type of nodes used in the MTG (e.g. Internode, Leaf, etc…), the MTG scale for each one, and some more details. Here is the classes <code>data.frame</code> from our example:</p>
@@ -134,7 +136,7 @@
 <span class="co">#&gt; 7   XEuler  REAL</span></pre></div>
 </li>
 <li>
-<p>MTG: a <code>data.tree</code> strucuture defining all nodes, their attributes and their relationships:</p>
+<p>MTG: a <code>data.tree</code> structure defining all nodes, their attributes and their relationships:</p>
 <div class="sourceCode" id="cb6"><pre class="r"><span class="no">MTG</span>$<span class="no">MTG</span>
 <span class="co">#&gt;                levelName</span>
 <span class="co">#&gt; 1 node_1                </span>
@@ -146,24 +148,78 @@
 </li>
 </ul>
 </div>
-<div id="22-plotting-a-plant" class="section level3">
+<div id="22-mutate-the-mtg" class="section level3">
 <h3 class="hasAnchor">
-<a href="#22-plotting-a-plant" class="anchor"></a>2.2 Plotting a plant</h3>
-<div id="221-static-plot" class="section level4">
+<a href="#22-mutate-the-mtg" class="anchor"></a>2.2 Mutate the MTG</h3>
+<p>The attributes (also known as features or variables) of the MTG can be mutated using <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code>. It allows to compute new variables, or modify the existing ones.</p>
+<div id="compute-new-variables" class="section level4">
 <h4 class="hasAnchor">
-<a href="#221-static-plot" class="anchor"></a>2.2.1 Static plot</h4>
-<p>The plant topology can be plotted using the <code>plot_MTG()</code> function:</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu">plot_MTG</span>(<span class="no">MTG</span>)
-<span class="co">#&gt; Warning: Ignoring unknown aesthetics: name, link, symbol, index</span></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<a href="#compute-new-variables" class="anchor"></a>Compute new variables</h4>
+<p><code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code> borrows its grammar from <code>dplyr</code>. We can compute a new variable based on the values of others:</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="co"># Import the MTG:</span>
+<span class="no">filepath</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"simple_plant.mtg"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"XploRer"</span>)
+<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)
+
+<span class="co"># And mutate it by adding two new variables, Length2 and Length3:</span>
+<span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>, <span class="kw">Length3</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length2</span> * <span class="fl">2</span>)</pre></div>
+<p>We can note two things here:</p>
+<ol>
+<li><p>We use <code>node$</code> to access the values of a variable inside the MTG. This is done to avoid any conflicts between variables from the MTG, and variables from your environment;</p></li>
+<li><p><code>Length3</code> uses the results of <code>Length2</code> before it even exist. This is very powerful to construct many new variables at once. It is allowed thanks to a sequential construction of the variables.</p></li>
+</ol>
+<p>As with <code>dplyr</code> main functions, <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code> can be used with pipes:</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)<span class="kw">%&gt;%</span>
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>)</pre></div>
+<p>This is allowed because the function returns the results invisibly. Note that it is mutating the MTG in place though, so no need to assign the results of <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code> to a variable.</p>
+<p>You can also use functions inside the call of the function. Some helpers are provided by the package to compute variables based on the parents or children of the node (see <code><a href="reference/get_parent_value.html">get_parent_value()</a></code> and <code>get_children_value()</code>). Here is an example were we define a new variable called <code>Length_parent</code> that is the length of the node’s parent:</p>
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length_parent</span> <span class="kw">=</span> <span class="fu"><a href="reference/get_parent_value.html">get_parent_value</a></span>(<span class="st">"Length"</span>))</pre></div>
+<p>We can also make more complex associations. Here is an example were we need the sum of the surface of the section of all children for the nodes:</p>
+<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
+           <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/get_children_values.html">get_children_values</a></span>(<span class="st">"section_surface"</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></div>
+<p>We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. This is helpful to check if our MTG follows the pipe model.</p>
+<p>The results can be viewed using the functions from the <code>data.tree</code> package:</p>
+<div class="sourceCode" id="cb11"><pre class="r"><span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html">ToDataFrameTree</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>,<span class="st">"Length"</span>,<span class="st">"Length2"</span>,<span class="st">"Length3"</span>,<span class="st">"Length_parent"</span>,<span class="st">"section_surface"</span>,<span class="st">"s_surf_child_sum"</span>)
+<span class="co">#&gt;                levelName Length Length2 Length3 Length_parent section_surface</span>
+<span class="co">#&gt; 1 node_1                     NA      NA      NA            NA              NA</span>
+<span class="co">#&gt; 2  °--node_2                 NA      NA      NA            NA              NA</span>
+<span class="co">#&gt; 3      °--node_3              4       6      12            NA       0.7853982</span>
+<span class="co">#&gt; 4          ¦--node_4         10      12      24             4      28.2743339</span>
+<span class="co">#&gt; 5          °--node_5          6       8      16             4              NA</span>
+<span class="co">#&gt; 6              °--node_6     12      14      28             6      38.4845100</span>
+<span class="co">#&gt;   s_surf_child_sum</span>
+<span class="co">#&gt; 1                0</span>
+<span class="co">#&gt; 2                0</span>
+<span class="co">#&gt; 3                0</span>
+<span class="co">#&gt; 4                0</span>
+<span class="co">#&gt; 5                0</span>
+<span class="co">#&gt; 6                0</span></pre></div>
 </div>
-<div id="222-interactive-plot" class="section level4">
+</div>
+<div id="23-plotting-a-plant" class="section level3">
+<h3 class="hasAnchor">
+<a href="#23-plotting-a-plant" class="anchor"></a>2.3 Plotting a plant</h3>
+<div id="231-static-plot" class="section level4">
 <h4 class="hasAnchor">
-<a href="#222-interactive-plot" class="anchor"></a>2.2.2 Interactive plot</h4>
+<a href="#231-static-plot" class="anchor"></a>2.3.1 Static plot</h4>
+<p>The plant topology can be plotted using the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> function. This function is implemented by <code>ggplot2</code> so you’ll need to load this package before-hand:</p>
+<div class="sourceCode" id="cb12"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<span class="co">#&gt; Warning: package 'ggplot2' was built under R version 3.6.3</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">MTG</span>)</pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
+<p>The function can be used in a pipe, such as:</p>
+<div class="sourceCode" id="cb13"><pre class="r"><span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)<span class="kw">%&gt;%</span>
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>)<span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">.</span>)</pre></div>
+</div>
+<div id="232-interactive-plot" class="section level4">
+<h4 class="hasAnchor">
+<a href="#232-interactive-plot" class="anchor"></a>2.3.2 Interactive plot</h4>
 <p>The same plot can be rendered as an interactive plot using:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/plotly_MTG.html">plotly_MTG</a></span>(<span class="no">MTG</span>)</pre></div>
-<p><img src="www/plotly_MTG.gif" width="100%"></p>
-<p><code><a href="reference/plotly_MTG.html">plotly_MTG()</a></code> uses the <a href="https://plotly.com/">plotly API</a> under the hood.</p>
+<div class="sourceCode" id="cb14"><pre class="r"><span class="fu">plotly_MTG</span>(<span class="no">MTG</span>)</pre></div>
+<p><img src="https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif" alt="Interactive plot"></p>
+<p><code>plotly_MTG()</code> uses the <a href="https://plotly.com/">plotly API</a> under the hood.</p>
+<p>It is also possible to add any variable in the tooltip appearing on hover of a node by adding it to the call. For example if we need the <code>Length</code> and the <code>Width</code> of the nodes, we would write:</p>
+<div class="sourceCode" id="cb15"><pre class="r"><span class="fu"><a href="reference/plotly_MTG.html">plotly_mtg</a></span>(<span class="no">MTG</span>, <span class="no">Length</span>, <span class="no">Width</span>)</pre></div>
 </div>
 </div>
 </div>
