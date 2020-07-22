@@ -1,3 +1,13 @@
+# XploRer 0.3.0
+
+* `get_parent_value()` was added to get the variables of the parent of a node
+
+* `get_children_values()` was added to get the variables of the children of a node
+
+* `mutate_mtg()` can use both `get_parent_value()` and `get_children_values()`
+
+* It is now possible to add any variable to the tooltip on hoover of a node in `plotly_mtg()`, e.g.: `plotly_mtg(MTG,Length,Width)`
+
 # XploRer 0.2.0
 
 * Mutating an MTG is now possible using `mutate_mtg()`. Its design is close to the one from `dplyr::mutate`
