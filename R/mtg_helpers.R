@@ -35,11 +35,10 @@ get_parent_value = function(..., node, .scale = NULL) {
 }
 
 
-#' Get parent value
+#' Get children value
 #'
-#' @description Get the value of one or several variables from the parent node. This is a helper
-#' function that is usually used as input to [mutate_mtg()] to get the values of the parent node
-#' for all nodes.
+#' @description Get the value of one or several variables from the children of a node.
+#' This is a helper function that is usually used as input to [mutate_mtg()].
 #'
 #' @param ... Any node attribute (as a character)
 #' @param node The node (do not put something when used from [mutate_mtg()])
@@ -57,9 +56,13 @@ get_parent_value = function(..., node, .scale = NULL) {
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
-#' get_parent_value("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 #'
-#' children = MTG$MTG$node_2$node_3$children
+#' # node_5 has one child:
+#' get_child_values("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+#'
+#' # node_5 has two children:
+#' get_child_values("Length","Width",  node = data.tree::FindNode(MTG$MTG, "node_3"))
+#'
 get_child_values = function(..., node, .scale = NULL, .recursive = TRUE) {
   children = node$children
   dot_args = list(...)
@@ -76,7 +79,6 @@ get_child_values = function(..., node, .scale = NULL, .recursive = TRUE) {
   # microbenchmarking shows it is 30% longer without init.
 
   # Assigning the values read from the childs:
-
   for (j in seq_along(children)){
     if(!children_in_scale[j] && .recursive){
       # If the child is not of the requested scale, try its children until
@@ -96,3 +98,4 @@ get_child_values = function(..., node, .scale = NULL, .recursive = TRUE) {
   }
   vals
 }
+
