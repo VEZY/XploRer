@@ -2,7 +2,7 @@
 #'
 #' @description Compute the topological order of a tree
 #'
-#' @param MTG An MTG tree as from [read_MTG()]
+#' @param MTG An MTG tree as from [read_mtg()]
 #' @param ascend Is the order computed from the base (`TRUE`), or the tip (`FALSE`) ?
 #'
 #' @return Nothing, update the values of the MTG in-place. The MTG is enriched with the
@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-#' MTG= read_MTG(filepath)
+#' MTG= read_mtg(filepath)
 #' topological_order(MTG)
 #' print(MTG$MTG, "topological_order")
 topological_order = function(MTG, ascend = FALSE){

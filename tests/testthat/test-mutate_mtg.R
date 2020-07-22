@@ -1,7 +1,7 @@
 context("Testing MTG apply")
 
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-MTG = read_MTG(filepath)
+MTG = read_mtg(filepath)
 
 test_that("adding a variable with mutate_mtg works", {
   mutate_mtg(MTG, test = 0+1)

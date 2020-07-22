@@ -4,7 +4,7 @@
 
 * Plotting an MTG is now done using `autoplot(MTG)`  
 
-* Interactive plots can be done using `plotly_MTG(MTG)`, which is an interface to the plotly API
+* Interactive plots can be done using `plotly_mtg(MTG)`, which is an interface to the plotly API
 
 # XploRer 0.1.1
 

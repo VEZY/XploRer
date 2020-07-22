@@ -15,9 +15,9 @@
 #' @examples
 #' \dontrun{
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-#' read_MTG(filepath)
+#' read_mtg(filepath)
 #' }
-read_MTG = function(file) {
+read_mtg = function(file) {
   MTG_file = readLines(file)
   MTG_file = strip_comments(MTG_file)
   MTG_file = strip_empty_lines(MTG_file)

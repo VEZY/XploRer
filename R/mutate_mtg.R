@@ -6,7 +6,7 @@
 #' @note The function was designed to be used as for [dplyr::mutate()], so it uses non-standard
 #' evaluation (NSE). It also returns the `mtg` so it can be used with pipes.
 #'
-#' @param data A `mtg`, as returned by [read_MTG()].
+#' @param data A `mtg`, as returned by [read_mtg()].
 #' @param ... Name-value pairs of expressions, each with length 1. To access a variable from the mtg,
 #' use `node$var` instead of `var`. \
 #'
@@ -24,7 +24,7 @@
 #' @examples
 #' # Import the MTG:
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
-#' MTG = read_MTG(filepath)
+#' MTG = read_mtg(filepath)
 #'
 #' # And mutate it by adding two new variables, Length2 and Length3:
 #' mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
@@ -36,7 +36,7 @@
 #'
 #' # We can also use pipes:
 #' \dontrun{
-#' read_MTG(filepath)%>%
+#' read_mtg(filepath)%>%
 #'   mutate_mtg(Length2 = node$Length + 2)%>%
 #'   plot(.)
 #' }

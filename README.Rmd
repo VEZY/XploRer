@@ -29,7 +29,8 @@ The goal of XploRer is to read, write, analyze and plot MTG (Multi-scale Tree Gr
 * [1. Installation](#1-installation)
 * [2. Examples](#2-examples)
   * [2.1 Reading a file](#21-reading-a-file)
-  * [2.2 Plot](#22-plotting-a-plant)
+  * [2.2 Mutate](#22-mutate-the-mtg)
+  * [2.3 Plot](#22-plotting-a-plant)
 * [3. Help](#3-help)
 
 ## 1. Installation
@@ -79,9 +80,17 @@ The `read_MTG()` function returns a list of 4:
     MTG$MTG
     ```
 
-### 2.2 Plotting a plant
+### 2.2 Mutate the MTG
 
-#### 2.2.1 Static plot
+The attributes (read variables) of the MTG can be mutated using `mutate_mtg()`. It allows to compute new variables, or modify the existing ones. 
+
+
+
+
+
+### 2.3 Plotting a plant
+
+#### 2.3.1 Static plot
 
 The plant topology can be plotted using the `plot_MTG()` function:
 
@@ -89,7 +98,7 @@ The plant topology can be plotted using the `plot_MTG()` function:
 plot_MTG(MTG)
 ```
 
-#### 2.2.2 Interactive plot
+#### 2.3.2 Interactive plot
 
 The same plot can be rendered as an interactive plot using: 
 

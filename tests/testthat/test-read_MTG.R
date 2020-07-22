@@ -41,7 +41,7 @@ test_that("Parse MTG", {
 })
 
 test_that("Read MTG file", {
-  MTG = read_MTG(filepath)
+  MTG = read_mtg(filepath)
   expect_known_hash(MTG, hash = "e0f411dbe9")
 })
 
