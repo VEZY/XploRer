@@ -115,7 +115,7 @@
     <p>Get attribute values from the children of a node.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_children_values</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_children_values</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,10 +130,11 @@
     </tr>
     <tr>
       <th>scale</th>
-      <td><p>The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)</p></td>
+      <td><p>The names of the MTG scale(s) required for the children (i.e. the SYMBOL
+from the MTG classes). Used as a filter.</p></td>
     </tr>
     <tr>
-      <th>.recursive</th>
+      <th>recursive</th>
       <td><p>If a child is not of the right <code>scale</code>, continue until the <code>scale</code>
 required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>
@@ -153,9 +154,22 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 
 <span class='co'># node_5 has one child:</span>
 <span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_5"</span>))</div><div class='output co'>#&gt; [1] 12</div><div class='input'>
+<span class='co'># Using node 3 as reference now:</span>
+<span class='no'>node_3</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_3"</span>)
 <span class='co'># node_3 has two children, returns two values:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_3"</span>))</div><div class='output co'>#&gt; [1] 10  6</div><div class='input'><span class='co'># To get the names of those children:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"name"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_3"</span>))</div><div class='output co'>#&gt; [1] "node_4" "node_5"</div><div class='input'>
+<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>)</div><div class='output co'>#&gt; [1] 10  6</div><div class='input'><span class='co'># To get the names of those children:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"name"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>)</div><div class='output co'>#&gt; [1] "node_4" "node_5"</div><div class='input'>
+<span class='co'># The width is not available for one child ("node_5"):</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>)</div><div class='output co'>#&gt; [1]  6 NA</div><div class='input'>
+<span class='co'># We can filter by scale if we need to return the values for some scales only:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; [1] 6 7</div><div class='input'><span class='co'># Here we get the value of node_6 also, because its parent "node_5" is not of scale</span>
+<span class='co'># "Leaf", so it was filtered out. It you need the values for one scale, but not</span>
+<span class='co'># making a recursive search from one scale to another until finding the required scale,</span>
+<span class='co'># you can put the `recursive` argument to `FALSE`:</span>
+
+<span class='co'># We can also get the values recursively until finding the right value:</span>
+<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1]  6 NA</div><div class='input'>
+
 <span class='co'># To get the values of the children of each node:</span>
 <span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width</span> <span class='kw'>=</span> <span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width"</span>)</div><div class='output co'>#&gt;                levelName Width children_width
