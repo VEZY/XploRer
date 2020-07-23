@@ -1,6 +1,6 @@
 #' Plot an MTG
 #'
-#' @param MTG An MTG, as from [read_mtg()]
+#' @param mtg An MTG, as from [read_mtg()]
 #' @param scale The scale required for plotting
 #' @param angle Insertion angle when branching
 #' @param phylotaxy Is phylotaxy required ? Uses 180 degrees if `TRUE`.

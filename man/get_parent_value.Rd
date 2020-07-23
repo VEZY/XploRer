@@ -11,7 +11,8 @@ get_parent_value(attribute, node = NULL, scale = NULL)
 
 \item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
-\item{scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
+\item{scale}{The names of the MTG scale required for the parent (i.e. the SYMBOL
+from the MTG classes). Used as a filter.}
 }
 \value{
 The attribute values from the parent of a node

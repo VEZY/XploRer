@@ -4,19 +4,34 @@
 \alias{mutate_mtg}
 \title{Mutate MTG}
 \usage{
-mutate_mtg(data, ...)
+mutate_mtg(
+  data,
+  ...,
+  .scale = NULL,
+  .traversal = c("pre-order", "post-order", "in-order", "level", "ancestor"),
+  .pruneFun = NULL
+)
 }
 \arguments{
 \item{data}{A \code{mtg}, as returned by \code{\link[=read_mtg]{read_mtg()}}.}
 
 \item{...}{Name-value pairs of expressions, each with length 1. To access a variable from the mtg,
-use \code{node$var} instead of \code{var}. \
-
-The name of each argument will be the name of a new variable, and the value will be its corresponding value. New variables overwrite
+use \code{node$var} instead of \code{var}. The name of each argument will be the name of a new variable,
+and the value will be its corresponding value. New variables overwrite
 existing variables of the same name. The arguments in \code{...} are automatically quoted and evaluated
 in the context of the \code{mtg}. They support unquoting and splicing. See the chapter about
 \href{https://adv-r.hadley.nz/metaprogramming.html}{metaprogramming} in the book "Advanced R" from H. Wickham
 for an introduction to these concepts.}
+
+\item{.scale}{The names of the MTG scale to apply the functions over (i.e. the SYMBOL from the MTG classes).
+This argument is used to apply a filter on the node modification.}
+
+\item{.traversal}{any of 'pre-order' (the default), 'post-order', 'in-order',
+'level', 'ancestor', or a custom function (see details)}
+
+\item{.pruneFun}{allows providing a a prune criteria, i.e. a function taking a
+Node as an input, and returning \code{TRUE} or \code{FALSE}. If \code{pruneFun} returns \code{FALSE}
+for a Node, then the Node and its entire sub-tree will not be considered.}
 }
 \value{
 The MTG invisibly. It is returned for piping purposes only, but it is modified in-place
@@ -25,6 +40,19 @@ inside de function.
 \description{
 Adds new variables to an MTG. New variables overwrite existing variables of
 the same name.
+}
+\details{
+The \code{.traversal} and \code{.pruneFun} arguments are passed to \link[data.tree:Traverse]{data.tree::Traverse}.
+From its documentation: the traversal order is as follows:
+\describe{
+\item{pre-order}{Go to first child, then to its first child, etc.}
+\item{post-order}{Go to the first branch's leaf, then to its siblings, and work your way back to the root}
+\item{in-order}{Go to the first branch's leaf, then to its parent, and only then to the leaf's sibling}
+\item{level}{Collect root, then level 2, then level 3, etc.}
+\item{ancestor}{Take a node, then the node's parent, then that node's parent in turn, etc. This ignores the \code{pruneFun} }
+\item{function}{You can also provide a function, whose sole parameter is a \code{\link{Node}} object. The
+function is expected to return the node's next node, a list of the node's next nodes, or NULL.}
+}
 }
 \note{
 The function was designed to be used as for \code{\link[dplyr:mutate]{dplyr::mutate()}}, so it uses non-standard
@@ -61,4 +89,7 @@ mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
 
 data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
 "Length_parent","section_surface","s_surf_child_sum")
+}
+\seealso{
+data.tree Do
 }

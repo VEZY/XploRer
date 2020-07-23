@@ -6,7 +6,8 @@
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The node (do not put something when used from [mutate_mtg()])
-#' @param scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
+#' @param scale The names of the MTG scale required for the parent (i.e. the SYMBOL
+#'  from the MTG classes). Used as a filter.
 #'
 #' @details This function returns the values of any attribute of the parent of a node. It is
 #' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
@@ -53,8 +54,9 @@ get_parent_value = function(attribute, node = NULL, scale = NULL) {
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
-#' @param scale The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)
-#' @param .recursive If a child is not of the right `scale`, continue until the `scale`
+#' @param scale The names of the MTG scale(s) required for the children (i.e. the SYMBOL
+#'  from the MTG classes). Used as a filter.
+#' @param recursive If a child is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
@@ -71,16 +73,32 @@ get_parent_value = function(attribute, node = NULL, scale = NULL) {
 #' # node_5 has one child:
 #' get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_5"))
 #'
+#' # Using node 3 as reference now:
+#' node_3 = data.tree::FindNode(MTG$MTG, "node_3")
 #' # node_3 has two children, returns two values:
-#' get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+#' get_children_values("Length", node = node_3)
 #' # To get the names of those children:
-#' get_children_values("name", node = data.tree::FindNode(MTG$MTG, "node_3"))
+#' get_children_values("name", node = node_3)
+#'
+#' # The width is not available for one child ("node_5"):
+#' get_children_values("Width", node = node_3)
+#'
+#' # We can filter by scale if we need to return the values for some scales only:
+#' get_children_values("Width", node = node_3, scale = "Leaf")
+#' # Here we get the value of node_6 also, because its parent "node_5" is not of scale
+#' # "Leaf", so it was filtered out. It you need the values for one scale, but not
+#' # making a recursive search from one scale to another until finding the required scale,
+#' # you can put the `recursive` argument to `FALSE`:
+#'
+#' # We can also get the values recursively until finding the right value:
+#' get_children_values("Width", node = node_3, scale = "Leaf", recursive = FALSE)
+#'
 #'
 #' # To get the values of the children of each node:
 #' mutate_mtg(MTG, children_width = get_children_values("Width"))
 #' print(MTG$MTG, "Width", "children_width")
 #'
-get_children_values = function(attribute, node = NULL, scale = NULL, .recursive = TRUE) {
+get_children_values = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -105,11 +123,11 @@ get_children_values = function(attribute, node = NULL, scale = NULL, .recursive 
 
   # Assigning the values read from the children:
   for (i in seq_along(children)){
-    if(!children_in_scale[i] && .recursive){
+    if(!children_in_scale[i] && recursive){
       # If the child is not of the requested scale, try its children until
       # meeting the right scale
-      vals_ = get_children_values(attribute,node = children[i], scale = scale,
-                               .recursive= .recursive)
+      vals_ = get_children_values(attribute,node = children[[i]], scale = scale,
+                               recursive= recursive)
       if(length(vals_) > 1){
         stop("Several childs found passing a scale: expected 'follow', got 'branch'")
         # Only 'follow' is accepted after crossing a scale (it is either before or after)

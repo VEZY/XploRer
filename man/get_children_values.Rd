@@ -4,16 +4,17 @@
 \alias{get_children_values}
 \title{Get children value}
 \usage{
-get_children_values(attribute, node = NULL, scale = NULL, .recursive = TRUE)
+get_children_values(attribute, node = NULL, scale = NULL, recursive = TRUE)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The MTG node}
 
-\item{scale}{The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)}
+\item{scale}{The names of the MTG scale(s) required for the children (i.e. the SYMBOL
+from the MTG classes). Used as a filter.}
 
-\item{.recursive}{If a child is not of the right \code{scale}, continue until the \code{scale}
+\item{recursive}{If a child is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{
@@ -33,10 +34,26 @@ MTG = read_mtg(filepath)
 # node_5 has one child:
 get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_5"))
 
+# Using node 3 as reference now:
+node_3 = data.tree::FindNode(MTG$MTG, "node_3")
 # node_3 has two children, returns two values:
-get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+get_children_values("Length", node = node_3)
 # To get the names of those children:
-get_children_values("name", node = data.tree::FindNode(MTG$MTG, "node_3"))
+get_children_values("name", node = node_3)
+
+# The width is not available for one child ("node_5"):
+get_children_values("Width", node = node_3)
+
+# We can filter by scale if we need to return the values for some scales only:
+get_children_values("Width", node = node_3, scale = "Leaf")
+# Here we get the value of node_6 also, because its parent "node_5" is not of scale
+# "Leaf", so it was filtered out. It you need the values for one scale, but not
+# making a recursive search from one scale to another until finding the required scale,
+# you can put the `recursive` argument to `FALSE`:
+
+# We can also get the values recursively until finding the right value:
+get_children_values("Width", node = node_3, scale = "Leaf", recursive = FALSE)
+
 
 # To get the values of the children of each node:
 mutate_mtg(MTG, children_width = get_children_values("Width"))

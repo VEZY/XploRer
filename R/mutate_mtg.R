@@ -8,13 +8,33 @@
 #'
 #' @param data A `mtg`, as returned by [read_mtg()].
 #' @param ... Name-value pairs of expressions, each with length 1. To access a variable from the mtg,
-#' use `node$var` instead of `var`. \
-#'
-#' The name of each argument will be the name of a new variable, and the value will be its corresponding value. New variables overwrite
+#' use `node$var` instead of `var`. The name of each argument will be the name of a new variable,
+#' and the value will be its corresponding value. New variables overwrite
 #' existing variables of the same name. The arguments in `...` are automatically quoted and evaluated
 #' in the context of the `mtg`. They support unquoting and splicing. See the chapter about
 #' [metaprogramming](https://adv-r.hadley.nz/metaprogramming.html) in the book "Advanced R" from H. Wickham
 #' for an introduction to these concepts.
+#' @param .scale The names of the MTG scale to apply the functions over (i.e. the SYMBOL from the MTG classes).
+#' This argument is used to apply a filter on the node modification.
+#' @param .traversal any of 'pre-order' (the default), 'post-order', 'in-order',
+#' 'level', 'ancestor', or a custom function (see details)
+#' @param .pruneFun allows providing a a prune criteria, i.e. a function taking a
+#'  Node as an input, and returning `TRUE` or `FALSE`. If `pruneFun` returns `FALSE`
+#'  for a Node, then the Node and its entire sub-tree will not be considered.
+#'
+#' @details The `.traversal` and `.pruneFun` arguments are passed to [data.tree::Traverse].
+#' From its documentation: the traversal order is as follows:
+#' \describe{
+#'    \item{pre-order}{Go to first child, then to its first child, etc.}
+#'    \item{post-order}{Go to the first branch's leaf, then to its siblings, and work your way back to the root}
+#'    \item{in-order}{Go to the first branch's leaf, then to its parent, and only then to the leaf's sibling}
+#'    \item{level}{Collect root, then level 2, then level 3, etc.}
+#'    \item{ancestor}{Take a node, then the node's parent, then that node's parent in turn, etc. This ignores the \code{pruneFun} }
+#'    \item{function}{You can also provide a function, whose sole parameter is a \code{\link{Node}} object. The
+#'    function is expected to return the node's next node, a list of the node's next nodes, or NULL.}
+#' }
+#'
+#' @seealso data.tree Do
 #'
 #' @return The MTG invisibly. It is returned for piping purposes only, but it is modified in-place
 #'  inside de function.
@@ -52,14 +72,23 @@
 #'
 #' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
 #' "Length_parent","section_surface","s_surf_child_sum")
-mutate_mtg = function(data,...){
+mutate_mtg = function(data,...,.scale = NULL,
+                      .traversal = c("pre-order", "post-order",
+                                     "in-order", "level", "ancestor"),
+                      .pruneFun = NULL){
   node = NULL # To avoid CRAN notes
   dots = rlang::enexprs(...)
   dots_names = names(dots)
   auto_named_dots = names(rlang::enquos(..., .named = TRUE))
 
-  if (length(dots) == 0L) {
+  if(length(dots) == 0L){
     return(NULL)
+  }
+
+  if(!is.null(.scale)){
+    filterFun = function(x){x$.symbol %in% .scale}
+  }else{
+    filterFun = NULL
   }
 
   dot_funs = vector(mode = "list", length = length(dots))
@@ -83,6 +112,9 @@ mutate_mtg = function(data,...){
   }
 
   # Actually applying the functions to all nodes:
-  data$MTG$Do(function(node) lapply(dot_funs, do.call, list(node = node)))
+  data$MTG$Do(fun = function(node){lapply(dot_funs, do.call, list(node = node))},
+              traversal = .traversal,
+              pruneFun = .pruneFun,
+              filterFun = filterFun)
   invisible(data)
 }
