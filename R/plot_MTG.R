@@ -21,12 +21,12 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_mtg(filepath)
 #' autoplot(MTG)
-autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
+autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   # NB: scale will be used to add information about nodes only for the nodes of the
   # scale required
 
-  if(!inherits(MTG,"mtg")){
-    stop("The ... arguments should start with an MTG as returned by read_mtg()")
+  if(!inherits(mtg,"mtg")){
+    stop("The mtg argument should be an mtg as returned by read_mtg()")
   }
 
   dots = rlang::enexprs(...)
@@ -36,21 +36,24 @@ autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   dot_names[not_named] = auto_named_dots[not_named]
   names(dots) = dot_names
 
-  # Compute the topological order if missing from the MTG:
-  if(!"topological_order" %in% MTG$MTG$fieldsAll){
-    topological_order(MTG)
+  # Compute the topological order if missing from the mtg:
+  if(!"topological_order" %in% mtg$MTG$fieldsAll){
+    topological_order(mtg)
   }
 
   if(length(dots) == 0){
     tree_df =
-      data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index",
+      data.tree::ToDataFrameNetwork(mtg$MTG, "name", ".link", ".symbol", ".index",
                                     "topological_order")
   }else{
     name_list = as.character(dots)
     names(name_list) = dot_names
+
     tree_df =
-      data.tree::ToDataFrameNetwork(MTG$MTG, "name", ".link", ".symbol", ".index",
-                                    "topological_order",as.character(dots))%>%
+      do.call(data.tree::ToDataFrameNetwork, args =
+                c(list(x = mtg$MTG,
+                     "name", ".link", ".symbol", ".index",
+                     "topological_order"),as.character(dots)))%>%
       dplyr::rename(!!!name_list)
 
     # NB : all these tricks because ggplotly outputs the name of the variable in the data
@@ -64,7 +67,7 @@ autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 
   tree_df =
     tree_df%>%
-    dplyr::left_join(data.frame(SYMBOL = MTG$classes$SYMBOL, SCALE = MTG$classes$SCALE,
+    dplyr::left_join(data.frame(SYMBOL = mtg$classes$SYMBOL, SCALE = mtg$classes$SCALE,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
     dplyr::group_by(.data$topological_order)%>%
@@ -136,7 +139,7 @@ autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 
 #' Plot an interactive MTG
 #'
-#' @param MTG An MTG, as from [read_mtg()]
+#' @param mtg An MTG, as from [read_mtg()]
 #' @param ... Names of the variables to be added to the tooltip (see details and examples).
 #' @param .scale The scale required for plotting
 #' @param .angle Insertion angle when branching
@@ -166,8 +169,8 @@ autoplot.mtg = function(MTG, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 #' plotly_mtg(MTG, node_width = Width)
 #' # Here the tooltip will show the Width, labeled as "node_width"
 #'
-plotly_mtg = function(MTG, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
-  mtg_plot = autoplot.mtg(MTG, scale = .scale, angle = .angle, phylotaxy = .phylotaxy,...)
+plotly_mtg = function(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
+  mtg_plot = autoplot.mtg(mtg, scale = .scale, angle = .angle, phylotaxy = .phylotaxy,...)
 
   dots = rlang::enexprs(...)
   dot_names = names(dots)

@@ -4,10 +4,10 @@
 \alias{plotly_mtg}
 \title{Plot an interactive MTG}
 \usage{
-plotly_mtg(MTG, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE)
+plotly_mtg(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE)
 }
 \arguments{
-\item{MTG}{An MTG, as from \code{\link[=read_mtg]{read_mtg()}}}
+\item{mtg}{An MTG, as from \code{\link[=read_mtg]{read_mtg()}}}
 
 \item{...}{Names of the variables to be added to the tooltip (see details and examples).}
 
