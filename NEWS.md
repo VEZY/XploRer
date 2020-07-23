@@ -1,3 +1,11 @@
+# XploRer 0.4.0
+
+* Fix issue in `get_children_values()` when requiring a particular scale
+
+* Fix issue in tooltip for `plotly_mtg()` when requiring several user variables
+
+* Rename `.scale` in `scale` for helpers (they don't use ellipsis anymore)
+
 # XploRer 0.3.0
 
 * `get_parent_value()` was added to get the variables of the parent of a node
