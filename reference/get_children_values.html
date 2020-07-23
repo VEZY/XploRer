@@ -115,7 +115,7 @@
     <p>Get attribute values from the children of a node.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_children_values</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_children_values</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,12 +129,12 @@
       <td><p>The MTG node</p></td>
     </tr>
     <tr>
-      <th>.scale</th>
+      <th>scale</th>
       <td><p>The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)</p></td>
     </tr>
     <tr>
       <th>.recursive</th>
-      <td><p>If a child is not of the right <code>.scale</code>, continue until the <code>.scale</code>
+      <td><p>If a child is not of the right <code>scale</code>, continue until the <code>scale</code>
 required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>
     </table>
