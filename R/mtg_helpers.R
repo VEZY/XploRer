@@ -6,7 +6,7 @@
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The node (do not put something when used from [mutate_mtg()])
-#' @param .scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
+#' @param scale The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)
 #'
 #' @details This function returns the values of any attribute of the parent of a node. It is
 #' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
@@ -19,7 +19,7 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
 #' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
-get_parent_value = function(attribute, node = NULL, .scale = NULL) {
+get_parent_value = function(attribute, node = NULL, scale = NULL) {
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -36,10 +36,10 @@ get_parent_value = function(attribute, node = NULL, .scale = NULL) {
 
   if(node$isRoot){
     vals = NA
-  } else if(is.null(.scale) || parent$.symbol %in% .scale){
+  } else if(is.null(scale) || parent$.symbol %in% scale){
     vals = parent[[attribute]]
   }else{
-    vals = get_parent_value(attribute, node = parent, .scale = .scale)
+    vals = get_parent_value(attribute, node = parent, scale = scale)
   }
   if(is.null(vals)) vals = NA
 
@@ -53,8 +53,8 @@ get_parent_value = function(attribute, node = NULL, .scale = NULL) {
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
-#' @param .scale The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)
-#' @param .recursive If a child is not of the right `.scale`, continue until the `.scale`
+#' @param scale The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)
+#' @param .recursive If a child is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
@@ -80,7 +80,7 @@ get_parent_value = function(attribute, node = NULL, .scale = NULL) {
 #' mutate_mtg(MTG, children_width = get_children_values("Width"))
 #' print(MTG$MTG, "Width", "children_width")
 #'
-get_children_values = function(attribute, node = NULL, .scale = NULL, .recursive = TRUE) {
+get_children_values = function(attribute, node = NULL, scale = NULL, .recursive = TRUE) {
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -97,7 +97,7 @@ get_children_values = function(attribute, node = NULL, .scale = NULL, .recursive
   if(length(children) == 0) return(NA)
   children_in_scale =
     unlist(lapply(children, function(x){
-      is.null(.scale) || x$.symbol %in% .scale
+      is.null(scale) || x$.symbol %in% scale
     }))
 
   # Initializing the values as a vector:
@@ -108,7 +108,7 @@ get_children_values = function(attribute, node = NULL, .scale = NULL, .recursive
     if(!children_in_scale[i] && .recursive){
       # If the child is not of the requested scale, try its children until
       # meeting the right scale
-      vals_ = get_children_values(attribute,node = children[i], .scale = .scale,
+      vals_ = get_children_values(attribute,node = children[i], scale = scale,
                                .recursive= .recursive)
       if(length(vals_) > 1){
         stop("Several childs found passing a scale: expected 'follow', got 'branch'")

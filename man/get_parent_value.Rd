@@ -4,14 +4,14 @@
 \alias{get_parent_value}
 \title{Get parent value}
 \usage{
-get_parent_value(attribute, node = NULL, .scale = NULL)
+get_parent_value(attribute, node = NULL, scale = NULL)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
-\item{.scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
+\item{scale}{The names of the MTG scale required (i.e. the SYMBOL from the MTG classes)}
 }
 \value{
 The attribute values from the parent of a node

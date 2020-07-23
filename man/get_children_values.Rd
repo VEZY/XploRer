@@ -4,16 +4,16 @@
 \alias{get_children_values}
 \title{Get children value}
 \usage{
-get_children_values(attribute, node = NULL, .scale = NULL, .recursive = TRUE)
+get_children_values(attribute, node = NULL, scale = NULL, .recursive = TRUE)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The MTG node}
 
-\item{.scale}{The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)}
+\item{scale}{The names of the MTG scale(s) required (i.e. the SYMBOL from the MTG classes)}
 
-\item{.recursive}{If a child is not of the right \code{.scale}, continue until the \code{.scale}
+\item{.recursive}{If a child is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{

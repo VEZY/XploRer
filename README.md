@@ -163,11 +163,11 @@ mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
 
 We can also make more complex associations. Here is an example were we
 need the sum of the surface of the section of all children for the
-nodes:
+nodes, but only for the nodes of scale “S”:
 
 ``` r
 mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
-           s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
+           s_surf_child_sum = sum(get_children_values("section_surface",scale = "S"),na.rm=TRUE))
 ```
 
 We first compute the surface of the section of each node, and then we
