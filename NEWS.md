@@ -1,3 +1,7 @@
+# XploRer 0.5.0
+
+ * Add `get_ancestors_values()` to get all values from the ancestors of a node (with or without the values of the current node, see `self` argument) 
+
 # XploRer 0.4.0
 
 * Fix issue in `get_children_values()` when requiring a particular scale

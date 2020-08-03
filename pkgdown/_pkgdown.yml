@@ -17,6 +17,7 @@ reference:
   - topological_order
   - get_parent_value
   - get_children_values
+  - get_ancestors_values
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:

@@ -2,6 +2,7 @@
 
 S3method(autoplot,mtg)
 export("%>%")
+export(get_ancestors_values)
 export(get_children_values)
 export(get_parent_value)
 export(mutate_mtg)
