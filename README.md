@@ -110,13 +110,43 @@ The `read_mtg()` function returns a list of 4:
     #> 6              °--node_6
     ```
 
-### 2.2 Mutate the MTG
+#### 2.2 Print/extract variables
+
+The variable of an MTG can be printed using the `print()` function,
+*e.g.*:
+
+``` r
+print(MTG$MTG, ".symbol", "Length")
+#>                levelName    .symbol Length
+#> 1 node_1                 Individual     NA
+#> 2  °--node_2                   Axis     NA
+#> 3      °--node_3          Internode      4
+#> 4          ¦--node_4           Leaf     10
+#> 5          °--node_5      Internode      6
+#> 6              °--node_6       Leaf     12
+```
+
+The variables can also be extracted in a `data.frame()` using the
+functions from the `data.tree` package *e.g.*:
+
+``` r
+data.tree::ToDataFrameTree(MTG$MTG,"Length","Width")
+#>                levelName Length Width
+#> 1 node_1                     NA    NA
+#> 2  °--node_2                 NA    NA
+#> 3      °--node_3              4     1
+#> 4          ¦--node_4         10     6
+#> 5          °--node_5          6    NA
+#> 6              °--node_6     12     7
+```
+
+### 2.3 Mutate the MTG
 
 The attributes (also known as features or variables) of the MTG can be
 mutated using `mutate_mtg()`. It allows to compute new variables, or
 modify the existing ones.
 
-#### Compute new variables
+#### 2.3.1 Compute new variables
 
 `mutate_mtg()` borrows its syntax from `dplyr`. We can compute a new
 variable based on the values of others:
@@ -151,15 +181,68 @@ This is allowed because the function returns the results invisibly. Note
 that it is mutating the MTG in place though, so no need to assign the
 results of `mutate_mtg()` to a variable.
 
+#### 2.3.2 Using parent values
+
 You can also use functions inside the call of the function. Some helpers
-are provided by the package to compute variables based on the parents or
-children of the node (see `get_parent_value()` and
-`get_children_value()`). Here is an example were we define a new
-variable called `Length_parent` that is the length of the node’s parent:
+are provided by the package to compute variables based on the ancestors
+or children of the node (see `get_parent_value()`,
+`get_children_values()` and `get_ancestors_values()`). Here is an
+example were we define a new variable called `Length_parent` that is the
+length of the node’s parent:
 
 ``` r
 mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
 ```
+
+`get_parent_value()` is used to get the value of the “Length” variable
+from the parent of each node.
+
+If we need the values of all ancestors of a node along the tree, we can
+use `get_ancestors_values()` instead:
+
+``` r
+mutate_mtg(MTG, total_length = sum(get_ancestors_values("Length",self = TRUE),na.rm = TRUE))
+```
+
+Here are the results for both:
+
+``` r
+print(MTG$MTG,".symbol","Length","Length_parent","total_length")
+#>                levelName    .symbol Length Length_parent total_length
+#> 1 node_1                 Individual     NA            NA            0
+#> 2  °--node_2                   Axis     NA            NA            0
+#> 3      °--node_3          Internode      4            NA            4
+#> 4          ¦--node_4           Leaf     10             4           14
+#> 5          °--node_5      Internode      6             4           10
+#> 6              °--node_6       Leaf     12             6           22
+```
+
+#### 2.3.3 Using children values
+
+To get the children values of a node, use `get_children_values()`. This
+function returns the values of a field for all children of a node:
+
+``` r
+get_children_values(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+#> node_4 node_5 
+#>     10      6
+```
+
+It can be used to get *e.g.* the average length of the children:
+
+``` r
+mutate_mtg(MTG, children_length = mean(get_children_values("Length"), na.rm = TRUE))
+print(MTG$MTG, ".symbol", "Length","children_length")
+#>                levelName    .symbol Length children_length
+#> 1 node_1                 Individual     NA             NaN
+#> 2  °--node_2                   Axis     NA               4
+#> 3      °--node_3          Internode      4               8
+#> 4          ¦--node_4           Leaf     10             NaN
+#> 5          °--node_5      Internode      6              12
+#> 6              °--node_6       Leaf     12             NaN
+```
+
+#### 2.2.4 Combine values
 
 We can also make more complex associations. Here is an example were we
 need the sum of the surface of the section of all children for the
@@ -174,25 +257,112 @@ We first compute the surface of the section of each node, and then we
 sum the values for all children of the nodes. This is helpful to check
 if our MTG follows the pipe model.
 
-The results can be viewed using the functions from the `data.tree`
-package:
+#### 2.2.5 Filter by scale
+
+We can also filter the parent by scale, *i.e.* the name of the SYMBOL
+from the MTG classes, which corresponds to the `.symbol` value in the
+node.
+
+To get the possible values for the SYMBOLS in an MTG:
 
 ``` r
-data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3","Length_parent","section_surface","s_surf_child_sum")
-#>                levelName Length Length2 Length3 Length_parent section_surface
-#> 1 node_1                     NA      NA      NA            NA              NA
-#> 2  °--node_2                 NA      NA      NA            NA              NA
-#> 3      °--node_3              4       6      12            NA       0.7853982
-#> 4          ¦--node_4         10      12      24             4      28.2743339
-#> 5          °--node_5          6       8      16             4              NA
-#> 6              °--node_6     12      14      28             6      38.4845100
-#>   s_surf_child_sum
-#> 1                0
-#> 2                0
-#> 3                0
-#> 4                0
-#> 5                0
-#> 6                0
+MTG$classes$SYMBOL
+#> [1] "$"          "Internode"  "Individual" "Leaf"       "Axis"
+```
+
+To get the symbol of a node use the `.symbol` field on a node:
+
+``` r
+MTG$MTG$.symbol
+#> [1] "Individual"
+```
+
+To filter the parent node by its scale, use the `scale` argument:
+
+``` r
+get_parent_value(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_6"), scale = "Axis")
+#> [1] NA
+```
+
+Here it returns `NA` because the first parent is an `Internode`, and the
+first node with scale “Axis” (`node_2`) has no values for “Length”, see
+by yourself:
+
+``` r
+print(MTG$MTG, ".symbol", "Length")
+#>                levelName    .symbol Length
+#> 1 node_1                 Individual     NA
+#> 2  °--node_2                   Axis     NA
+#> 3      °--node_3          Internode      4
+#> 4          ¦--node_4           Leaf     10
+#> 5          °--node_5      Internode      6
+#> 6              °--node_6       Leaf     12
+```
+
+Several functions implements their own way to deal with scales.
+`get_parent_value()`, `get_ancestors_values()` and
+`get_children_values()` all share a `scale` argument to filter the
+parents by scale. By default, the function will return the values from
+the first ancestor with the required scale by “climbing” the tree from
+one node to the other (starting from the node of interest). If none of
+the ancestors are of the required scale, then the function returns `NA`.
+
+The `recursive` argument can be used in `get_parent_value()` and
+`get_children_values()` functions to disable this default behavior of
+“climbing”, so the function will return `NA` if the first parent is
+not of the right scale.
+
+Here is an example with recursive behavior:
+
+``` r
+get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf")
+#> node_4 node_6 
+#>     10     12
+```
+
+And without:
+
+``` r
+get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf", recursive = FALSE)
+#> [1] NA
+```
+
+Here it returns `NA` because “node\_2” has one child (“node\_3”) that is
+not of the right scale, but `recursive = FALSE` so the function just
+returns `NA`.
+
+> Note that `get_ancestors_values()` does not have the `recursive`
+> argument because it is a recursive function by design. So if an
+> ancestor is not of the right scale, it just passes to the next
+> ancestor.
+
+`mutate_mtg()` has a `.scale` argument that is used similarly to the
+`scale` argument of the other functions. The only difference is that the
+functions inside a `mutate_mtg()` call will only be applied to the nodes
+of the chosen scales, but once the function called, it will still have
+access to the node parents and children if needed. Furthermore, the
+`.scale` argument is applied to all functions inside the `mutate_mtg()`
+call.
+
+The advantage is we can combine the `.scale` argument from
+`mutate_mtg()` and then the `scale` argument from the other functions in
+a single call. If you need a computation at one scale for a variable but
+at another scale for another, it is preferable to use multiple calls to
+`mutate_mtg()`, possibly chained using a pipe, *e.g.*:
+
+``` r
+mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+          .scale = "Internode")%>%
+mutate_mtg(area = node$Width * node$Length, .scale = "Leaf")
+
+print(MTG$MTG, ".symbol", "Width","section_surface", "area")
+#>                levelName    .symbol Width section_surface area
+#> 1 node_1                 Individual    NA              NA   NA
+#> 2  °--node_2                   Axis    NA              NA   NA
+#> 3      °--node_3          Internode     1       0.7853982   NA
+#> 4          ¦--node_4           Leaf     6      28.2743339   60
+#> 5          °--node_5      Internode    NA              NA   NA
+#> 6              °--node_6       Leaf     7      38.4845100   84
 ```
 
 ### 2.3 Plotting a plant
@@ -209,7 +379,7 @@ library(ggplot2)
 autoplot(MTG)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-23-1.png" width="100%" />
 
 The function can be used in a pipe, such as:
 

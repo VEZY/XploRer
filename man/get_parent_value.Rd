@@ -4,7 +4,7 @@
 \alias{get_parent_value}
 \title{Get parent value}
 \usage{
-get_parent_value(attribute, node = NULL, scale = NULL)
+get_parent_value(attribute, node = NULL, scale = NULL, recursive = TRUE)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
@@ -13,6 +13,9 @@ get_parent_value(attribute, node = NULL, scale = NULL)
 
 \item{scale}{The names of the MTG scale required for the parent (i.e. the SYMBOL
 from the MTG classes). Used as a filter.}
+
+\item{recursive}{If a parent is not of the right \code{scale}, continue until the \code{scale}
+required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{
 The attribute values from the parent of a node

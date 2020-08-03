@@ -8,6 +8,8 @@
 #' @param node The node (do not put something when used from [mutate_mtg()])
 #' @param scale The names of the MTG scale required for the parent (i.e. the SYMBOL
 #'  from the MTG classes). Used as a filter.
+#' @param recursive If a parent is not of the right `scale`, continue until the `scale`
+#' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @details This function returns the values of any attribute of the parent of a node. It is
 #' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
@@ -20,7 +22,7 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
 #' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
-get_parent_value = function(attribute, node = NULL, scale = NULL) {
+get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -39,9 +41,12 @@ get_parent_value = function(attribute, node = NULL, scale = NULL) {
     vals = NA
   } else if(is.null(scale) || parent$.symbol %in% scale){
     vals = parent[[attribute]]
-  }else{
+  }else if(isTRUE(recursive)){
     vals = get_parent_value(attribute, node = parent, scale = scale)
+  }else{
+    vals = NA
   }
+
   if(is.null(vals)) vals = NA
 
   vals
@@ -119,29 +124,34 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
     }))
 
   # Initializing the values as a vector:
-  vals = rep(NA, length(children))
+  vals = vector(mode = "list",length = length(children))
 
   # Assigning the values read from the children:
   for (i in seq_along(children)){
-    if(!children_in_scale[i] && recursive){
-      # If the child is not of the requested scale, try its children until
-      # meeting the right scale
-      vals_ = get_children_values(attribute,node = children[[i]], scale = scale,
-                               recursive= recursive)
-      if(length(vals_) > 1){
-        stop("Several childs found passing a scale: expected 'follow', got 'branch'")
-        # Only 'follow' is accepted after crossing a scale (it is either before or after)
+    if(!children_in_scale[i]){
+
+      if(isTRUE(recursive)){
+        # If the child is not of the requested scale, try its children until
+        # meeting the right scale
+        vals_ = get_children_values(attribute,node = children[[i]], scale = scale,
+                                    recursive= recursive)
+      }else{
+        vals_ = NA
       }
     }else{
       # Else, just return its values
       vals_ = children[[i]][[attribute]]
+      if(!is.null(vals_)){
+        names(vals_) = children[[i]]$name
+      }
     }
 
     if(is.null(vals_) || length(vals_) == 0) vals_ = NA
 
     vals[[i]] = vals_
   }
-  vals
+
+  unlist(vals)
 }
 
 
@@ -188,20 +198,35 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 #'
 get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FALSE){
 
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_parent_value()' is used interactively")
+    }
+  }
+
   if(isTRUE(self) && (is.null(scale) || node$.symbol %in% scale)){
     val = node[[attribute]]
-    names(val) = node$name
+    if(!is.null(val)){
+      names(val) = node$name
+    }
   }else{
     val = vector()
   }
 
-  while (!data.tree::isRoot(node)){
-    parent_val = get_parent_value(attribute, node = node, scale = scale)
-    node = node$parent
-    if(!is.null(scale) && !node$.symbol %in% scale){
+  node_current = node
+
+  while (!data.tree::isRoot(node_current)){
+    parent_val = get_parent_value(attribute, node = node_current, scale = scale)
+    node_current = node_current$parent
+    if(!is.null(scale) && !node_current$.symbol %in% scale){
       next()
     }
-    names(parent_val) = node$name
+    names(parent_val) = node_current$name
     val = c(val, parent_val)
   }
 

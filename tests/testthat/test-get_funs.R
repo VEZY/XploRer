@@ -22,8 +22,8 @@ test_that("get_parent_value: test root node", {
 })
 
 test_that("get_children_values: requesting an attribute", {
-  test = get_children_values("Length", node = node_5)
-  expect_equal(test,12.0)
+  test = get_children_values(attribute = "Length", node = node_5)
+  expect_equal(test,c(node_6 = 12.0))
 })
 
 test_that("get_children_values: requesting an attributes that is missing", {
