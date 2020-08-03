@@ -1,3 +1,14 @@
+# XploRer 0.6.0
+
+* improve doc in readme 
+
+* add a recursive argument to `get_parent_value()`
+
+* get_children_values and `get_ancestors_values()` now return the node name
+
+* fix issues with `get_ancestors_values()` (didn't work properly when called from `mutate_mtg()`)
+
+
 # XploRer 0.5.0
 
  * Add `get_ancestors_values()` to get all values from the ancestors of a node (with or without the values of the current node, see `self` argument) 
