@@ -1,5 +1,3 @@
-context("'Get' functions")
-
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 node_5 = data.tree::FindNode(MTG$MTG, "node_5")

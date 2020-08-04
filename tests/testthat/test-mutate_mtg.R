@@ -1,5 +1,3 @@
-context("Testing MTG apply")
-
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 

@@ -37,7 +37,7 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   names(dots) = dot_names
 
   # Compute the topological order if missing from the mtg:
-  if(!"topological_order" %in% mtg$MTG$fieldsAll){
+  if(!"topological_order" %in% mtg$MTG$attributesAll){
     topological_order(mtg)
   }
 

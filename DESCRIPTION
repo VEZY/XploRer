@@ -12,10 +12,11 @@ RoxygenNote: 7.1.0
 Imports: 
     stringr,
     magrittr,
-    data.tree,
+    data.tree (>= 1.0.0),
     dplyr,
     ggplot2,
     rlang,
     plotly
 Suggests: 
     testthat
+Config/testthat/edition: 3
