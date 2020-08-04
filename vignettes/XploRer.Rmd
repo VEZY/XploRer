@@ -118,7 +118,7 @@ This is allowed because the function returns the results invisibly. Note that it
 You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see `get_parent_value()`, `get_children_values()` and `get_ancestors_values()`). Here is an example were we define a new variable called `Length_parent` that is the length of the node's parent:
 
 ```{r}
-mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
+mutate_mtg(MTG, Length_parent = get_parent_value(node$Length))
 ```
 
 `get_parent_value()` is used to get the value of the "Length" variable from the parent of each node. 
@@ -126,7 +126,7 @@ mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
 If we need the values of all ancestors of a node along the tree, we can use `get_ancestors_values()` instead:
 
 ```{r}
-mutate_mtg(MTG, total_length = sum(get_ancestors_values("Length",self = TRUE),na.rm = TRUE))
+mutate_mtg(MTG, total_length = sum(get_ancestors_values(Length,self = TRUE),na.rm = TRUE))
 ```
 
 Here are the results for both:
@@ -140,13 +140,13 @@ print(MTG$MTG,".symbol","Length","Length_parent","total_length")
 To get the children values of a node, use `get_children_values()`. This function returns the values of a field for all children of a node:
 
 ```{r}
-get_children_values(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+get_children_values(attribute = Length, node = data.tree::FindNode(MTG$MTG, "node_3"))
 ```
 
 It can be used to get *e.g.* the average length of the children:
 
 ```{r}
-mutate_mtg(MTG, children_length = mean(get_children_values("Length"), na.rm = TRUE))
+mutate_mtg(MTG, children_length = mean(get_children_values(node$Length), na.rm = TRUE))
 print(MTG$MTG, ".symbol", "Length","children_length")
 ```
 
@@ -156,7 +156,7 @@ We can also make more complex associations. Here is an example were we need the 
 
 ```{r}
 mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
-           s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
+           s_surf_child_sum = sum(get_children_values(node$section_surface),na.rm=TRUE))
 ```
 
 We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. The `s_surf_child_sum` variable uses the `section_surface` variable that was just created before.
@@ -209,13 +209,13 @@ The `recursive` argument can be used in `get_parent_value()` and `get_children_v
 Here is an example with recursive behavior (the default):
 
 ```{r}
-get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf")
+get_children_values(attribute = Length, node = MTG$MTG$node_2, scale = "Leaf")
 ```
 
 And without:
 
 ```{r}
-get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf", recursive = FALSE)
+get_children_values(attribute = Length, node = MTG$MTG$node_2, scale = "Leaf", recursive = FALSE)
 ```
 
 The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right scale. 

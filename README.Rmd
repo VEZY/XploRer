@@ -67,7 +67,7 @@ Mutate the MTG to add/recompute node attributes:
 ```{r}
 MTG%>%
   mutate_mtg(section_surface = pi * ((node$Width / 2)^2),
-             s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE),
+             s_surf_child_sum = sum(get_children_values(node$section_surface),na.rm=TRUE),
              .scale = "Internode")
 
 print(MTG$MTG, ".symbol", "section_surface", "s_surf_child_sum")
@@ -116,7 +116,7 @@ Please note that the XploRer project is released with a [Contributor Code of Con
 
 To do before v1:
 
-- [ ] Make mtg helpers (`get_parent_value()`, `get_children_values()` and `get_ancestors_values()`) use NSE format to homogenize with `mutate_mtg()`
+- [x] Make mtg helpers (`get_parent_value()`, `get_children_values()` and `get_ancestors_values()`) use NSE format to homogenize with `mutate_mtg()`
 
 - [x] Add a "Get started" vignette (add the basic info on what we can do with the package)
 

@@ -69,7 +69,7 @@ Mutate the MTG to add/recompute node attributes:
 ``` r
 MTG%>%
   mutate_mtg(section_surface = pi * ((node$Width / 2)^2),
-             s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE),
+             s_surf_child_sum = sum(get_children_values(node$section_surface),na.rm=TRUE),
              .scale = "Internode")
 
 print(MTG$MTG, ".symbol", "section_surface", "s_surf_child_sum")
@@ -132,9 +132,9 @@ follow the steps one by one. Look into [this
 article](https://guides.github.com/features/issues/) for more info.
 
 If you want to contribute, please read our [contribution
-guidelines](https://dplyr.tidyverse.org/CONTRIBUTING.html) first. It’s a
-few minutes read only and guides you through the whole process of
-contributing (along with many useful tools).
+guidelines](https://vezy.github.io/XploRer/CONTRIBUTING.html) first.
+It’s a few minutes read only and guides you through the whole process
+of contributing (along with many useful tools).
 
 ## 5\. Code of Conduct
 
@@ -146,17 +146,15 @@ By contributing to this project, you agree to abide by its terms.
 
 To do before v1:
 
-  - [ ] Make mtg helpers (`get_parent_value()`, `get_children_values()`
+  - [x] Make mtg helpers (`get_parent_value()`, `get_children_values()`
     and `get_ancestors_values()`) use NSE format to homogenize with
     `mutate_mtg()`
 
-  - [ ] Add a “Get started” vignette (add the basic info on what we can
+  - [x] Add a “Get started” vignette (add the basic info on what we can
     do with the package)
 
-  - [ ] Update the readme to display only very basic information about
+  - [x] Update the readme to display only very basic information about
     the package, and about contributions (very welcome)
-
-  - [ ] Add a “Get started” vignette
 
   - [ ] Add a vignette about the mtg format, and on the basics
     (navigate, get value…)

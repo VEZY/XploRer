@@ -30,19 +30,8 @@
 #' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
 
-  attribute = rlang::enexpr(attribute)
-
-  if(rlang::is_call(attribute)){
-    if(rlang::expr_text(attribute[2]) == "node()"){
-      # Attribute given as a call (e.g. attribute = node$Length)
-      attribute = gsub("\\(|\\)","",rlang::expr_text(attribute[3]))
-    }else{
-      stop("attribute argument should be given as attribute name (e.g. Length) or node call (e.g. node$Length)")
-    }
-  }else{
-    # Attribute given as an expression or a character (e.g. attribute = Length, or attribute = "Length")
-    attribute = rlang::as_string(attribute)
-  }
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -68,7 +57,7 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
     vals = parent[[attribute]]
 
   }else if(isTRUE(recursive)){
-    vals = get_parent_value(attribute, node = parent, scale = scale)
+    vals = get_parent_value(!!attribute_expr, node = parent, scale = scale)
   }else{
     vals = NA
   }
@@ -131,6 +120,9 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
 #'
 get_children_values = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
 
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
+
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
   # explicitly giving node = node as argument
@@ -159,7 +151,7 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
       if(isTRUE(recursive)){
         # If the child is not of the requested scale, try its children until
         # meeting the right scale
-        vals_ = get_children_values(attribute,node = children[[i]], scale = scale,
+        vals_ = get_children_values(!!attribute_expr,node = children[[i]], scale = scale,
                                     recursive= recursive)
       }else{
         vals_ = NA
@@ -224,6 +216,9 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 #'
 get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FALSE){
 
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
+
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
   # explicitly giving node = node as argument
@@ -247,7 +242,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FA
   node_current = node
 
   while (!data.tree::isRoot(node_current)){
-    parent_val = get_parent_value(attribute, node = node_current, scale = scale)
+    parent_val = get_parent_value(!!attribute_expr, node = node_current, scale = scale)
     node_current = node_current$parent
     if(!is.null(scale) && !node_current$.symbol %in% scale){
       next()
@@ -259,3 +254,50 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FA
   val
 }
 
+
+
+#' Attribute as name
+#'
+#' This function is used to get the attribute as a character instead of an expression
+#' (e.g. attribute = Length) or an extract to the node (e.g. attribute = node$Length).
+#' It is used in a special context where we know the attribute will always be used to reference
+#' a node (i.e. data masking).
+#'
+#' @param attribute a quoted expression
+#'
+#' @return The attribute as a character
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' attribute_as_name(rlang::expr(Length))
+#' attribute_as_name(rlang::expr(node$Length))
+#' attribute_as_name(rlang::expr("Length"))
+#'
+#' test = "Length"
+#' attribute_as_name(rlang::expr(test))
+#' }
+attribute_as_name = function(attribute){
+
+  if(rlang::is_call(attribute)){
+    if(rlang::expr_text(attribute[2]) == "node()"){
+      # Attribute given as a call (e.g. attribute = node$Length)
+      attribute = gsub("\\(|\\)","",rlang::expr_text(attribute[3]))
+    }else{
+      stop("attribute argument should be given as attribute name (e.g. Length) or node call (e.g. node$Length)")
+    }
+  }else{
+    # Try to execute the object to see if it exists in the environments
+    # to be able to do test = "Length" ; attribute_as_name(rlang::expr(test))
+    attr_obj = try(eval(attribute),silent = TRUE)
+
+    if(!inherits(attr_obj, "try-error")){
+      return(attr_obj)
+    }
+
+    # Attribute given as an expression or a character (e.g. attribute = Length, or attribute = "Length")
+    attribute = rlang::as_string(attribute)
+
+  }
+  attribute
+}

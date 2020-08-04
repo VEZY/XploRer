@@ -31,7 +31,7 @@ test_that("get_children_values: requesting an attributes that is missing", {
 
 
 test_that("get_ancestors_values: requesting an attribute", {
-  test = get_ancestors_values("Length", node = node_5)
+  test = get_ancestors_values(attribute = "Length", node = node_5)
   expect_equal(setNames(test[1],NULL),get_parent_value("Length", node = node_5))
   expect_equal(test,c(node_3 = 4, node_2 = NA, node_1 = NA))
 })
