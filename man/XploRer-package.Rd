@@ -8,6 +8,14 @@
 \description{
 Manage plant topology data from MTG files.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://vezy.github.io/XploRer/}
+  \item \url{https://github.com/VEZY/XploRer}
+}
+
+}
 \author{
 \strong{Maintainer}: Remi Vezy \email{remi.vezy@cirad.fr} (\href{https://orcid.org/0000-0002-0808-1461}{ORCID})
 
