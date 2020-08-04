@@ -1,3 +1,14 @@
+# XploRer 0.7.0
+
+* `get_parent_value()`, `get_children_values()` and `get_ancestors_values()` all accept expressions as attribute argument. Use `node$variable` to be sure to use the value from the node (as for `rlang::.data` is used in `dplyr`)
+
+* replace fieldsAll by attributesAll in nodes following data.tree 1.0.0
+
+* add Getting started vignette 
+
+* add contributing + code of conduct + issue template
+
+
 # XploRer 0.6.0
 
 * improve doc in readme 
