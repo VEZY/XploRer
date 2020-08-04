@@ -119,7 +119,7 @@ We can note two things here:
 
 1. We use `node$` to access the values of a variable inside the MTG. This is done to avoid any conflicts between variables from the MTG, and variables from your environment;  
 
-1. `Length3` uses the results of `Length2` before it even exist. This is very powerful to construct many new variables at once. It is allowed thanks to a sequential construction of the variables.
+1. `Length3` uses the results of `Length2` before it even exist. This is very powerful to construct several new variables at once. It is allowed thanks to a sequential construction of the variables.
 
 As with `dplyr` main functions, `mutate_mtg()` can be used with pipes: 
 
@@ -180,21 +180,28 @@ We first compute the surface of the section of each node, and then we sum the va
 
 #### 2.2.5 Filter by scale
 
-We can also filter the parent by scale, *i.e.* the name of the SYMBOL from the MTG classes, which corresponds to the `.symbol` value in the node.
+##### Introduction on scale 
 
-To get the possible values for the SYMBOLS in an MTG:
+We can also filter the nodes by scale, *i.e.* the name of the SYMBOL from the MTG classes, which corresponds to the `.symbol` value in the node.
+
+To get all the possible values for the SYMBOLS in an MTG, print the SYMBOL column from the classes section:
 
 ```{r}
 MTG$classes$SYMBOL
 ```
 
-To get the symbol of a node use the `.symbol` field on a node:
+To get the actual symbol of a node use the `.symbol` field on a node. Here is an example for the root node of the mtg:
 
 ```{r}
 MTG$MTG$.symbol
 ```
 
-To filter the parent node by its scale, use the `scale` argument:
+
+##### The scale argument from the helper functions
+
+`get_parent_value()` and `get_children_values()` implement the `scale` argument to filter by scale. It allows to tell the function to only consider the scales passed to this argument, ignoring all others.
+
+For example we can filter the parent node by its scale using the `scale` argument with `get_parent_value()`:
 
 ```{r}
 get_parent_value(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_6"), scale = "Axis")
@@ -206,11 +213,17 @@ Here it returns `NA` because the first parent is an `Internode`, and the first n
 print(MTG$MTG, ".symbol", "Length")
 ```
 
-Several functions implements their own way to deal with scales. `get_parent_value()`, `get_ancestors_values()` and `get_children_values()` all share a `scale` argument to filter the parents by scale. By default, the function will return the values from the first ancestor with the required scale by "climbing" the tree from one node to the other (starting from the node of interest). If none of the ancestors are of the required scale, then the function returns `NA`. 
+By default, the function will search for the first node which satisfies the scale required by the user and return its value:
 
-The `recursive` argument can be used in `get_parent_value()` and `get_children_values()` functions to disable this default behavior of "climbing", so the function will return `NA` if the first parent is not of the right scale.
+- `get_parent_value()` looks if the parent node is of the required scale, if it is, it returns its value, if not, it looks at the parent of the parent. And it does this recursively until either finding an ancestor with the required scale, or finding the root node (returns `NA` in this case). 
 
-Here is an example with recursive behavior:
+- `get_children_values()` looks if the children are of the required scale. If a child is, it return its value, if not, it will look at the children of the node if any, and repeat the procedure recursively until it finds either a child with the required scale or a leaf (returns `NA` in this case).
+
+An easier way to think about this is that when using the scale argument, functions work on a different tree with only the scales required.
+
+The `recursive` argument can be used in `get_parent_value()` and `get_children_values()` functions to disable this default behavior of "climbing" or "descending" the tree. If `recursive` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right scale.
+
+Here is an example with recursive behavior (the default):
 
 ```{r}
 get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf")
@@ -221,14 +234,18 @@ And without:
 ```{r}
 get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf", recursive = FALSE)
 ```
-Here it returns `NA` because "node_2" has one child ("node_3") that is not of the right scale, but `recursive = FALSE` so the function just returns `NA`. 
 
+The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right scale. 
 
 > Note that `get_ancestors_values()` does not have the `recursive` argument because it is a recursive function by design. So if an ancestor is not of the right scale, it just jumps to the next ancestor.
 
-`mutate_mtg()` has a `.scale` argument that is used similarly to the `scale` argument of the other functions. The only difference is that the functions inside a `mutate_mtg()` call will only be applied to the nodes of the chosen scales, but once the function called, it will still have access to the node parents and children if needed. Furthermore, the `.scale` argument is applied to all functions inside the `mutate_mtg()` call. 
+##### The .scale argument from mutate_mtg()
 
-There can be a benefit in combining the `.scale` argument from `mutate_mtg()` and then the `scale` argument from the other functions in a single call. If you need a computation at one scale for a variable but at another scale for another, it is preferable to use multiple calls to `mutate_mtg()`, possibly chained using a pipe, *e.g.*:
+`mutate_mtg()` has a `.scale` argument that is used similarly to the `scale` argument of the other functions. The only difference is that the functions inside a `mutate_mtg()` call will only be applied to the nodes of the chosen scales, while still having access to the node parents and children if needed. The `.scale` argument is applied to all functions inside the `mutate_mtg()` call. 
+
+There can be a benefit in combining the `.scale` argument from `mutate_mtg()` and the `scale` argument from the other functions in a single call. 
+
+Be careful though, if you need a computation at one scale for a variable but at another scale for another, it is preferable to use multiple calls to `mutate_mtg()`, possibly chained using a pipe. For example if we need the section surface for the internodes only, and the surface for the leaves only, we would use two separate calls to `mutate_mtg()` with each its own scale filter:
 
 ```{r}
 mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
@@ -237,7 +254,6 @@ mutate_mtg(area = node$Width * node$Length, .scale = "Leaf")
 
 print(MTG$MTG, ".symbol", "Width","section_surface", "area")
 ```
-
 
 ### 2.3 Plotting a plant
 
@@ -282,3 +298,39 @@ plotly_mtg(MTG, Length, Width)
 Please see the [OpenAlea documentation](http://openalea.gforge.inria.fr/doc/vplants/newmtg/doc/_build/html/contents.html) (especially chapter 8) for more details on the MTG files. 
 
 If you have any other problem related to the package, please feel free to [fill an issue](https://github.com/VEZY/XploRer/issues) on Github.
+
+
+## 4. Roadmap
+
+To do before v1:
+
+- [ ] Make mtg helpers (`get_parent_value()`, `get_children_values()` and `get_ancestors_values()`) use NSE format to homogenize with `mutate_mtg()`
+
+- [ ] Add a "Get started" vignette (add the basic infos on what we can do with the package)
+
+- [ ] Update the readme to display only very basic information about the package, and about contributions (very welcome) 
+
+- [ ] Add a "Get started" vignette
+
+- [ ] Add a vignette about the mtg format, and on the basics (navigate, get value...)
+
+- [ ] Add a vignette about mutating the mtg
+
+- [ ] Add a vignette about plotting the mtg
+
+- [ ] Check the mtg validity:
+
+  - [ ] add all checks on the mtg in `read_mtg()` using the sections
+  - [ ] Add a new argument to remove the checks
+  - [ ] Print the problems nicely using `[cli](https://cli.r-lib.org/)` and/or `[waldo](https://waldo.r-lib.org/)`
+
+- [ ] Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This wil make the mtg more usable 
+
+In a more distant future (v2):
+
+- [ ] Add 3d plotting when geometry attributes are available. Make it compatible with XPlo and OpenAlea.
+
+- [ ] Add an opf (open plant format) parser -> opf to mtg
+
+- [ ] Add an opf writer when the geometry is available (using reference meshes)
+
