@@ -4,14 +4,19 @@
 #' function that is usually used as input to [mutate_mtg()] to get the values of the parent node
 #' for all nodes.
 #'
-#' @param attribute Any node attribute (as a character)
+#' @param attribute Any node attribute (as a character, an expression or a node callm see details)
 #' @param node The node (do not put something when used from [mutate_mtg()])
 #' @param scale The names of the MTG scale required for the parent (i.e. the SYMBOL
 #'  from the MTG classes). Used as a filter.
 #' @param recursive If a parent is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
-#' @details This function returns the values of any attribute of the parent of a node. It is
+#' @details The `attribute` argument can be given as a string (*e.g.* attribute = "Length"), an
+#' expression (*e.g.* attribute = Length) or a call to a node (*e.g.* attribute = node$Length).
+#' All are equivalent because they evaluate the node given by the user or by the calling function.
+#' This behavior is set to homogenize the grammar used in the calls of `mutate_mtg()`.
+#'
+#' @note This function returns the values of any attribute of the parent of a node. It is
 #' mainly intended to be used in a call to [mutate_mtg()] (see [mutate_mtg()] doc for examples).
 #'
 #' @return The attribute values from the parent of a node
@@ -21,8 +26,23 @@
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
+#' get_parent_value(Length,  node = data.tree::FindNode(MTG$MTG, "node_5"))
 #' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
+
+  attribute = rlang::enexpr(attribute)
+
+  if(rlang::is_call(attribute)){
+    if(rlang::expr_text(attribute[2]) == "node()"){
+      # Attribute given as a call (e.g. attribute = node$Length)
+      attribute = gsub("\\(|\\)","",rlang::expr_text(attribute[3]))
+    }else{
+      stop("attribute argument should be given as attribute name (e.g. Length) or node call (e.g. node$Length)")
+    }
+  }else{
+    # Attribute given as an expression or a character (e.g. attribute = Length, or attribute = "Length")
+    attribute = rlang::as_string(attribute)
+  }
 
   # If the node is not given, use the one from the parent environment.
   # This is done to make it work from mutate_mtg without the need of
@@ -40,7 +60,13 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
   if(node$isRoot){
     vals = NA
   } else if(is.null(scale) || parent$.symbol %in% scale){
+
+    # vals = get(attribute, envir = parent)
+    # vals = rlang::expr(`$`(parent, attribute))
+
+    # substitute(node$x,list(x= dots_names[i]))
     vals = parent[[attribute]]
+
   }else if(isTRUE(recursive)){
     vals = get_parent_value(attribute, node = parent, scale = scale)
   }else{

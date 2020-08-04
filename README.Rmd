@@ -118,11 +118,9 @@ To do before v1:
 
 - [ ] Make mtg helpers (`get_parent_value()`, `get_children_values()` and `get_ancestors_values()`) use NSE format to homogenize with `mutate_mtg()`
 
-- [ ] Add a "Get started" vignette (add the basic info on what we can do with the package)
+- [x] Add a "Get started" vignette (add the basic info on what we can do with the package)
 
-- [ ] Update the readme to display only very basic information about the package, and about contributions (very welcome) 
-
-- [ ] Add a "Get started" vignette
+- [x] Update the readme to display only very basic information about the package, and about contributions (very welcome) 
 
 - [ ] Add a vignette about the mtg format, and on the basics (navigate, get value...)
 

@@ -7,7 +7,7 @@
 get_parent_value(attribute, node = NULL, scale = NULL, recursive = TRUE)
 }
 \arguments{
-\item{attribute}{Any node attribute (as a character)}
+\item{attribute}{Any node attribute (as a character, an expression or a node callm see details)}
 
 \item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
@@ -26,11 +26,18 @@ function that is usually used as input to \code{\link[=mutate_mtg]{mutate_mtg()}
 for all nodes.
 }
 \details{
+The \code{attribute} argument can be given as a string (\emph{e.g.} attribute = "Length"), an
+expression (\emph{e.g.} attribute = Length) or a call to a node (\emph{e.g.} attribute = node$Length).
+All are equivalent because they evaluate the node given by the user or by the calling function.
+This behavior is set to homogenize the grammar used in the calls of \code{mutate_mtg()}.
+}
+\note{
 This function returns the values of any attribute of the parent of a node. It is
 mainly intended to be used in a call to \code{\link[=mutate_mtg]{mutate_mtg()}} (see \code{\link[=mutate_mtg]{mutate_mtg()}} doc for examples).
 }
 \examples{
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
+get_parent_value(Length,  node = data.tree::FindNode(MTG$MTG, "node_5"))
 get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
 }
