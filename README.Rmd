@@ -106,7 +106,7 @@ Contributions are more than welcome! Whatever your programming level really. If 
 
 If you find any issue, want to make a suggestion, or need a new functionality, please [fill an issue](https://github.com/VEZY/XploRer/issues). This is not more complicated than writing an email (but really simpler for us), just follow the steps one by one. Look into [this article](https://guides.github.com/features/issues/) for more info. 
 
-If you want to contribute, please read our [contribution guidelines](https://dplyr.tidyverse.org/CONTRIBUTING.html) first. It's a few minutes read only and guides you through the whole process of contributing (along with many useful tools).
+If you want to contribute, please read our [contribution guidelines](https://vezy.github.io/XploRer/CONTRIBUTING.html) first. It's a few minutes read only and guides you through the whole process of contributing (along with many useful tools).
 
 ## 5. Code of Conduct
 
