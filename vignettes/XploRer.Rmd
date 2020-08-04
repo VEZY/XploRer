@@ -1,0 +1,277 @@
+---
+title: "Introduction to XploRer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to XploRer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(XploRer)
+```
+
+## Installation
+
+
+you can install the release version of XploRer from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("VEZY/XploRer")
+```
+
+## Read a file
+
+Read a simple MTG file:
+
+```{r example}
+library(XploRer)
+
+MTG = read_mtg("https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg")
+```
+
+The `read_mtg()` function returns a list of 4: 
+
+- classes: a `data.frame` that holds information about the type of nodes used in the MTG (e.g. Internode, Leaf, etc...), the MTG scale for each one, and some more details. Here is the classes `data.frame` from our example:
+
+    ```{r}
+    MTG$classes
+    ```
+
+- description: a `data.frame` defining the potential topological constraints existing between nodes. Here is the description `data.frame` from our example:
+
+    ```{r}
+    MTG$description
+    ```
+
+- features: a `data.frame` listing all attributes present in the file and their associated type. Here is the features `data.frame` from our example:
+
+    ```{r}
+    MTG$features
+    ```
+
+- MTG: a `data.tree` structure defining all nodes, their attributes and their relationships:
+
+    ```{r}
+    MTG$MTG
+    ```
+
+## Print/extract variables
+
+The variables / attributes of an MTG can be printed using the `print()` function on the MTG field, *e.g.*:
+
+```{r}
+print(MTG$MTG, ".symbol", "Length")
+```
+
+
+The variables can also be extracted in a `data.frame()` using the functions from the `data.tree` package *e.g.*:
+
+```{r}
+data.tree::ToDataFrameTree(MTG$MTG,"Length","Width")
+```
+
+
+## Mutate the MTG
+
+The attributes (also known as features or variables) of the MTG can be mutated using `mutate_mtg()`. It allows to compute new variables, or modify the existing ones.
+
+### Compute new variables
+
+`mutate_mtg()` borrows its syntax from `dplyr`. We can compute a new variable based on the values of others: 
+```{r}
+# Import the MTG:
+filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
+MTG = read_mtg(filepath)
+
+# And mutate it by adding two new variables, Length2 and Length3:
+mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
+
+print(MTG$MTG, ".symbol", "Length", "Length2", "Length3")
+```
+
+We can note two things here:
+
+1. We use `node$` to access the values of a variable inside the MTG. This is done to avoid any conflicts between variables from the MTG, and variables from your environment;  
+
+1. `Length3` uses the results of `Length2` before it even exist. This is very powerful to construct several new variables at once. It is allowed thanks to a sequential construction of the variables.
+
+As with `dplyr` main functions, `mutate_mtg()` can be used with pipes: 
+
+```{r}
+read_mtg(filepath)%>%
+  mutate_mtg(Length2 = node$Length + 2)
+```
+
+This is allowed because the function returns the results invisibly. Note that it is mutating the MTG in place though, so no need to assign the results of `mutate_mtg()` to a variable. 
+
+### Use parent values
+
+You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see `get_parent_value()`, `get_children_values()` and `get_ancestors_values()`). Here is an example were we define a new variable called `Length_parent` that is the length of the node's parent:
+
+```{r}
+mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
+```
+
+`get_parent_value()` is used to get the value of the "Length" variable from the parent of each node. 
+
+If we need the values of all ancestors of a node along the tree, we can use `get_ancestors_values()` instead:
+
+```{r}
+mutate_mtg(MTG, total_length = sum(get_ancestors_values("Length",self = TRUE),na.rm = TRUE))
+```
+
+Here are the results for both:
+
+```{r}
+print(MTG$MTG,".symbol","Length","Length_parent","total_length")
+```
+
+### Use children values
+
+To get the children values of a node, use `get_children_values()`. This function returns the values of a field for all children of a node:
+
+```{r}
+get_children_values(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_3"))
+```
+
+It can be used to get *e.g.* the average length of the children:
+
+```{r}
+mutate_mtg(MTG, children_length = mean(get_children_values("Length"), na.rm = TRUE))
+print(MTG$MTG, ".symbol", "Length","children_length")
+```
+
+### Combine values
+
+We can also make more complex associations. Here is an example were we need the sum of the surface of the section of all children for the nodes:
+
+```{r}
+mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+           s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
+```
+
+We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. The `s_surf_child_sum` variable uses the `section_surface` variable that was just created before.
+
+### Filter by scale
+
+#### Introduction on scale 
+
+We can also filter the nodes by scale, *i.e.* the name of the SYMBOL from the MTG classes, which corresponds to the `.symbol` value in the node.
+
+To get all the possible values for the SYMBOLS in an MTG, print the SYMBOL column from the classes section:
+
+```{r}
+MTG$classes$SYMBOL
+```
+
+To get the actual symbol of a node use the `.symbol` field on a node. Here is an example for the root node of the mtg:
+
+```{r}
+MTG$MTG$.symbol
+```
+
+
+#### The scale argument from the helper functions
+
+`get_parent_value()` and `get_children_values()` implement the `scale` argument to filter by scale. It allows to tell the function to only consider the scales passed to this argument, ignoring all others.
+
+For example we can filter the parent node by its scale using the `scale` argument with `get_parent_value()`:
+
+```{r}
+get_parent_value(attribute = "Length", node = data.tree::FindNode(MTG$MTG, "node_6"), scale = "Axis")
+```
+
+Here it returns `NA` because the first parent is an `Internode`, and the first node with scale "Axis" (`node_2`) has no values for "Length", see by yourself:
+
+```{r}
+print(MTG$MTG, ".symbol", "Length")
+```
+
+By default, the function will search for the first node which satisfies the scale required by the user and return its value:
+
+- `get_parent_value()` looks if the parent node is of the required scale, if it is, it returns its value, if not, it looks at the parent of the parent. And it does this recursively until either finding an ancestor with the required scale, or finding the root node (returns `NA` in this case). 
+
+- `get_children_values()` looks if the children are of the required scale. If a child is, it return its value, if not, it will look at the children of the node if any, and repeat the procedure recursively until it finds either a child with the required scale or a leaf (returns `NA` in this case).
+
+An easier way to think about this is that when using the scale argument, functions work on a different tree with only the scales required.
+
+The `recursive` argument can be used in `get_parent_value()` and `get_children_values()` functions to disable this default behavior of "climbing" or "descending" the tree. If `recursive` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right scale.
+
+Here is an example with recursive behavior (the default):
+
+```{r}
+get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf")
+```
+
+And without:
+
+```{r}
+get_children_values(attribute = "Length", node = MTG$MTG$node_2, scale = "Leaf", recursive = FALSE)
+```
+
+The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right scale. 
+
+> Note that `get_ancestors_values()` does not have the `recursive` argument because it is a recursive function by design. So if an ancestor is not of the right scale, it just jumps to the next ancestor.
+
+##### The .scale argument from mutate_mtg()
+
+`mutate_mtg()` has a `.scale` argument that is used similarly to the `scale` argument of the other functions. The only difference is that the functions inside a `mutate_mtg()` call will only be applied to the nodes of the chosen scales, while still having access to the node parents and children if needed. The `.scale` argument is applied to all functions inside the `mutate_mtg()` call. 
+
+There can be a benefit in combining the `.scale` argument from `mutate_mtg()` and the `scale` argument from the other functions in a single call. 
+
+Be careful though, if you need a computation at one scale for a variable but at another scale for another, it is preferable to use multiple calls to `mutate_mtg()`, possibly chained using a pipe. For example if we need the section surface for the internodes only, and the surface for the leaves only, we would use two separate calls to `mutate_mtg()` with each its own scale filter:
+
+```{r}
+mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
+          .scale = "Internode")%>%
+mutate_mtg(area = node$Width * node$Length, .scale = "Leaf")
+
+print(MTG$MTG, ".symbol", "Width","section_surface", "area")
+```
+
+## Plotting a plant
+
+### Static plot
+
+The plant topology can be plotted using the `autoplot()` function. This function is implemented by `ggplot2` so you'll need to load this package before-hand: 
+
+```{r}
+library(ggplot2)
+autoplot(MTG)
+```
+
+The function can be used in a pipe, such as:
+
+```{r eval=FALSE}
+read_mtg(filepath)%>%
+  mutate_mtg(Length2 = node$Length + 2)%>%
+  autoplot(.)
+```
+
+### Interactive plot
+
+The same plot can be rendered as an interactive plot using: 
+
+```{r eval=FALSE}
+plotly_MTG(MTG)
+```
+
+![Interactive plot](https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif)
+
+`plotly_MTG()` uses the [plotly API](https://plotly.com/) under the hood. 
+
+It is also possible to add any variable in the tooltip appearing on hover of a node by adding it to the call. For example if we need the `Length` and the `Width` of the nodes, we would write:
+
+```{r eval=FALSE}
+plotly_mtg(MTG, Length, Width)
+```
+

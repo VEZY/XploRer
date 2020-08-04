@@ -19,5 +19,8 @@ Imports:
     rlang,
     plotly
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
+VignetteBuilder: knitr
