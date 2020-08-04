@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -161,14 +161,14 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 
 <span class='co'># node_6 has four ancestors:</span>
 <span class='fu'>get_ancestors_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_6"</span>))</div><div class='output co'>#&gt; node_5 node_3 node_2 node_1 
-#&gt;     NA     NA     NA     NA </div><div class='input'><span class='co'># Two of them have no values for Length</span>
+#&gt;      6      4     NA     NA </div><div class='input'><span class='co'># Two of them have no values for Length</span>
 
 <span class='co'># If the value of node_6 is also needed:</span>
 <span class='fu'>get_ancestors_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; node_6 node_5 node_3 node_2 node_1 
-#&gt;     12     NA     NA     NA     NA </div><div class='input'>
+#&gt;     12      6      4     NA     NA </div><div class='input'>
 <span class='co'># We can filter by scale if we need to return the values for some scales only:</span>
 <span class='fu'>get_ancestors_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_5 node_3 
-#&gt;     NA     NA </div><div class='input'>
+#&gt;     NA      1 </div><div class='input'>
 <span class='co'># The values are only returned for the ancestors with the required scale.</span>
 <span class='co'># For example we know that a leaf cannot be an ancestor because it cannot bear anything:</span>
 <span class='fu'>get_ancestors_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/FindNode.html'>FindNode</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; logical(0)</div><div class='input'># In this case it returns a length 0 vector.

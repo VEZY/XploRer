@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -201,29 +201,29 @@
 <h3 class="hasAnchor">
 <a href="#use-parent-values" class="anchor"></a>Use parent values</h3>
 <p>You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code>, <code><a href="../reference/get_children_values.html">get_children_values()</a></code> and <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code>). Here is an example were we define a new variable called <code>Length_parent</code> that is the length of the node’s parent:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length_parent</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_parent_value.html">get_parent_value</a></span>(<span class="st">"Length"</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length_parent</span> <span class="kw">=</span> <span class="fu"><a href="../reference/get_parent_value.html">get_parent_value</a></span>(<span class="no">node</span>$<span class="no">Length</span>))</pre></body></html></div>
 <p><code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> is used to get the value of the “Length” variable from the parent of each node.</p>
 <p>If we need the values of all ancestors of a node along the tree, we can use <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> instead:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">total_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/get_ancestors_values.html">get_ancestors_values</a></span>(<span class="st">"Length"</span>,<span class="kw">self</span> <span class="kw">=</span> <span class="fl">TRUE</span>),<span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">total_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/get_ancestors_values.html">get_ancestors_values</a></span>(<span class="no">Length</span>,<span class="kw">self</span> <span class="kw">=</span> <span class="fl">TRUE</span>),<span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))</pre></body></html></div>
 <p>Here are the results for both:</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>,<span class="st">".symbol"</span>,<span class="st">"Length"</span>,<span class="st">"Length_parent"</span>,<span class="st">"total_length"</span>)
 <span class="co">#&gt;                levelName    .symbol Length Length_parent total_length</span>
 <span class="co">#&gt; 1 node_1                 Individual     NA            NA            0</span>
 <span class="co">#&gt; 2  °--node_2                   Axis     NA            NA            0</span>
 <span class="co">#&gt; 3      °--node_3          Internode      4            NA            4</span>
-<span class="co">#&gt; 4          ¦--node_4           Leaf     10             4           10</span>
-<span class="co">#&gt; 5          °--node_5      Internode      6             4            6</span>
-<span class="co">#&gt; 6              °--node_6       Leaf     12             6           12</span></pre></body></html></div>
+<span class="co">#&gt; 4          ¦--node_4           Leaf     10             4           14</span>
+<span class="co">#&gt; 5          °--node_5      Internode      6             4           10</span>
+<span class="co">#&gt; 6              °--node_6       Leaf     12             6           22</span></pre></body></html></div>
 </div>
 <div id="use-children-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-children-values" class="anchor"></a>Use children values</h3>
 <p>To get the children values of a node, use <code><a href="../reference/get_children_values.html">get_children_values()</a></code>. This function returns the values of a field for all children of a node:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/FindNode.html">FindNode</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">"node_3"</span>))
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/FindNode.html">FindNode</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">"node_3"</span>))
 <span class="co">#&gt; node_4 node_5 </span>
 <span class="co">#&gt;     10      6</span></pre></body></html></div>
 <p>It can be used to get <em>e.g.</em> the average length of the children:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">children_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="st">"Length"</span>), <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">children_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="no">node</span>$<span class="no">Length</span>), <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>,<span class="st">"children_length"</span>)
 <span class="co">#&gt;                levelName    .symbol Length children_length</span>
 <span class="co">#&gt; 1 node_1                 Individual     NA             NaN</span>
@@ -238,7 +238,7 @@
 <a href="#combine-values" class="anchor"></a>Combine values</h3>
 <p>We can also make more complex associations. Here is an example were we need the sum of the surface of the section of all children for the nodes:</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-           <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="st">"section_surface"</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></body></html></div>
+           <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></body></html></div>
 <p>We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. The <code>s_surf_child_sum</code> variable uses the <code>section_surface</code> variable that was just created before.</p>
 </div>
 <div id="filter-by-scale" class="section level3">
@@ -279,11 +279,11 @@
 <p>An easier way to think about this is that when using the scale argument, functions work on a different tree with only the scales required.</p>
 <p>The <code>recursive</code> argument can be used in <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code> functions to disable this default behavior of “climbing” or “descending” the tree. If <code>recursive</code> is explicitly set to <code>FALSE</code>, the function returns <code>NA</code> if the first parent is not of the right scale.</p>
 <p>Here is an example with recursive behavior (the default):</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
 <span class="co">#&gt; node_4 node_6 </span>
 <span class="co">#&gt;     10     12</span></pre></body></html></div>
 <p>And without:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">recursive</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">scale</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">recursive</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; [1] NA</span></pre></body></html></div>
 <p>The function returns <code>NA</code> without the recursive behavior because “node_2” has one child (“node_3”) that is not of the right scale.</p>
 <blockquote>

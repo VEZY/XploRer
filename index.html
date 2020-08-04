@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@
 <p>Mutate the MTG to add/recompute node attributes:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">MTG</span><span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-             <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/get_children_values.html">get_children_values</a></span>(<span class="st">"section_surface"</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
+             <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/get_children_values.html">get_children_values</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
              <span class="kw">.scale</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
@@ -170,7 +170,7 @@
 <a href="#4-contribute" class="anchor"></a>4. Contribute</h2>
 <p>Contributions are more than welcome! Whatever your programming level really. If you need help on your first contribution, fill an issue about it.</p>
 <p>If you find any issue, want to make a suggestion, or need a new functionality, please <a href="https://github.com/VEZY/XploRer/issues">fill an issue</a>. This is not more complicated than writing an email (but really simpler for us), just follow the steps one by one. Look into <a href="https://guides.github.com/features/issues/">this article</a> for more info.</p>
-<p>If you want to contribute, please read our <a href="https://dplyr.tidyverse.org/CONTRIBUTING.html">contribution guidelines</a> first. It’s a few minutes read only and guides you through the whole process of contributing (along with many useful tools).</p>
+<p>If you want to contribute, please read our <a href="https://vezy.github.io/XploRer/CONTRIBUTING.html">contribution guidelines</a> first. It’s a few minutes read only and guides you through the whole process of contributing (along with many useful tools).</p>
 </div>
 <div id="5-code-of-conduct" class="section level2">
 <h2 class="hasAnchor">
@@ -182,14 +182,12 @@
 <a href="#6-roadmap" class="anchor"></a>6. Roadmap</h2>
 <p>To do before v1:</p>
 <ul>
-<li><p><input type="checkbox" disabled>
+<li><p><input type="checkbox" disabled checked>
 Make mtg helpers (<code><a href="reference/get_parent_value.html">get_parent_value()</a></code>, <code><a href="reference/get_children_values.html">get_children_values()</a></code> and <code><a href="reference/get_ancestors_values.html">get_ancestors_values()</a></code>) use NSE format to homogenize with <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code></p></li>
-<li><p><input type="checkbox" disabled>
+<li><p><input type="checkbox" disabled checked>
 Add a “Get started” vignette (add the basic info on what we can do with the package)</p></li>
-<li><p><input type="checkbox" disabled>
+<li><p><input type="checkbox" disabled checked>
 Update the readme to display only very basic information about the package, and about contributions (very welcome)</p></li>
-<li><p><input type="checkbox" disabled>
-Add a “Get started” vignette</p></li>
 <li><p><input type="checkbox" disabled>
 Add a vignette about the mtg format, and on the basics (navigate, get value…)</p></li>
 <li><p><input type="checkbox" disabled>
