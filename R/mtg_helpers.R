@@ -159,7 +159,7 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
     }else{
       # Else, just return its values
       vals_ = children[[i]][[attribute]]
-      if(!is.null(vals_)){
+      if(length(vals_) > 0){
         names(vals_) = children[[i]]$name
       }
     }

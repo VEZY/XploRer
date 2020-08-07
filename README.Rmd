@@ -136,6 +136,10 @@ To do before v1:
 
 - [ ] Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This wil make the mtg more usable 
 
+- [ ] Read mtg from XLSX
+
+- [ ] Replace node name by .symbol name
+
 In a more distant future (v2):
 
 - [ ] Add 3d plotting when geometry attributes are available. Make it compatible with XPlo and OpenAlea.
