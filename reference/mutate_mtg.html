@@ -129,6 +129,7 @@ the same name.</p>
   <span class='no'>data</span>,
   <span class='no'>...</span>,
   <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>.traversal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pre-order"</span>, <span class='st'>"post-order"</span>, <span class='st'>"in-order"</span>, <span class='st'>"level"</span>, <span class='st'>"ancestor"</span>),
   <span class='kw'>.pruneFun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
@@ -152,7 +153,12 @@ for an introduction to these concepts.</p></td>
     </tr>
     <tr>
       <th>.scale</th>
-      <td><p>The names of the MTG scale to apply the functions over (i.e. the SYMBOL from the MTG classes).
+      <td><p>An integer vector of the <code>.scale</code> to apply the functions over (i.e. the SCALE from the MTG classes).
+This argument is used to apply a filter on the node modification.</p></td>
+    </tr>
+    <tr>
+      <th>.symbol</th>
+      <td><p>A character vector of the <code>.symbol</code> to apply the functions over (i.e. the SYMBOL from the MTG classes).
 This argument is used to apply a filter on the node modification.</p></td>
     </tr>
     <tr>

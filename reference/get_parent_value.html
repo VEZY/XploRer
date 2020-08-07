@@ -127,7 +127,13 @@ function that is usually used as input to <code><a href='mutate_mtg.html'>mutate
 for all nodes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parent_value</span>(<span class='no'>attribute</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_parent_value</span>(
+  <span class='no'>attribute</span>,
+  <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,8 +148,13 @@ for all nodes.</p>
     </tr>
     <tr>
       <th>scale</th>
-      <td><p>The names of the MTG scale required for the parent (i.e. the SYMBOL
-from the MTG classes). Used as a filter.</p></td>
+      <td><p>An integer vector for filtering the MTG scale of the parent (i.e. the SCALE
+column from the MTG classes).</p></td>
+    </tr>
+    <tr>
+      <th>symbol</th>
+      <td><p>A character vector for filtering the names of the MTG symbol required for the parent (i.e. the SYMBOL
+column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>recursive</th>
