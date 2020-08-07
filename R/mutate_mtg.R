@@ -14,7 +14,9 @@
 #' in the context of the `mtg`. They support unquoting and splicing. See the chapter about
 #' [metaprogramming](https://adv-r.hadley.nz/metaprogramming.html) in the book "Advanced R" from H. Wickham
 #' for an introduction to these concepts.
-#' @param .scale The names of the MTG scale to apply the functions over (i.e. the SYMBOL from the MTG classes).
+#' @param .scale An integer vector of the `.scale` to apply the functions over (i.e. the SCALE from the MTG classes).
+#' This argument is used to apply a filter on the node modification.
+#' @param .symbol A character vector of the `.symbol` to apply the functions over (i.e. the SYMBOL from the MTG classes).
 #' This argument is used to apply a filter on the node modification.
 #' @param .traversal any of 'pre-order' (the default), 'post-order', 'in-order',
 #' 'level', 'ancestor', or a custom function (see details)
@@ -72,7 +74,7 @@
 #'
 #' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
 #' "Length_parent","section_surface","s_surf_child_sum")
-mutate_mtg = function(data,...,.scale = NULL,
+mutate_mtg = function(data,..., .scale = NULL, .symbol = NULL,
                       .traversal = c("pre-order", "post-order",
                                      "in-order", "level", "ancestor"),
                       .pruneFun = NULL){
@@ -85,8 +87,12 @@ mutate_mtg = function(data,...,.scale = NULL,
     return(NULL)
   }
 
-  if(!is.null(.scale)){
-    filterFun = function(x){x$.symbol %in% .scale}
+  if(!is.null(.scale) && !is.null(.symbol)){
+    filterFun = function(x){x$.symbol %in% .symbol && x$.scale %in% .scale}
+  }else if(!is.null(.symbol)){
+    filterFun = function(x){x$.symbol %in% .symbol}
+  }else if(!is.null(.scale)){
+    filterFun = function(x){x$.scale %in% .scale}
   }else{
     filterFun = NULL
   }

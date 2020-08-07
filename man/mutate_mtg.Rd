@@ -8,6 +8,7 @@ mutate_mtg(
   data,
   ...,
   .scale = NULL,
+  .symbol = NULL,
   .traversal = c("pre-order", "post-order", "in-order", "level", "ancestor"),
   .pruneFun = NULL
 )
@@ -23,7 +24,10 @@ in the context of the \code{mtg}. They support unquoting and splicing. See the c
 \href{https://adv-r.hadley.nz/metaprogramming.html}{metaprogramming} in the book "Advanced R" from H. Wickham
 for an introduction to these concepts.}
 
-\item{.scale}{The names of the MTG scale to apply the functions over (i.e. the SYMBOL from the MTG classes).
+\item{.scale}{An integer vector of the \code{.scale} to apply the functions over (i.e. the SCALE from the MTG classes).
+This argument is used to apply a filter on the node modification.}
+
+\item{.symbol}{A character vector of the \code{.symbol} to apply the functions over (i.e. the SYMBOL from the MTG classes).
 This argument is used to apply a filter on the node modification.}
 
 \item{.traversal}{any of 'pre-order' (the default), 'post-order', 'in-order',

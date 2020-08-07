@@ -138,7 +138,7 @@ To do before v1:
 
 - [ ] Read mtg from XLSX
 
-- [ ] Replace node name by .symbol name
+- [ ] Replace node name by .symbol name:
 
 - [ ] Use scale on actual scale, and add a new filter for symbol.
 
