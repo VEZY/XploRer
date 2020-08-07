@@ -17,7 +17,7 @@ test_that("Parse classes", {
   expect_true(is.data.frame(classes))
   expect_equal(nrow(classes),5)
   expect_equal(classes$SYMBOL,c("$","Individual","Axis","Internode","Leaf"))
-  expect_equal(classes$SCALE,c("0","1","2","3","3"))
+  expect_equal(classes$SCALE,c(0,1,2,3,3))
   expect_equal(classes$DECOMPOSITION,rep("FREE",5))
   expect_equal(classes$INDEXATION,rep("FREE",5))
   expect_equal(classes$DEFINITION,rep("IMPLICIT",5))

@@ -134,11 +134,15 @@ To do before v1:
   - [ ] Add a new argument to remove the checks
   - [ ] Print the problems nicely using [cli](https://cli.r-lib.org/) and/or [waldo](https://waldo.r-lib.org/)
 
-- [ ] Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This wil make the mtg more usable 
+- [ ] Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This will make the mtg more usable 
 
 - [ ] Read mtg from XLSX
 
 - [ ] Replace node name by .symbol name
+
+- [ ] Use scale on actual scale, and add a new filter for symbol.
+
+- [ ] Put back the scene node
 
 In a more distant future (v2):
 

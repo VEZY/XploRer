@@ -4,7 +4,7 @@
 \alias{parse_MTG_node_attr}
 \title{Parse MTG node attributes}
 \usage{
-parse_MTG_node_attr(node_data, features, attr_column_start)
+parse_MTG_node_attr(node_data, features, attr_column_start, line = NULL)
 }
 \arguments{
 \item{features}{The features data.frame}

@@ -22,15 +22,15 @@ Length	ALPHA
 Width	ALPHA
 
 MTG:
-ENTITY-CODE		XX	YY	ZZ	Length	Width
+ENTITY-CODE				XX	YY	ZZ	Length	Width
 /Scene0
-^/Individual0		0.0	0.0	0.0
+^/Individual0				0.0	0.0	0.0
 ^/Axis0
-^/Internode0					4.0	1.0
+^/Internode0							4.0	1.0
 	+Axis1
 		/Internode0					4.0	1.0
 			+Leaf0				10.0	6.0
-^<Internode1					6.0
+^<Internode1							6.0	1.0
 	+Axis1
 		/Internode0					4.0	1.0
 			+Leaf0				10.0	6.0

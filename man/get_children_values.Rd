@@ -4,15 +4,24 @@
 \alias{get_children_values}
 \title{Get children value}
 \usage{
-get_children_values(attribute, node = NULL, scale = NULL, recursive = TRUE)
+get_children_values(
+  attribute,
+  node = NULL,
+  scale = NULL,
+  symbol = NULL,
+  recursive = TRUE
+)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The MTG node}
 
-\item{scale}{The names of the MTG scale(s) required for the children (i.e. the SYMBOL
-from the MTG classes). Used as a filter.}
+\item{scale}{An integer vector for filtering the \code{.scale} of the children (i.e. the SCALE
+column from the MTG classes).}
+
+\item{symbol}{A character vector for filtering the children by the name of their \code{.symbol} (i.e. the SYMBOL
+column from the MTG classes).}
 
 \item{recursive}{If a child is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}

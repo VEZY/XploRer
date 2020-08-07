@@ -4,15 +4,24 @@
 \alias{get_ancestors_values}
 \title{Get ancestors value}
 \usage{
-get_ancestors_values(attribute, node = NULL, scale = NULL, self = FALSE)
+get_ancestors_values(
+  attribute,
+  node = NULL,
+  scale = NULL,
+  symbol = NULL,
+  self = FALSE
+)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character)}
 
 \item{node}{The MTG node}
 
-\item{scale}{Filter ancestors by the names of the MTG scale(s) (i.e. the SYMBOL
+\item{scale}{An integer vector for filtering ancestors by their \code{.scale} (i.e. the SCALE
 from the MTG classes).}
+
+\item{symbol}{A character vector for filtering the names of the ancestors \code{.symbol} (i.e. the SYMBOL
+column from the MTG classes).}
 
 \item{self}{Return the value of the current node (\code{TRUE}), or the ancestors only (\code{FALSE}, the default)}
 }

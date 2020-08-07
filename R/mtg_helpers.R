@@ -6,8 +6,10 @@
 #'
 #' @param attribute Any node attribute (as a character, an expression or a node callm see details)
 #' @param node The node (do not put something when used from [mutate_mtg()])
-#' @param scale The names of the MTG scale required for the parent (i.e. the SYMBOL
-#'  from the MTG classes). Used as a filter.
+#' @param symbol A character vector for filtering the names of the MTG symbol required for the parent (i.e. the SYMBOL
+#'  column from the MTG classes).
+#' @param scale An integer vector for filtering the MTG scale of the parent (i.e. the SCALE
+#'  column from the MTG classes).
 #' @param recursive If a parent is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
@@ -28,7 +30,7 @@
 #' MTG = read_mtg(filepath)
 #' get_parent_value(Length,  node = data.tree::FindNode(MTG$MTG, "node_5"))
 #' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
-get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
+get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL, recursive = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -46,18 +48,18 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
 
   parent = node$parent
 
+  # Is there any filter happening for the parent node?:
+  is_scale_filtered = !is.null(scale) && !parent$.scale %in% scale
+  is_symbol_filtered = !is.null(symbol) && !parent$.symbol %in% symbol
+  is_filtered = is_scale_filtered || is_symbol_filtered
+
   if(node$isRoot){
     vals = NA
-  } else if(is.null(scale) || parent$.symbol %in% scale){
-
-    # vals = get(attribute, envir = parent)
-    # vals = rlang::expr(`$`(parent, attribute))
-
-    # substitute(node$x,list(x= dots_names[i]))
+  }else if(!is_filtered){
     vals = parent[[attribute]]
-
   }else if(isTRUE(recursive)){
-    vals = get_parent_value(!!attribute_expr, node = parent, scale = scale)
+    vals = get_parent_value(!!attribute_expr, node = parent, scale = scale,
+                            symbol = symbol)
   }else{
     vals = NA
   }
@@ -74,8 +76,10 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
-#' @param scale The names of the MTG scale(s) required for the children (i.e. the SYMBOL
-#'  from the MTG classes). Used as a filter.
+#' @param symbol A character vector for filtering the children by the name of their `.symbol` (i.e. the SYMBOL
+#'  column from the MTG classes).
+#' @param scale An integer vector for filtering the `.scale` of the children (i.e. the SCALE
+#'  column from the MTG classes).
 #' @param recursive If a child is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
@@ -118,7 +122,8 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, recursive = TR
 #' mutate_mtg(MTG, children_width = get_children_values("Width"))
 #' print(MTG$MTG, "Width", "children_width")
 #'
-get_children_values = function(attribute, node = NULL, scale = NULL, recursive = TRUE) {
+get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+                               recursive = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -136,9 +141,13 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 
   children = node$children
   if(length(children) == 0) return(NA)
-  children_in_scale =
+
+  is_children_filtered =
     unlist(lapply(children, function(x){
-      is.null(scale) || x$.symbol %in% scale
+      # Is there any filter happening for the child node?:
+      is_scale_filtered = !is.null(scale) && !x$.scale %in% scale
+      is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
+      is_scale_filtered || is_symbol_filtered
     }))
 
   # Initializing the values as a vector:
@@ -146,25 +155,23 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 
   # Assigning the values read from the children:
   for (i in seq_along(children)){
-    if(!children_in_scale[i]){
+    if(is_children_filtered[i]){
 
       if(isTRUE(recursive)){
         # If the child is not of the requested scale, try its children until
         # meeting the right scale
         vals_ = get_children_values(!!attribute_expr,node = children[[i]], scale = scale,
-                                    recursive= recursive)
+                                    symbol = symbol, recursive= recursive)
       }else{
         vals_ = NA
+        names(vals_) = children[[i]]$name
       }
     }else{
       # Else, just return its values
       vals_ = children[[i]][[attribute]]
-      if(length(vals_) > 0){
-        names(vals_) = children[[i]]$name
-      }
+      if(is.null(vals_) || length(vals_) == 0) vals_ = NA
+      names(vals_) = children[[i]]$name
     }
-
-    if(is.null(vals_) || length(vals_) == 0) vals_ = NA
 
     vals[[i]] = vals_
   }
@@ -179,8 +186,10 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
-#' @param scale Filter ancestors by the names of the MTG scale(s) (i.e. the SYMBOL
+#' @param scale An integer vector for filtering ancestors by their `.scale` (i.e. the SCALE
 #'  from the MTG classes).
+#' @param symbol A character vector for filtering the names of the ancestors `.symbol` (i.e. the SYMBOL
+#'  column from the MTG classes).
 #' @param self Return the value of the current node (`TRUE`), or the ancestors only (`FALSE`, the default)
 #'
 #' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
@@ -214,7 +223,11 @@ get_children_values = function(attribute, node = NULL, scale = NULL, recursive =
 #' # making a recursive search from one scale to another until finding the required scale,
 #' # you can put the `recursive` argument to `FALSE`:
 #'
-get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FALSE){
+get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = NULL, self = FALSE){
+
+  if(!is.null(scale) && !is.numeric(scale)){
+    stop("The scale argument must be numeric")
+  }
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -230,7 +243,13 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FA
     }
   }
 
-  if(isTRUE(self) && (is.null(scale) || node$.symbol %in% scale)){
+  # Is there any filter happening for the current node?:
+  is_scale_filtered = !is.null(scale) && !node$.scale %in% scale
+  is_symbol_filtered = !is.null(symbol) && !node$.symbol %in% symbol
+  is_filtered = is_scale_filtered || is_symbol_filtered
+
+
+  if(isTRUE(self) && !is_filtered){
     val = node[[attribute]]
     if(!is.null(val)){
       names(val) = node$name
@@ -242,9 +261,16 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, self = FA
   node_current = node
 
   while (!data.tree::isRoot(node_current)){
-    parent_val = get_parent_value(!!attribute_expr, node = node_current, scale = scale)
+    parent_val = get_parent_value(!!attribute_expr, node = node_current,
+                                  scale = scale,symbol = symbol)
     node_current = node_current$parent
-    if(!is.null(scale) && !node_current$.symbol %in% scale){
+
+    # Is there any filter happening for the parent node?:
+    is_scale_filtered = !is.null(scale) && !node_current$.scale %in% scale
+    is_symbol_filtered = !is.null(symbol) && !node_current$.symbol %in% symbol
+    is_filtered = is_scale_filtered || is_symbol_filtered
+
+    if(is_filtered){
       next()
     }
     names(parent_val) = node_current$name

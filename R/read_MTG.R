@@ -166,10 +166,12 @@ parse_MTG_code = function(MTG){
 #' @keywords internal
 #'
 parse_MTG_classes = function(MTG){
-  parse_MTG_section(MTG,
-                   "CLASSES:",
-                   c('SYMBOL', 'SCALE', 'DECOMPOSITION', 'INDEXATION', 'DEFINITION'),
-                   "DESCRIPTION:",FALSE)
+  classes = parse_MTG_section(MTG,
+                              "CLASSES:",
+                              c('SYMBOL', 'SCALE', 'DECOMPOSITION', 'INDEXATION', 'DEFINITION'),
+                              "DESCRIPTION:",FALSE)
+  classes$SCALE = as.numeric(classes$SCALE)
+  classes
 }
 
 #' Parse MTG description
@@ -257,6 +259,8 @@ parse_MTG_MTG = function(MTG,classes,description,features){
     }
   }
 
+
+
   # Getting the root node:
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
@@ -264,7 +268,9 @@ parse_MTG_MTG = function(MTG,classes,description,features){
                                      attr_column_start),
                  .link = node_1_element$link,
                  .symbol = node_1_element$symbol,
-                 .index = node_1_element$index)
+                 .index = node_1_element$index,
+                 .scale = classes$SCALE[node_1_element$symbol == classes$SYMBOL]
+                 )
 
   # Initializing "last_node_column". Will be used to remember the last node
   # built for any given column (help to connect new nodes to the right node)
@@ -287,12 +293,19 @@ parse_MTG_MTG = function(MTG,classes,description,features){
     node_column = find_MTG_node_column(node_data)
     node_data = node_data[node_column:length(node_data)]
 
+    if(attr_column_start < node_column){
+      stop("Error in MTG: Found an MTG node declared at column ",node_column,
+           ", but attributes are declared to start at column ",attr_column_start,
+           " in the ENTITY-CODE row. \nYou can probably fix the issue by adding",
+           " some tabs after ENTITY-CODE (try to add ",
+           node_column-attr_column_start+1," tabs).")
+    }
     node_attr_column_start = attr_column_start - node_column + 1
     node = split_MTG_elements(node_data[1])
     node = expand_node(node)
 
     # Get node attributes:
-    node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start)
+    node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start,i)
 
     # Declare a new node as object (because the methods associated to nodes are OO):
     # assign(node_name, data.tree::Node$new(node_name))
@@ -323,11 +336,13 @@ parse_MTG_MTG = function(MTG,classes,description,features){
         node_k_attr= c(node_attr,
                        .link = node_element$link,
                        .symbol = node_element$symbol,
-                       .index = node_element$index)
+                       .index = node_element$index,
+                       .scale = classes$SCALE[node_element$symbol == classes$SYMBOL])
       }else{
         node_k_attr= c(.link = node_element$link,
                        .symbol = node_element$symbol,
-                       .index = node_element$index)
+                       .index = node_element$index,
+                       .scale = classes$SCALE[node_element$symbol == classes$SYMBOL])
       }
       if(k == min(building_nodes)){
         parent_node = paste0("node_",parent_column)
@@ -437,9 +452,13 @@ expand_node = function(x){
 #'
 #' @keywords internal
 #'
-parse_MTG_node_attr = function(node_data,features,attr_column_start){
+parse_MTG_node_attr = function(node_data,features,attr_column_start,line= NULL){
   node_attr= vector(length = nrow(features))
   node_data_attr = node_data[-c(1:(attr_column_start-1))]
+  if(length(node_data_attr) > nrow(features)){
+    stop("Found more columns for features in MTG than declared in the FEATURE section",
+         ". Please check line ",line, " of the MTG:\n",paste(node_data, collapse = "\t"))
+  }
   node_attr = as.list(node_data_attr)
   # NB: -c(1,2) because the first one is the node topology, and the second one
   # is used to separate the topology from the attributes

@@ -4,15 +4,24 @@
 \alias{get_parent_value}
 \title{Get parent value}
 \usage{
-get_parent_value(attribute, node = NULL, scale = NULL, recursive = TRUE)
+get_parent_value(
+  attribute,
+  node = NULL,
+  scale = NULL,
+  symbol = NULL,
+  recursive = TRUE
+)
 }
 \arguments{
 \item{attribute}{Any node attribute (as a character, an expression or a node callm see details)}
 
 \item{node}{The node (do not put something when used from \code{\link[=mutate_mtg]{mutate_mtg()}})}
 
-\item{scale}{The names of the MTG scale required for the parent (i.e. the SYMBOL
-from the MTG classes). Used as a filter.}
+\item{scale}{An integer vector for filtering the MTG scale of the parent (i.e. the SCALE
+column from the MTG classes).}
+
+\item{symbol}{A character vector for filtering the names of the MTG symbol required for the parent (i.e. the SYMBOL
+column from the MTG classes).}
 
 \item{recursive}{If a parent is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
