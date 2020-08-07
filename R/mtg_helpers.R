@@ -210,17 +210,17 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
 #' # If the value of node_6 is also needed:
 #' get_ancestors_values("Length", node = data.tree::FindNode(MTG$MTG, "node_6"), self = TRUE)
 #'
-#' # We can filter by scale if we need to return the values for some scales only:
-#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), scale = "Internode")
+#' # We can filter by symbol if we need to return the values for some symbols only:
+#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Internode")
 #'
-#' # The values are only returned for the ancestors with the required scale.
+#' # The values are only returned for the ancestors with the required symbol
 #' # For example we know that a leaf cannot be an ancestor because it cannot bear anything:
-#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), scale = "Leaf")
+#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Leaf")
 #' # In this case it returns a length 0 vector.
 #'
-#' # Here we get the value of node_6 also, because its parent "node_5" is not of scale
-#' # "Leaf", so it was filtered out. It you need the values for one scale, but not
-#' # making a recursive search from one scale to another until finding the required scale,
+#' # Here we get the value of node_6 also, because its parent "node_5" is not of symbol
+#' # "Leaf", so it was filtered out. It you need the values for one symbol, but not
+#' # making a recursive search from one scale to another until finding the required symbol,
 #' # you can put the `recursive` argument to `FALSE`:
 #'
 get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = NULL, self = FALSE){
