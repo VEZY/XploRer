@@ -233,6 +233,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 
   section_begin = grep("MTG", MTG)
   section_header = split_at_tab(MTG[section_begin+1])[[1]]
+  section_header = trimws(section_header)
 
   if(section_header[1] != "ENTITY-CODE" && section_header[1] != "TOPO"){
     stop("Neither ENTITY-CODE or TOPO were found in the MTG header")
@@ -240,7 +241,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
 
   common_features= section_header[section_header != ""][-1] %in% features$NAME
   if(!all(common_features)){
-    stop("unknown ENTITY-CODE in MTG: ",section_header[!common_features])
+    stop("unknown column in the ENTITY-CODE in MTG: ",section_header[section_header != ""][-1][!common_features])
   }
 
   attr_column_start = which(section_header != "")[-1][1]
