@@ -252,17 +252,6 @@ parse_MTG_MTG = function(MTG,classes,description,features){
   # Splitting columns:
   splitted_MTG= strsplit(MTG_code,"\t")
 
-  # AMAPStudio always adds an unnecessary Scene as the root of the MTG,
-  # we ignore it:
-  if(grepl("/Scene",splitted_MTG[[1]][1])){
-    splitted_MTG= splitted_MTG[-1]
-    if(strtrim(splitted_MTG[[1]][1],1) == "^"){
-      splitted_MTG[[1]][1] = stringr::str_sub(splitted_MTG[[1]][1],2)
-    }
-  }
-
-
-
   # Getting the root node:
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
