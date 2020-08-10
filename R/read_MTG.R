@@ -27,7 +27,7 @@ read_mtg = function(file) {
   check_sections(MTG_file)
 
   code = parse_MTG_code(MTG_file)
-  classes = parse_MTG_classes(MTG_file)
+  classes = parse_MTG_classes(MTG = MTG_file)
   description = parse_MTG_description(MTG_file)
   features = parse_MTG_features(MTG_file)
 
@@ -52,10 +52,10 @@ read_mtg = function(file) {
 #' check_sections(mtg)
 #' }
 check_sections = function(MTG_file){
-  sections= c("CODE:", "CLASSES:", "DESCRIPTION:", "FEATURES:","MTG:")
-  MTG_sections_pos = grep("CODE:|CLASSES:|DESCRIPTION:|FEATURES:|MTG:", MTG_file)
-  MTG_sections= gsub(pattern = ":[^\\\n]*", replacement = ":", x = MTG_file[MTG_sections_pos])
-  is_section_in_MTG= sections %in% MTG_sections
+  sections= c("CODE", "CLASSES", "DESCRIPTION", "FEATURES","MTG")
+  MTG_sections_pos = grep(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_file)
+  MTG_sections = gsub(pattern = ":[^\\\n]*", replacement = ":", x = MTG_file[MTG_sections_pos])
+  is_section_in_MTG= grepl(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_sections)
 
   if(!all(is_section_in_MTG)){
     stop("Section ",sections[!is_section_in_MTG]," not found in the MTG file. ",
@@ -64,7 +64,8 @@ check_sections = function(MTG_file){
     )
   }
 
-  if(!identical(match(MTG_sections,sections), 1:5)){
+
+  if(!identical(grep(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_sections), 1:5)){
     stop("Sections of the MTG file are not in the right order.\n",
          " Expected: ",paste(sections, collapse = " "),"\n Found: ",
          paste(MTG_sections, collapse = " "))
@@ -145,8 +146,8 @@ parse_MTG_section = function(MTG,section_name,header,next_section,allow_empty){
 #' @keywords internal
 #'
 parse_MTG_code = function(MTG){
-  code_section = grep("CODE:", MTG)
-  code = gsub("CODE:","",MTG[code_section])
+  code_section = grep("CODE[[:blank:]]*:", MTG)
+  code = gsub("CODE[[:blank:]]*:","",MTG[code_section])
   code = trimws(code)
   if(code != "FORM-A" && code != "FORM-B"){
     stop("Unknown MTG format. CODE: ",code,". Only FORM-A and FORM-B allowed.")
@@ -167,9 +168,9 @@ parse_MTG_code = function(MTG){
 #'
 parse_MTG_classes = function(MTG){
   classes = parse_MTG_section(MTG,
-                              "CLASSES:",
+                              "CLASSES[[:blank:]]*:",
                               c('SYMBOL', 'SCALE', 'DECOMPOSITION', 'INDEXATION', 'DEFINITION'),
-                              "DESCRIPTION:",FALSE)
+                              "DESCRIPTION",FALSE)
   classes$SCALE = as.numeric(classes$SCALE)
   classes
 }
@@ -184,9 +185,9 @@ parse_MTG_classes = function(MTG){
 #' @keywords internal
 #'
 parse_MTG_description = function(MTG){
-  description_df= parse_MTG_section(MTG,"DESCRIPTION:",
+  description_df= parse_MTG_section(MTG,"DESCRIPTION[[:blank:]]*:",
                                    c("LEFT", "RIGHT", "RELTYPE", "MAX"),
-                                   "FEATURES:",TRUE)
+                                   "FEATURES",TRUE)
   if(nrow(description_df) == 0){
     return(description_df)
   }
@@ -209,9 +210,9 @@ parse_MTG_description = function(MTG){
 #' @keywords internal
 #'
 parse_MTG_features = function(MTG){
-  parse_MTG_section(MTG,"FEATURES:",
+  parse_MTG_section(MTG,"FEATURES[[:blank:]]*:",
                     c("NAME", "TYPE"),
-                    "MTG:",TRUE)
+                    "MTG",TRUE)
 }
 
 
