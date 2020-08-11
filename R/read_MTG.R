@@ -20,6 +20,10 @@
 read_mtg = function(file) {
   MTG_file = readLines(file)
   MTG_file = strip_comments(MTG_file)
+
+  # Find MTG index in file to be able to return the true line at which there is an error
+  MTG_section_begin = grep("MTG[[:blank:]]*:", MTG_file)
+
   MTG_file = strip_empty_lines(MTG_file)
   # NB: could use pipes here, but can be ~2x slower
 
@@ -31,7 +35,7 @@ read_mtg = function(file) {
   description = parse_MTG_description(MTG_file)
   features = parse_MTG_features(MTG_file)
 
-  MTG = parse_MTG_MTG(MTG_file,classes,description,features)
+  MTG = parse_MTG_MTG(MTG_file,classes,description,features,MTG_section_begin)
 
   MTG = list(classes = classes, description = description,
              features = features,MTG = MTG)
@@ -53,9 +57,9 @@ read_mtg = function(file) {
 #' }
 check_sections = function(MTG_file){
   sections= c("CODE", "CLASSES", "DESCRIPTION", "FEATURES","MTG")
-  MTG_sections_pos = grep(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_file)
+  MTG_sections_pos = grep(paste0("(",paste(sections, collapse = "|"),")[[:blank:]]*:"), MTG_file)
   MTG_sections = gsub(pattern = ":[^\\\n]*", replacement = ":", x = MTG_file[MTG_sections_pos])
-  is_section_in_MTG= grepl(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_sections)
+  is_section_in_MTG = grepl(paste0(paste(sections, collapse = "|"),"[[:blank:]]*:"), MTG_sections)
 
   if(!all(is_section_in_MTG)){
     stop("Section ",sections[!is_section_in_MTG]," not found in the MTG file. ",
@@ -65,7 +69,7 @@ check_sections = function(MTG_file){
   }
 
 
-  if(!identical(grep(paste0(paste(sections, collapse = "|"),"*[[:blank:]]:"), MTG_sections), 1:5)){
+  if(!identical(grep(paste0(paste(sections, collapse = "|"),"[[:blank:]]*:"), MTG_sections), 1:5)){
     stop("Sections of the MTG file are not in the right order.\n",
          " Expected: ",paste(sections, collapse = " "),"\n Found: ",
          paste(MTG_sections, collapse = " "))
@@ -186,8 +190,8 @@ parse_MTG_classes = function(MTG){
 #'
 parse_MTG_description = function(MTG){
   description_df= parse_MTG_section(MTG,"DESCRIPTION[[:blank:]]*:",
-                                   c("LEFT", "RIGHT", "RELTYPE", "MAX"),
-                                   "FEATURES",TRUE)
+                                    c("LEFT", "RIGHT", "RELTYPE", "MAX"),
+                                    "FEATURES",TRUE)
   if(nrow(description_df) == 0){
     return(description_df)
   }
@@ -225,12 +229,14 @@ parse_MTG_features = function(MTG){
 #' @param classes The MTG classes
 #' @param description The MTG description
 #' @param features The MTG features
+#' @param first_line The first line of the MTG. Used to print the true line at
+#' which there is an error.
 #'
 #'
 #' @return A parsed MTG
 #' @keywords internal
 #'
-parse_MTG_MTG = function(MTG,classes,description,features){
+parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
 
   section_begin = grep("MTG", MTG)
   section_header = split_at_tab(MTG[section_begin+1])[[1]]
@@ -261,7 +267,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
                  .symbol = node_1_element$symbol,
                  .index = node_1_element$index,
                  .scale = classes$SCALE[node_1_element$symbol == classes$SYMBOL]
-                 )
+  )
 
   # Initializing "last_node_column". Will be used to remember the last node
   # built for any given column (help to connect new nodes to the right node)
@@ -285,7 +291,7 @@ parse_MTG_MTG = function(MTG,classes,description,features){
     node_data = node_data[node_column:length(node_data)]
 
     if(attr_column_start < node_column){
-      stop("Error in MTG: Found an MTG node declared at column ",node_column,
+      stop("Error in MTG at line ",i+first_line+1,": Found an MTG node declared at column ",node_column,
            ", but attributes are declared to start at column ",attr_column_start,
            " in the ENTITY-CODE row. \nYou can probably fix the issue by adding",
            " some tabs after ENTITY-CODE (try to add ",

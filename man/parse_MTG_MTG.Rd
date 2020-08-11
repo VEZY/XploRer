@@ -4,7 +4,7 @@
 \alias{parse_MTG_MTG}
 \title{Parse MTG}
 \usage{
-parse_MTG_MTG(MTG, classes, description, features)
+parse_MTG_MTG(MTG, classes, description, features, first_line = 1)
 }
 \arguments{
 \item{MTG}{A pre-formatted MTG}
@@ -14,6 +14,9 @@ parse_MTG_MTG(MTG, classes, description, features)
 \item{description}{The MTG description}
 
 \item{features}{The MTG features}
+
+\item{first_line}{The first line of the MTG. Used to print the true line at
+which there is an error.}
 }
 \value{
 A parsed MTG
