@@ -280,6 +280,65 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
   val
 }
 
+#' Get consecutive node values
+#'
+#' Get the values of an attribute for all consecutive nodes (i.e. not branching)
+#'
+#' @param attribute Any node attribute (as a character)
+#' @param node The MTG node
+#' @param symbol A character vector for filtering the names of the nodes that are considered for succession.
+#' @return A vector of values named after the nodes of interest
+#' @export
+#'
+#' @examples
+#' filepath= system.file("extdata", "tree1h.mtg", package = "XploRer")
+#' MTG = read_mtg(filepath)
+#' get_nodes_symbol_values(attribute = "length", node = FindNode(MTG$MTG,"node_8"), symbol = "S")
+#'
+get_nodes_symbol_values = function(attribute, node = NULL, symbol = NULL){
+
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
+
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_children_values()' is used interactively")
+    }
+  }
+
+  children = node$children
+  if(length(children) == 0) return()
+
+  is_children_filtered =
+    unlist(lapply(children, function(x){
+      # Is there any filter happening for the child node?:
+      is_branching = x$.link == "+"
+      is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
+      is_branching || is_symbol_filtered
+    }))
+
+  child = children[[which(!is_children_filtered)]]
+
+  if(length(child) == 0){
+    return()
+  }else{
+    vals_ = child[[attribute]]
+
+    if(is.null(vals_) || length(vals_) == 0){
+      vals_ = NA
+      names(vals_) = child$name
+    }
+
+    vals_ = c(vals_,get_nodes_symbol_values(!!attribute_expr,node = child, symbol = symbol))
+
+  }
+  unlist(vals_)
+}
 
 
 #' Attribute as name
