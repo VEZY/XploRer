@@ -40,18 +40,18 @@ filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 
 # node_6 has four ancestors:
-get_ancestors_values("Length", node = data.tree::FindNode(MTG$MTG, "node_6"))
+get_ancestors_values("Length", node = extract_node(MTG, "node_6"))
 # Two of them have no values for Length
 
 # If the value of node_6 is also needed:
-get_ancestors_values("Length", node = data.tree::FindNode(MTG$MTG, "node_6"), self = TRUE)
+get_ancestors_values("Length", node = extract_node(MTG, "node_6"), self = TRUE)
 
 # We can filter by symbol if we need to return the values for some symbols only:
-get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Internode")
+get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Internode")
 
 # The values are only returned for the ancestors with the required symbol
 # For example we know that a leaf cannot be an ancestor because it cannot bear anything:
-get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Leaf")
+get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Leaf")
 # In this case it returns a length 0 vector.
 
 # Here we get the value of node_6 also, because its parent "node_5" is not of symbol

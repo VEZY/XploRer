@@ -41,10 +41,10 @@ filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 
 # node_5 has one child:
-get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_5"))
+get_children_values("Length", node = extract_node(MTG, "node_5"))
 
 # Using node 3 as reference now:
-node_3 = data.tree::FindNode(MTG$MTG, "node_3")
+node_3 = extract_node(MTG, "node_3")
 # node_3 has two children, returns two values:
 get_children_values("Length", node = node_3)
 # To get the names of those children:

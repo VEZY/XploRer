@@ -46,10 +46,10 @@ test_that("Parse features", {
 
 test_that("Parse MTG", {
   MTG = parse_MTG_MTG(MTG_file,classes,description,features)
-  expect_equal(MTG$totalCount,6) # number of nodes
+  expect_equal(MTG$totalCount,7) # number of nodes
   expect_equal(MTG$leafCount,2)
-  expect_equal(MTG$height,5)
-  expect_equal(MTG$averageBranchingFactor,1.25)
+  expect_equal(MTG$height,6)
+  expect_equal(MTG$averageBranchingFactor,1.2)
 })
 
 test_that("Read MTG file", {

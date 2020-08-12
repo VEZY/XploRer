@@ -2,9 +2,10 @@
 
 S3method(autoplot,mtg)
 export("%>%")
+export(extract_node)
 export(get_ancestors_values)
 export(get_children_values)
-export(get_nodes_symbol_values)
+export(get_follow_values)
 export(get_parent_value)
 export(mutate_mtg)
 export(plotly_mtg)

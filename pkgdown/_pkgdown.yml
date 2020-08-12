@@ -18,6 +18,7 @@ reference:
   - get_parent_value
   - get_children_values
   - get_ancestors_values
+  - get_follow_values
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:

@@ -4,7 +4,7 @@ MTG = read_mtg(filepath)
 test_that("adding a variable with mutate_mtg works", {
   mutate_mtg(MTG, test = 0+1)
   mtg_df = data.tree::ToDataFrameTree(MTG$MTG,"test")
-  expect_equal(mtg_df$test, rep(1,6))
+  expect_equal(mtg_df$test, rep(1,7))
 })
 
 test_that("adding a variable with mutate_mtg using another node attribute works", {

@@ -28,8 +28,8 @@
 #' @examples
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
-#' get_parent_value(Length,  node = data.tree::FindNode(MTG$MTG, "node_5"))
-#' get_parent_value("Length",  node = data.tree::FindNode(MTG$MTG, "node_5"))
+#' get_parent_value(Length,  node = extract_node(MTG, "node_5"))
+#' get_parent_value("Length",  node = extract_node(MTG, "node_5"))
 get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL, recursive = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
@@ -95,10 +95,10 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #' MTG = read_mtg(filepath)
 #'
 #' # node_5 has one child:
-#' get_children_values("Length", node = data.tree::FindNode(MTG$MTG, "node_5"))
+#' get_children_values("Length", node = extract_node(MTG, "node_5"))
 #'
 #' # Using node 3 as reference now:
-#' node_3 = data.tree::FindNode(MTG$MTG, "node_3")
+#' node_3 = extract_node(MTG, "node_3")
 #' # node_3 has two children, returns two values:
 #' get_children_values("Length", node = node_3)
 #' # To get the names of those children:
@@ -204,18 +204,18 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
 #' MTG = read_mtg(filepath)
 #'
 #' # node_6 has four ancestors:
-#' get_ancestors_values("Length", node = data.tree::FindNode(MTG$MTG, "node_6"))
+#' get_ancestors_values("Length", node = extract_node(MTG, "node_6"))
 #' # Two of them have no values for Length
 #'
 #' # If the value of node_6 is also needed:
-#' get_ancestors_values("Length", node = data.tree::FindNode(MTG$MTG, "node_6"), self = TRUE)
+#' get_ancestors_values("Length", node = extract_node(MTG, "node_6"), self = TRUE)
 #'
 #' # We can filter by symbol if we need to return the values for some symbols only:
-#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Internode")
+#' get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Internode")
 #'
 #' # The values are only returned for the ancestors with the required symbol
 #' # For example we know that a leaf cannot be an ancestor because it cannot bear anything:
-#' get_ancestors_values("Width", node = data.tree::FindNode(MTG$MTG, "node_6"), symbol = "Leaf")
+#' get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Leaf")
 #' # In this case it returns a length 0 vector.
 #'
 #' # Here we get the value of node_6 also, because its parent "node_5" is not of symbol
@@ -282,7 +282,9 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 
 #' Get consecutive node values
 #'
-#' Get the values of an attribute for all consecutive nodes (i.e. not branching)
+#' Get the values of an attribute for all consecutive nodes (i.e. following nodes,
+#' excluding branching ones). It is usually used to compute e.g. the total length
+#' of an axis when the length were measured at the segment scale or unit of growth scale.
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
@@ -293,9 +295,12 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #' @examples
 #' filepath= system.file("extdata", "tree1h.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
-#' get_nodes_symbol_values(attribute = "length", node = FindNode(MTG$MTG,"node_8"), symbol = "S")
+#' get_follow_values(attribute = "length", node = extract_node(MTG,"node_8"), symbol = "S")
 #'
-get_nodes_symbol_values = function(attribute, node = NULL, symbol = NULL){
+#' # Length were observed at the "S" scale (S = segment of an axis between tow branches),
+#' # but we need the length at the axis scale, to do so:
+#' mutate_mtg(MTG, axis_length = sum(get_follow_values(attribute = "length", symbol = "S")), .symbol = "A")
+get_follow_values = function(attribute, node = NULL, scale = NULL, symbol = NULL){
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -319,8 +324,13 @@ get_nodes_symbol_values = function(attribute, node = NULL, symbol = NULL){
       # Is there any filter happening for the child node?:
       is_branching = x$.link == "+"
       is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
-      is_branching || is_symbol_filtered
+      is_scale_filtered = !is.null(scale) && !x$.scale %in% scale
+      is_branching || is_symbol_filtered || is_scale_filtered
     }))
+
+  if(all(is_children_filtered)){
+    return()
+  }
 
   child = children[[which(!is_children_filtered)]]
 
@@ -334,7 +344,7 @@ get_nodes_symbol_values = function(attribute, node = NULL, symbol = NULL){
       names(vals_) = child$name
     }
 
-    vals_ = c(vals_,get_nodes_symbol_values(!!attribute_expr,node = child, symbol = symbol))
+    vals_ = c(vals_,get_follow_values(!!attribute_expr,node = child, symbol = symbol))
 
   }
   unlist(vals_)
@@ -385,4 +395,20 @@ attribute_as_name = function(attribute){
 
   }
   attribute
+}
+
+#' Extract a node from the MTG
+#'
+#' @param mtg An mtg as from [read_mtg()]
+#' @param name The name of the node, e.g. "node_1"
+#'
+#' @return The node (with all its information, parent, children, attributes...)
+#' @export
+#'
+#' @examples
+#' filepath= system.file("extdata", "tree1h.mtg", package = "XploRer")
+#' MTG = read_mtg(filepath)
+#' extract_node(MTG,"node_6")
+extract_node = function(mtg,name){
+  data.tree::FindNode(mtg$MTG,name)
 }
