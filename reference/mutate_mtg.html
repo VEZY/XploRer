@@ -230,20 +230,22 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 
 
 <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>,
-<span class='st'>"Length_parent"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"s_surf_child_sum"</span>)</div><div class='output co'>#&gt;                levelName Length Length2 Length3 Length_parent section_surface
-#&gt; 1 node_1                     NA      NA      NA            NA              NA
-#&gt; 2  °--node_2                 NA      NA      NA            NA              NA
-#&gt; 3      °--node_3              4       6      12            NA       0.7853982
-#&gt; 4          ¦--node_4         10      12      24             4      28.2743339
-#&gt; 5          °--node_5          6       8      16             4              NA
-#&gt; 6              °--node_6     12      14      28             6      38.4845100
-#&gt;   s_surf_child_sum
-#&gt; 1                0
-#&gt; 2                0
-#&gt; 3                0
-#&gt; 4                0
-#&gt; 5                0
-#&gt; 6                0</div></pre>
+<span class='st'>"Length_parent"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"s_surf_child_sum"</span>)</div><div class='output co'>#&gt;                    levelName Length Length2 Length3 Length_parent
+#&gt; 1 node_1                         NA      NA      NA            NA
+#&gt; 2  °--node_2                     NA      NA      NA            NA
+#&gt; 3      °--node_3                 NA      NA      NA            NA
+#&gt; 4          °--node_4              4       6      12            NA
+#&gt; 5              ¦--node_5         10      12      24             4
+#&gt; 6              °--node_6          6       8      16             4
+#&gt; 7                  °--node_7     12      14      28             6
+#&gt;   section_surface s_surf_child_sum
+#&gt; 1              NA                0
+#&gt; 2              NA                0
+#&gt; 3              NA                0
+#&gt; 4       0.7853982                0
+#&gt; 5      28.2743339                0
+#&gt; 6              NA                0
+#&gt; 7      38.4845100                0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

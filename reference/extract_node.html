@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parse MTG — parse_MTG_MTG • XploRer</title>
+<title>Extract a node from the MTG — extract_node • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Parse MTG — parse_MTG_MTG" />
-<meta property="og:description" content="Parse the MTG section from an MTG file" />
+<meta property="og:title" content="Extract a node from the MTG — extract_node" />
+<meta property="og:description" content="Extract a node from the MTG" />
 
 
 
@@ -114,47 +114,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Parse MTG</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/read_MTG.R'><code>R/read_MTG.R</code></a></small>
-    <div class="hidden name"><code>parse_MTG_MTG.Rd</code></div>
+    <h1>Extract a node from the MTG</h1>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_helpers.R'><code>R/mtg_helpers.R</code></a></small>
+    <div class="hidden name"><code>extract_node.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Parse the MTG section from an MTG file</p>
+    <p>Extract a node from the MTG</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parse_MTG_MTG</span>(<span class='no'>MTG</span>, <span class='no'>classes</span>, <span class='no'>description</span>, <span class='no'>features</span>, <span class='kw'>first_line</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>extract_node</span>(<span class='no'>mtg</span>, <span class='no'>name</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>MTG</th>
-      <td><p>A pre-formatted MTG</p></td>
+      <th>mtg</th>
+      <td><p>An mtg as from <code><a href='read_MTG.html'>read_mtg()</a></code></p></td>
     </tr>
     <tr>
-      <th>classes</th>
-      <td><p>The MTG classes</p></td>
-    </tr>
-    <tr>
-      <th>description</th>
-      <td><p>The MTG description</p></td>
-    </tr>
-    <tr>
-      <th>features</th>
-      <td><p>The MTG features</p></td>
-    </tr>
-    <tr>
-      <th>first_line</th>
-      <td><p>The first line of the MTG. Used to print the true line at
-which there is an error.</p></td>
+      <th>name</th>
+      <td><p>The name of the node, e.g. "node_1"</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A parsed MTG</p>
+    <p>The node (with all its information, parent, children, attributes...)</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"tree1h.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
+<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='input'><span class='fu'>extract_node</span>(<span class='no'>MTG</span>,<span class='st'>"node_6"</span>)</div><div class='output co'>#&gt;                      levelName
+#&gt; 1  node_6                     
+#&gt; 2   °--node_7                 
+#&gt; 3       ¦--node_8             
+#&gt; 4       ¦   °--node_9         
+#&gt; 5       ¦       ¦--node_10    
+#&gt; 6       ¦       ¦   °--node_11
+#&gt; 7       ¦       °--node_12    
+#&gt; 8       °--node_13            
+#&gt; 9           ¦--node_14        
+#&gt; 10          ¦   °--node_15    
+#&gt; 11          °--node_16        </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

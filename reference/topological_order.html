@@ -147,13 +147,14 @@ topological order of each node</p>
     <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
 <span class='no'>MTG</span><span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
 <span class='fu'>topological_order</span>(<span class='no'>MTG</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"topological_order"</span>)</div><div class='output co'>#&gt;                levelName topological_order
-#&gt; 1 node_1                                 2
-#&gt; 2  °--node_2                             2
-#&gt; 3      °--node_3                         2
-#&gt; 4          ¦--node_4                     1
-#&gt; 5          °--node_5                     2
-#&gt; 6              °--node_6                 1</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"topological_order"</span>)</div><div class='output co'>#&gt;                    levelName topological_order
+#&gt; 1 node_1                                     2
+#&gt; 2  °--node_2                                 2
+#&gt; 3      °--node_3                             2
+#&gt; 4          °--node_4                         2
+#&gt; 5              ¦--node_5                     1
+#&gt; 6              °--node_6                     2
+#&gt; 7                  °--node_7                 1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
