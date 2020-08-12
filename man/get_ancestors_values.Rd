@@ -29,7 +29,7 @@ column from the MTG classes).}
 The attribute values from the ancestors of the node (from first parent to farther ancestor)
 }
 \description{
-Get attribute values from all ancestors (all nodes above).
+Get attribute values from all ancestors (basipetal).
 }
 \details{
 This function is mainly intended to be used with \code{\link[=mutate_mtg]{mutate_mtg()}}. In this case,

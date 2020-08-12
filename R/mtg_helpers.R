@@ -182,7 +182,7 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
 
 #' Get ancestors value
 #'
-#' @description Get attribute values from all ancestors (all nodes above).
+#' @description Get attribute values from all ancestors (basipetal).
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
@@ -239,7 +239,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
     if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
       node = eval(quote(node), parent.frame())
     }else{
-      stop("node should be given when 'get_parent_value()' is used interactively")
+      stop("node should be given when 'get_ancestors_values()' is used interactively")
     }
   }
 
@@ -280,27 +280,57 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
   val
 }
 
-#' Get consecutive node values
+#' Get descendant values
 #'
-#' Get the values of an attribute for all consecutive nodes (i.e. following nodes,
-#' excluding branching ones). It is usually used to compute e.g. the total length
-#' of an axis when the length were measured at the segment scale or unit of growth scale.
+#' @description Get attribute values from the descendants (acropetal).
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
-#' @param symbol A character vector for filtering the names of the nodes that are considered for succession.
-#' @return A vector of values named after the nodes of interest
+#' @param scale An integer vector for filtering descendant by their `.scale` (i.e. the SCALE
+#'  from the MTG classes).
+#' @param symbol A character vector for filtering the names of the descendant `.symbol` (i.e. the SYMBOL
+#'  column from the MTG classes).
+#' @param link A character vector for filtering the `.link` with the descendant
+#' @param recursive Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
+#' until finding a child that meets the filter conditions. `FALSE`: stop the search for a child if it
+#' does not meet the filtering conditions.
+#'
+#' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
+#' the `node` argument can be left empty (or you can put `node = node` equivalently).
+#'
+#' @return The attribute values from the descendant(s) of the node
+#'
 #' @export
 #'
 #' @examples
 #' filepath= system.file("extdata", "tree1h.mtg", package = "XploRer")
 #' MTG = read_mtg(filepath)
-#' get_follow_values(attribute = "length", node = extract_node(MTG,"node_8"), symbol = "S")
+#' node_8 = extract_node(MTG,"node_8")
+#' # getting all descendants of node_8
+#' get_descendants_values(attribute = "length", node = node_8)
 #'
-#' # Length were observed at the "S" scale (S = segment of an axis between tow branches),
+#' # getting all descendants of node_8, but only the nodes with symbol "S":
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S")
+#'
+#' # getting all descendants of node_8, but only the nodes with symbol "S", and not
+#' # recursively, i.e. we stop the search for a child if it is filtered out (we don't
+#' # go to its own children)
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#'                        recursive = FALSE)
+#'
+#' # To get the descendants of a node but only for the nodes following it, not
+#' # branching (e.g. for an axis):
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#'                        link = c("/","<"), recursive = FALSE)
+#'
+#' # Length were observed at the "S" scale (S = segment of an axis between two branches),
 #' # but we need the length at the axis scale, to do so:
-#' mutate_mtg(MTG, axis_length = sum(get_follow_values(attribute = "length", symbol = "S")), .symbol = "A")
-get_follow_values = function(attribute, node = NULL, scale = NULL, symbol = NULL){
+#' mutate_mtg(MTG,
+#'            axis_length = sum(get_descendants_values(attribute = "length", symbol = "S",
+#'                                                    link = c("/","<"), recursive = FALSE)),
+#'            .symbol = "A")
+get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+                                  link = NULL, recursive = TRUE){
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -312,7 +342,7 @@ get_follow_values = function(attribute, node = NULL, scale = NULL, symbol = NULL
     if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
       node = eval(quote(node), parent.frame())
     }else{
-      stop("node should be given when 'get_children_values()' is used interactively")
+      stop("node should be given when 'get_descendants_values()' is used interactively")
     }
   }
 
@@ -322,7 +352,7 @@ get_follow_values = function(attribute, node = NULL, scale = NULL, symbol = NULL
   is_children_filtered =
     unlist(lapply(children, function(x){
       # Is there any filter happening for the child node?:
-      is_branching = x$.link == "+"
+      is_branching = !is.null(link) && !x$.link %in% link
       is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
       is_scale_filtered = !is.null(scale) && !x$.scale %in% scale
       is_branching || is_symbol_filtered || is_scale_filtered
@@ -332,21 +362,38 @@ get_follow_values = function(attribute, node = NULL, scale = NULL, symbol = NULL
     return()
   }
 
-  child = children[[which(!is_children_filtered)]]
-
-  if(length(child) == 0){
-    return()
-  }else{
-    vals_ = child[[attribute]]
-
-    if(is.null(vals_) || length(vals_) == 0){
-      vals_ = NA
-      names(vals_) = child$name
-    }
-
-    vals_ = c(vals_,get_follow_values(!!attribute_expr,node = child, symbol = symbol))
-
+  if(isFALSE(recursive)){
+    # If not recursive, prune the tree where filtered
+    children = children[which(!is_children_filtered)]
   }
+
+  if(length(children) == 0){
+    return()
+  }
+
+  vals_ = unlist(lapply(children, function(x){x[[attribute]]}))
+  names(vals_) = unlist(lapply(children, function(x){x$name}))
+
+  if(is.null(vals_) || length(vals_) == 0){
+    vals_ = rep(NA, length(children))
+    names(vals_) = unlist(lapply(children, function(x){x$name}))
+  }
+
+  if(isTRUE(recursive)){
+    # If recursive, keep all children but keep the values only for the ones not filtered
+    vals_ = vals_[!is_children_filtered]
+  }
+
+  # vals_ = c(vals_,get_descendants_values(!!attribute_expr,node = children, symbol = symbol, link = link))
+
+  vals_children =
+    lapply(children, function(x){
+      get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+                             recursive = recursive)
+    })
+
+  vals_ = c(vals_, unlist(vals_children))
+
   unlist(vals_)
 }
 
