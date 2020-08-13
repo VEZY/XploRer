@@ -10,7 +10,8 @@ get_descendants_values(
   scale = NULL,
   symbol = NULL,
   link = NULL,
-  recursive = TRUE
+  recursive = TRUE,
+  self = FALSE
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ column from the MTG classes).}
 \item{recursive}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
 until finding a child that meets the filter conditions. \code{FALSE}: stop the search for a child if it
 does not meet the filtering conditions.}
+
+\item{self}{Return the value of the current node (\code{TRUE}), or the ancestors only (\code{FALSE}, the default)}
 }
 \value{
 The attribute values from the descendant(s) of the node

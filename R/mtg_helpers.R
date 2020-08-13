@@ -294,6 +294,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #' @param recursive Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
 #' until finding a child that meets the filter conditions. `FALSE`: stop the search for a child if it
 #' does not meet the filtering conditions.
+#' @param self Return the value of the current node (`TRUE`), or the ancestors only (`FALSE`, the default)
 #'
 #' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
 #' the `node` argument can be left empty (or you can put `node = node` equivalently).
@@ -330,7 +331,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #'                                                    link = c("/","<"), recursive = FALSE)),
 #'            .symbol = "A")
 get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
-                                  link = NULL, recursive = TRUE){
+                                  link = NULL, recursive = TRUE, self = FALSE){
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -346,8 +347,23 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
     }
   }
 
+  # Is there any filter happening for the current node?:
+  is_branching = !is.null(link) && !node$.link %in% link
+  is_symbol_filtered = !is.null(symbol) && !node$.symbol %in% symbol
+  is_scale_filtered = !is.null(scale) && !node$.scale %in% scale
+  is_filtered = is_branching || is_symbol_filtered || is_scale_filtered
+
+  if(isTRUE(self) && !is_filtered){
+    val = node[[attribute]]
+    if(!is.null(val)){
+      names(val) = node$name
+    }
+  }else{
+    val = NULL
+  }
+
   children = node$children
-  if(length(children) == 0) return()
+  if(length(children) == 0) return(val)
 
   is_children_filtered =
     unlist(lapply(children, function(x){
@@ -358,8 +374,8 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
       is_branching || is_symbol_filtered || is_scale_filtered
     }))
 
-  if(all(is_children_filtered)){
-    return()
+  if(all(is_children_filtered) && isFALSE(recursive)){
+    return(val)
   }
 
   if(isFALSE(recursive)){
@@ -368,11 +384,15 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
   }
 
   if(length(children) == 0){
-    return()
+    return(val)
   }
 
-  vals_ = unlist(lapply(children, function(x){x[[attribute]]}))
-  names(vals_) = unlist(lapply(children, function(x){x$name}))
+  vals_ = unlist(lapply(children, function(x){
+    x = x[[attribute]]
+    if(is.null(x)){x = NA}
+    x
+  }))
+  # names(vals_) = unlist(lapply(children, function(x){x$name}))
 
   if(is.null(vals_) || length(vals_) == 0){
     vals_ = rep(NA, length(children))
@@ -386,14 +406,28 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
 
   # vals_ = c(vals_,get_descendants_values(!!attribute_expr,node = children, symbol = symbol, link = link))
 
+  # vals_children =
+  #   lapply(children, function(x){
+  #     if(data.tree::isLeaf(x) && self){
+  #       # If we need the value of the last node that is also a leaf, we put self = TRUE
+  #       get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+  #                              recursive = recursive, self = TRUE)
+  #     }else{
+  #       get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+  #                              recursive = recursive, self = FALSE)
+  #     }
+  #   })
+
   vals_children =
     lapply(children, function(x){
       get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
-                             recursive = recursive)
+                             recursive = recursive, self = FALSE)
     })
 
-  vals_ = c(vals_, unlist(vals_children))
+  vals_ = c(val, vals_, unlist(vals_children))
 
+  names(vals_) = stringr::str_extract(string = names(vals_),
+                                      pattern = "node_[[:digit:]]+$")
   unlist(vals_)
 }
 
