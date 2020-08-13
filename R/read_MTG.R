@@ -262,7 +262,7 @@ parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
   node_1_node = split_MTG_elements(splitted_MTG[[1]][1])[[1]][1]
   node_1_element = parse_MTG_node(node_1_node)
   node_1_attr= c(parse_MTG_node_attr(node_data = splitted_MTG[[1]],features,
-                                     attr_column_start),
+                                     attr_column_start,line = first_line+1),
                  .link = node_1_element$link,
                  .symbol = node_1_element$symbol,
                  .index = node_1_element$index,
@@ -302,7 +302,8 @@ parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
     node = expand_node(node)
 
     # Get node attributes:
-    node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start,i)
+    node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start,
+                                    line = i+first_line+1)
 
     # Declare a new node as object (because the methods associated to nodes are OO):
     # assign(node_name, data.tree::Node$new(node_name))
@@ -311,14 +312,15 @@ parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
       # The parent node is the last one built on the same column
       parent_column = last_node_column[node_column]
       if(is.na(parent_column)){
-        stop("Node defined at line ",i," uses the '<' notation but is the first on its column")
+        stop("Node defined at line ",i+first_line+1,
+             " uses the '<' notation but is the first on its column")
       }
     }else{
       # The parent node is the last one built on column - 1.
       parent_column = last_node_column[node_column - 1]
 
       if(is.na(parent_column)){
-        stop("Can't find the parent of Node defined at line ",i,
+        stop("Can't find the parent of Node defined at line ",i+first_line+1,
              ". It may be defined on a column that is too far right.")
       }
     }
