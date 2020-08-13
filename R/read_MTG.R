@@ -465,28 +465,50 @@ parse_MTG_node_attr = function(node_data,features,attr_column_start,line= NULL){
   node_type = features[seq_along(node_data_attr),2]
 
   if(any(node_type == "INT")){
-    node_attr[node_type == "INT" & node_attr == ""] =
+    node_attr[node_type == "INT" & (node_attr == "" | node_attr == "NA")] =
       NA_integer_
-    node_attr[node_type == "INT" & node_attr != ""] =
-      as.integer(node_attr[node_type == "INT" & node_attr != ""])
+
+    tmp = tryCatch(as.integer(node_attr[node_type == "INT" & node_attr != ""]),
+                   error=function(e) e, warning=function(w) w)
+
+    if(inherits(tmp,"warning") || inherits(tmp,"error")){
+      stop("Found issue in the MTG when converting into integer",
+           ". Please check line ",line, " of the MTG:\n",paste(node_data, collapse = "\t"))
+    }
+
+    node_attr[node_type == "INT" & node_attr != ""] = tmp
   }
 
   if(any(node_type == "REAL")){
-    node_attr[node_type == "REAL" & node_attr == ""] =
+    node_attr[node_type == "REAL" & (node_attr == "" | node_attr == "NA")] =
       NA_real_
 
-    node_attr[node_type == "REAL" & node_attr != ""] =
-      as.numeric(node_attr[node_type == "REAL" & node_attr != ""])
+    tmp = tryCatch(as.numeric(node_attr[node_type == "REAL" & node_attr != ""]),
+                   error=function(e) e, warning=function(w) w)
+
+    if(inherits(tmp,"warning") || inherits(tmp,"error")){
+      stop("Found issue in the MTG when converting into real",
+           ". Please check line ",line, " of the MTG:\n",paste(node_data, collapse = "\t"))
+    }
+
+    node_attr[node_type == "REAL" & node_attr != ""] = tmp
   }
 
   if(any(node_type == "ALPHA")){
     special_attr = names(node_attr) %in% c("Width","Length")
     special_attr = special_attr & node_type == "ALPHA"
-    node_attr[special_attr & node_attr == ""] =
+    node_attr[special_attr & (node_attr == "" | node_attr == "NA")] =
       NA_real_
 
-    node_attr[special_attr & node_attr != ""] =
-      as.numeric(node_attr[special_attr & node_attr != ""])
+    tmp = tryCatch(as.numeric(node_attr[special_attr & node_attr != ""]),
+                   error=function(e) e, warning=function(w) w)
+
+    if(inherits(tmp,"warning") || inherits(tmp,"error")){
+      stop("Found issue in the MTG when converting into ALPHA",
+           ". Please check line ",line, " of the MTG:\n",paste(node_data, collapse = "\t"))
+    }
+
+    node_attr[special_attr & node_attr != ""] = tmp
   }
   node_attr
 }
