@@ -1,0 +1,286 @@
+#' Get descendants values
+#'
+#' @description Get attribute values from the descendants (acropetal).
+#'
+#' @param attribute Any node attribute (as a character)
+#' @param node The MTG node
+#' @param scale An integer vector for filtering descendant by their `.scale` (i.e. the SCALE
+#'  from the MTG classes).
+#' @param symbol A character vector for filtering the names of the descendant `.symbol` (i.e. the SYMBOL
+#'  column from the MTG classes).
+#' @param link A character vector for filtering the `.link` with the descendant
+#' @param continue Boolean. If `TRUE`, the function returns all nodes that are not filtered. If `FALSE`, stop
+#' at the first node that is filtered out.
+#' @param self Return the value of the current node (`TRUE`), or the ancestors only (`FALSE`, the default)
+#' @param filter_fun Any filtering function taking a node as input, e.g. [data.tree::isLeaf()]
+#' @param recursivity_level The maximum number of recursions allowed (considering filters). E.g. to get only the
+#' children, `recursivity_level = 1`, if children + their children: `recursivity_level = 2`.
+#' If `NULL` (the default), the function returns all values from the node to the root.
+#'
+#' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
+#' the `node` argument can be left empty (or you can put `node = node` equivalently).
+#'
+#' @return The attribute values from the descendant(s) of the node
+#'
+#' @export
+#'
+#' @examples
+#' filepath= system.file("extdata", "tree1h.mtg", package = "XploRer")
+#' MTG = read_mtg(filepath)
+#' node_8 = extract_node(MTG,"node_8")
+#' # getting all descendants of node_8
+#' get_descendants_values(attribute = "length", node = node_8)
+#'
+#' # getting all descendants of node_8, but only the nodes with symbol "S":
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S")
+#'
+#' # getting all descendants of node_8, but only the nodes with symbol "S", and not
+#' # recursively, i.e. we stop the search for a child if it is filtered out (we don't
+#' # go to its own children)
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#'                        continue = FALSE)
+#'
+#' # getting the children of node_8 (and not below):
+#' get_descendants_values(attribute = "length", node = node_8, recursivity_level = 1)
+#' # getting the children of node_8 and their children:
+#' get_descendants_values(attribute = "length", node = node_8, recursivity_level = 2)
+#' # getting the children of node_8 and their children, and filter for "S":
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S", recursivity_level = 2)
+#' # The function returns until node_12 because node_10 is not an "S" and is then filtered out
+#' # which makes node_12 two levels below node.
+#'
+#' # To get the descendants of a node but only for the nodes following it, not
+#' # branching (e.g. for an axis):
+#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#'                        link = c("/","<"), continue = FALSE)
+#'
+#' # To get the values for the leaves (i.e. the last node) only:
+#' get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
+#'
+#' # Length were observed at the "S" scale (S = segment of an axis between two branches),
+#' # but we need the length at the axis scale, to do so:
+#' mutate_mtg(MTG,
+#'            axis_length = sum(get_descendants_values(attribute = "length", symbol = "S",
+#'                                                    link = c("/","<"), continue = FALSE)),
+#'            .symbol = "A")
+get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+                                  link = NULL, continue = TRUE, self = FALSE,
+                                  filter_fun = NULL, recursivity_level = NULL){
+
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
+
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_descendants_values()' is used interactively")
+    }
+  }
+
+  # Is there any filter happening for the current node?:
+  is_branching = !is.null(link) && !node$.link %in% link
+  is_symbol_filtered = !is.null(symbol) && !node$.symbol %in% symbol
+  is_scale_filtered = !is.null(scale) && !node$.scale %in% scale
+  is_filter_fun = !is.null(filter_fun) && !filter_fun(node)
+
+  is_filtered = is_branching || is_symbol_filtered || is_scale_filtered || is_filter_fun
+
+  if(isTRUE(self) && !is_filtered){
+    val = node[[attribute]]
+    if(!is.null(val)){
+      names(val) = node$name
+    }
+  }else{
+    val = NULL
+  }
+
+  if(!is.null(recursivity_level) && recursivity_level == 0) return(val)
+
+  children = node$children
+  if(length(children) == 0) return(val)
+
+  is_children_filtered =
+    unlist(lapply(children, function(x){
+      # Is there any filter happening for the child node?:
+      is_branching = !is.null(link) && !x$.link %in% link
+      is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
+      is_scale_filtered = !is.null(scale) && !x$.scale %in% scale
+      is_filter_fun = !is.null(filter_fun) && !filter_fun(x)
+
+      is_branching || is_symbol_filtered || is_scale_filtered || is_filter_fun
+    }))
+
+  if(all(is_children_filtered) && isFALSE(continue)){
+    return(val)
+  }
+
+  if(isFALSE(continue)){
+    # If not recursive, prune the tree where filtered
+    children = children[which(!is_children_filtered)]
+  }
+
+  if(length(children) == 0){
+    return(val)
+  }
+
+  vals_ = unlist(lapply(children, function(x){
+    x = x[[attribute]]
+    if(is.null(x)){x = NA}
+    x
+  }))
+  # names(vals_) = unlist(lapply(children, function(x){x$name}))
+
+  if(is.null(vals_) || length(vals_) == 0){
+    vals_ = rep(NA, length(children))
+    names(vals_) = unlist(lapply(children, function(x){x$name}))
+  }
+
+  if(isTRUE(continue)){
+    # If recursive, keep all children but keep the values only for the ones not filtered
+    vals_ = vals_[!is_children_filtered]
+  }
+
+  if(!is.null(recursivity_level)){
+    # Decreasing recursivity_level by one for the children not filtered. And keeping
+    # it to its value for the children that are filtered out to be able to continue below
+    # if needed:
+    recursivity_level = rep(recursivity_level,length(children))
+    recursivity_level[!is_children_filtered] =
+      recursivity_level[!is_children_filtered] - 1
+
+    vals_children =
+      mapply(function(x,recurs){
+        get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+                               continue = continue, self = FALSE,
+                               filter_fun = filter_fun,
+                               recursivity_level = recurs)
+      }, children, recurs = recursivity_level, SIMPLIFY = FALSE)
+  }else{
+    vals_children =
+      lapply(children, function(x,recurs){
+        get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+                               continue = continue, self = FALSE,
+                               filter_fun = filter_fun,
+                               recursivity_level = recursivity_level)
+      })
+  }
+
+  vals_ = c(val, vals_, unlist(vals_children))
+
+  names(vals_) = stringr::str_extract(string = names(vals_),
+                                      pattern = "node_[[:digit:]]+$")
+  unlist(vals_)
+}
+
+#' Get children value
+#'
+#' @description Get attribute values from the children of a node.
+#'
+#' @param attribute Any node attribute (as a character)
+#' @param node The MTG node
+#' @param symbol A character vector for filtering the children by the name of their `.symbol` (i.e. the SYMBOL
+#'  column from the MTG classes).
+#' @param scale An integer vector for filtering the `.scale` of the children (i.e. the SCALE
+#'  column from the MTG classes).
+#' @param continue If a child is not of the right `scale`, continue until the `scale`
+#' required is met if `TRUE`, or returns `NA` if `FALSE`.
+#'
+#' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
+#' the `node` argument can be left empty (or you can put `node = node` equivalently).
+#'
+#' @return The attribute values from the children of the node
+#'
+#' @export
+#'
+#' @examples
+#' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
+#' MTG = read_mtg(filepath)
+#'
+#' # node_5 has one child:
+#' get_children_values("Length", node = extract_node(MTG, "node_5"))
+#'
+#' # Using node 3 as reference now:
+#' node_3 = extract_node(MTG, "node_3")
+#' # node_3 has two children, returns two values:
+#' get_children_values("Length", node = node_3)
+#' # To get the names of those children:
+#' get_children_values("name", node = node_3)
+#'
+#' # The width is not available for one child ("node_5"):
+#' get_children_values("Width", node = node_3)
+#'
+#' # We can filter by scale if we need to return the values for some scales only:
+#' get_children_values("Width", node = node_3, scale = "Leaf")
+#' # Here we get the value of node_6 also, because its parent "node_5" is not of scale
+#' # "Leaf", so it was filtered out. It you need the values for one scale, but not
+#' # making a recursive search from one scale to another until finding the required scale,
+#' # you can put the `continue` argument to `FALSE`:
+#'
+#' # We can also get the values recursively until finding the right value:
+#' get_children_values("Width", node = node_3, scale = "Leaf", continue = FALSE)
+#'
+#'
+#' # To get the values of the children of each node:
+#' mutate_mtg(MTG, children_width = get_children_values("Width"))
+#' print(MTG$MTG, "Width", "children_width")
+#'
+get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+                               continue = TRUE) {
+
+  attribute_expr = rlang::enexpr(attribute)
+  attribute = attribute_as_name(attribute_expr)
+
+  # If the node is not given, use the one from the parent environment.
+  # This is done to make it work from mutate_mtg without the need of
+  # explicitly giving node = node as argument
+  if(is.null(node)){
+    if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
+      node = eval(quote(node), parent.frame())
+    }else{
+      stop("node should be given when 'get_children_values()' is used interactively")
+    }
+  }
+
+  children = node$children
+  if(length(children) == 0) return(NA)
+
+  is_children_filtered =
+    unlist(lapply(children, function(x){
+      # Is there any filter happening for the child node?:
+      is_scale_filtered = !is.null(scale) && !x$.scale %in% scale
+      is_symbol_filtered = !is.null(symbol) && !x$.symbol %in% symbol
+      is_scale_filtered || is_symbol_filtered
+    }))
+
+  # Initializing the values as a vector:
+  vals = vector(mode = "list",length = length(children))
+
+  # Assigning the values read from the children:
+  for (i in seq_along(children)){
+    if(is_children_filtered[i]){
+
+      if(isTRUE(continue)){
+        # If the child is not of the requested scale, try its children until
+        # meeting the right scale
+        vals_ = get_children_values(!!attribute_expr,node = children[[i]], scale = scale,
+                                    symbol = symbol, continue= continue)
+      }else{
+        vals_ = NA
+        names(vals_) = children[[i]]$name
+      }
+    }else{
+      # Else, just return its values
+      vals_ = children[[i]][[attribute]]
+      if(is.null(vals_) || length(vals_) == 0) vals_ = NA
+      names(vals_) = children[[i]]$name
+    }
+
+    vals[[i]] = vals_
+  }
+
+  unlist(vals)
+}
