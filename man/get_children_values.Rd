@@ -9,7 +9,7 @@ get_children_values(
   node = NULL,
   scale = NULL,
   symbol = NULL,
-  recursive = TRUE
+  continue = TRUE
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ column from the MTG classes).}
 \item{symbol}{A character vector for filtering the children by the name of their \code{.symbol} (i.e. the SYMBOL
 column from the MTG classes).}
 
-\item{recursive}{If a child is not of the right \code{scale}, continue until the \code{scale}
+\item{continue}{If a child is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{
@@ -58,10 +58,10 @@ get_children_values("Width", node = node_3, scale = "Leaf")
 # Here we get the value of node_6 also, because its parent "node_5" is not of scale
 # "Leaf", so it was filtered out. It you need the values for one scale, but not
 # making a recursive search from one scale to another until finding the required scale,
-# you can put the `recursive` argument to `FALSE`:
+# you can put the `continue` argument to `FALSE`:
 
 # We can also get the values recursively until finding the right value:
-get_children_values("Width", node = node_3, scale = "Leaf", recursive = FALSE)
+get_children_values("Width", node = node_3, scale = "Leaf", continue = FALSE)
 
 
 # To get the values of the children of each node:

@@ -205,7 +205,7 @@ By default, the function will search for the first node which satisfies the symb
 
 An easier way to think about this is that when using the symbol or scale argument, functions work on a different tree with only the symbol(s) or scale(s) required.
 
-The `recursive` argument can be used in `get_parent_value()` and `get_children_values()` functions to disable this default behavior of "climbing" or "descending" the tree. If `recursive` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right symbol.
+The `continue` argument can be used in `get_parent_value()` and `get_children_values()` functions to disable this default behavior of "climbing" or "descending" the tree. If `continue` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right symbol.
 
 Here is an example with recursive behavior (the default):
 
@@ -216,12 +216,12 @@ get_children_values(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf")
 And without:
 
 ```{r}
-get_children_values(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf", recursive = FALSE)
+get_children_values(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf", continue = FALSE)
 ```
 
 The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right symbol. 
 
-> Note that `get_ancestors_values()` does not have the `recursive` argument because it is a recursive function by design. So if an ancestor is not of the right symbol, it just jumps to the next ancestor.
+> Note that `get_ancestors_values()` does not have the `continue` argument because it is a recursive function by design. So if an ancestor is not of the right symbol, it just jumps to the next ancestor.
 
 ##### The .symbol and the .scale arguments from mutate_mtg()
 

@@ -136,12 +136,12 @@ test_that("get_descendants_values: filter by symbol", {
 test_that("get_descendants_values: no recursivity", {
   # By S, non-recursive:
   test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "S",
-                                recursive = FALSE)
+                                continue = FALSE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 
   # By A, non-recursive:
   test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "A",
-                                recursive = FALSE)
+                                continue = FALSE)
   expect_null(test)
 })
 
@@ -160,6 +160,6 @@ test_that("get_descendants_values: with self", {
 
 test_that("get_descendants_values: not recursive and self", {
   test = get_descendants_values(attribute = "length", node = A4$MTG$node_7, symbol = "S",
-                                recursive = FALSE, self = TRUE)
+                                continue = FALSE, self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 })

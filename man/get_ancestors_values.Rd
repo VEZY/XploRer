@@ -12,7 +12,7 @@ get_ancestors_values(
   self = FALSE,
   link = NULL,
   filter_fun = NULL,
-  recursive = TRUE
+  continue = TRUE
 )
 }
 \arguments{
@@ -32,7 +32,7 @@ column from the MTG classes).}
 
 \item{filter_fun}{Any filtering function taking a node as input, e.g. \code{\link[data.tree:isLeaf]{data.tree::isLeaf()}}}
 
-\item{recursive}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
+\item{continue}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
 until finding a child that meets the filter conditions. \code{FALSE}: stop the search for a child if it
 does not meet the filtering conditions.}
 }
@@ -68,6 +68,6 @@ get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Leaf
 # Here we get the value of node_6 also, because its parent "node_5" is not of symbol
 # "Leaf", so it was filtered out. It you need the values for one symbol, but not
 # making a recursive search from one scale to another until finding the required symbol,
-# you can put the `recursive` argument to `FALSE`:
+# you can put the `continue` argument to `FALSE`:
 
 }

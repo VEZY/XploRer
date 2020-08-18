@@ -11,7 +11,7 @@ get_parent_value(
   symbol = NULL,
   link = NULL,
   filter_fun = NULL,
-  recursive = TRUE
+  continue = TRUE
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ column from the MTG classes).}
 
 \item{filter_fun}{Any filtering function taking a node as input, e.g. \code{\link[data.tree:isLeaf]{data.tree::isLeaf()}}}
 
-\item{recursive}{If a parent is not of the right \code{scale}, continue until the \code{scale}
+\item{continue}{If a parent is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{

@@ -13,7 +13,7 @@
 #' @param link A character vector for filtering the `.link` with the descendant
 #' @param filter_fun Any filtering function taking a node as input, e.g. [data.tree::isLeaf()]
 #'
-#' @param recursive If a parent is not of the right `scale`, continue until the `scale`
+#' @param continue If a parent is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @details The `attribute` argument can be given as a string (*e.g.* attribute = "Length"), an
@@ -34,7 +34,7 @@
 #' get_parent_value(Length,  node = extract_node(MTG, "node_5"))
 #' get_parent_value("Length",  node = extract_node(MTG, "node_5"))
 get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
-                            link = NULL, filter_fun = NULL, recursive = TRUE) {
+                            link = NULL, filter_fun = NULL, continue = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -66,7 +66,7 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     vals = NA
   }else if(!is_filtered){
     vals = parent[[attribute]]
-  }else if(isTRUE(recursive)){
+  }else if(isTRUE(continue)){
     vals = get_parent_value(!!attribute_expr, node = parent, scale = scale,
                             symbol = symbol)
   }else{
@@ -89,7 +89,7 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #'  column from the MTG classes).
 #' @param scale An integer vector for filtering the `.scale` of the children (i.e. the SCALE
 #'  column from the MTG classes).
-#' @param recursive If a child is not of the right `scale`, continue until the `scale`
+#' @param continue If a child is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @details This function is mainly intended to be used with [mutate_mtg()]. In this case,
@@ -121,10 +121,10 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #' # Here we get the value of node_6 also, because its parent "node_5" is not of scale
 #' # "Leaf", so it was filtered out. It you need the values for one scale, but not
 #' # making a recursive search from one scale to another until finding the required scale,
-#' # you can put the `recursive` argument to `FALSE`:
+#' # you can put the `continue` argument to `FALSE`:
 #'
 #' # We can also get the values recursively until finding the right value:
-#' get_children_values("Width", node = node_3, scale = "Leaf", recursive = FALSE)
+#' get_children_values("Width", node = node_3, scale = "Leaf", continue = FALSE)
 #'
 #'
 #' # To get the values of the children of each node:
@@ -132,7 +132,7 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #' print(MTG$MTG, "Width", "children_width")
 #'
 get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
-                               recursive = TRUE) {
+                               continue = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -166,11 +166,11 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
   for (i in seq_along(children)){
     if(is_children_filtered[i]){
 
-      if(isTRUE(recursive)){
+      if(isTRUE(continue)){
         # If the child is not of the requested scale, try its children until
         # meeting the right scale
         vals_ = get_children_values(!!attribute_expr,node = children[[i]], scale = scale,
-                                    symbol = symbol, recursive= recursive)
+                                    symbol = symbol, continue= continue)
       }else{
         vals_ = NA
         names(vals_) = children[[i]]$name
@@ -201,7 +201,7 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
 #'  column from the MTG classes).
 #' @param link A character vector for filtering the `.link` with the descendant
 #' @param filter_fun Any filtering function taking a node as input, e.g. [data.tree::isLeaf()]
-#' @param recursive Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
+#' @param continue Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
 #' until finding a child that meets the filter conditions. `FALSE`: stop the search for a child if it
 #' does not meet the filtering conditions.
 #' @param self Return the value of the current node (`TRUE`), or the ancestors only (`FALSE`, the default)
@@ -235,11 +235,11 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
 #' # Here we get the value of node_6 also, because its parent "node_5" is not of symbol
 #' # "Leaf", so it was filtered out. It you need the values for one symbol, but not
 #' # making a recursive search from one scale to another until finding the required symbol,
-#' # you can put the `recursive` argument to `FALSE`:
+#' # you can put the `continue` argument to `FALSE`:
 #'
 get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                                  self = FALSE, link = NULL, filter_fun = NULL,
-                                 recursive= TRUE){
+                                 continue= TRUE){
 
   if(!is.null(scale) && !is.numeric(scale)){
     stop("The scale argument must be numeric")
@@ -298,7 +298,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
       parent_val = NULL
     }else if(!is_filtered){
       parent_val = node_current[[attribute]]
-    }else if(isTRUE(recursive)){
+    }else if(isTRUE(continue)){
       next()
     }else{
       parent_val = NULL
@@ -325,7 +325,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #' @param symbol A character vector for filtering the names of the descendant `.symbol` (i.e. the SYMBOL
 #'  column from the MTG classes).
 #' @param link A character vector for filtering the `.link` with the descendant
-#' @param recursive Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
+#' @param continue Boolean. `TRUE`: if a descendant is not of the right `scale`,`symbol`, or `link`, continue with its own children
 #' until finding a child that meets the filter conditions. `FALSE`: stop the search for a child if it
 #' does not meet the filtering conditions.
 #' @param self Return the value of the current node (`TRUE`), or the ancestors only (`FALSE`, the default)
@@ -352,12 +352,12 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #' # recursively, i.e. we stop the search for a child if it is filtered out (we don't
 #' # go to its own children)
 #' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
-#'                        recursive = FALSE)
+#'                        continue = FALSE)
 #'
 #' # To get the descendants of a node but only for the nodes following it, not
 #' # branching (e.g. for an axis):
 #' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
-#'                        link = c("/","<"), recursive = FALSE)
+#'                        link = c("/","<"), continue = FALSE)
 #'
 #' # To get the values for the leaves (i.e. the last node) only:
 #' get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
@@ -366,10 +366,10 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 #' # but we need the length at the axis scale, to do so:
 #' mutate_mtg(MTG,
 #'            axis_length = sum(get_descendants_values(attribute = "length", symbol = "S",
-#'                                                    link = c("/","<"), recursive = FALSE)),
+#'                                                    link = c("/","<"), continue = FALSE)),
 #'            .symbol = "A")
 get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
-                                  link = NULL, recursive = TRUE, self = FALSE, filter_fun = NULL){
+                                  link = NULL, continue = TRUE, self = FALSE, filter_fun = NULL){
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -416,11 +416,11 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
       is_branching || is_symbol_filtered || is_scale_filtered || is_filter_fun
     }))
 
-  if(all(is_children_filtered) && isFALSE(recursive)){
+  if(all(is_children_filtered) && isFALSE(continue)){
     return(val)
   }
 
-  if(isFALSE(recursive)){
+  if(isFALSE(continue)){
     # If not recursive, prune the tree where filtered
     children = children[which(!is_children_filtered)]
   }
@@ -441,7 +441,7 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
     names(vals_) = unlist(lapply(children, function(x){x$name}))
   }
 
-  if(isTRUE(recursive)){
+  if(isTRUE(continue)){
     # If recursive, keep all children but keep the values only for the ones not filtered
     vals_ = vals_[!is_children_filtered]
   }
@@ -449,7 +449,7 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
   vals_children =
     lapply(children, function(x){
       get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
-                             recursive = recursive, self = FALSE, filter_fun = filter_fun)
+                             continue = continue, self = FALSE, filter_fun = filter_fun)
     })
 
   vals_ = c(val, vals_, unlist(vals_children))

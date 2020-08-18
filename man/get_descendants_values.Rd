@@ -10,7 +10,7 @@ get_descendants_values(
   scale = NULL,
   symbol = NULL,
   link = NULL,
-  recursive = TRUE,
+  continue = TRUE,
   self = FALSE,
   filter_fun = NULL
 )
@@ -28,7 +28,7 @@ column from the MTG classes).}
 
 \item{link}{A character vector for filtering the \code{.link} with the descendant}
 
-\item{recursive}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
+\item{continue}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
 until finding a child that meets the filter conditions. \code{FALSE}: stop the search for a child if it
 does not meet the filtering conditions.}
 
@@ -60,12 +60,12 @@ get_descendants_values(attribute = "length", node = node_8, symbol = "S")
 # recursively, i.e. we stop the search for a child if it is filtered out (we don't
 # go to its own children)
 get_descendants_values(attribute = "length", node = node_8, symbol = "S",
-                       recursive = FALSE)
+                       continue = FALSE)
 
 # To get the descendants of a node but only for the nodes following it, not
 # branching (e.g. for an axis):
 get_descendants_values(attribute = "length", node = node_8, symbol = "S",
-                       link = c("/","<"), recursive = FALSE)
+                       link = c("/","<"), continue = FALSE)
 
 # To get the values for the leaves (i.e. the last node) only:
 get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
@@ -74,6 +74,6 @@ get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tr
 # but we need the length at the axis scale, to do so:
 mutate_mtg(MTG,
            axis_length = sum(get_descendants_values(attribute = "length", symbol = "S",
-                                                   link = c("/","<"), recursive = FALSE)),
+                                                   link = c("/","<"), continue = FALSE)),
            .symbol = "A")
 }
