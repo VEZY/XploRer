@@ -274,7 +274,8 @@
 <p><code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code> implement the <code>scale</code> and <code>symbol</code> arguments to filter by scale or symbol. It allows to tell the function to only consider the scales/symbols passed to this argument, ignoring all others.</p>
 <p>For example we can filter the parent node by its symbol using the <code>symbol</code> argument with <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code>:</p>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/get_parent_value.html">get_parent_value</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="fu"><a href="../reference/extract_node.html">extract_node</a></span>(<span class="no">MTG</span>, <span class="st">"node_6"</span>), <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Axis"</span>)
-<span class="co">#&gt; [1] NA</span></pre></body></html></div>
+<span class="co">#&gt; node_3 </span>
+<span class="co">#&gt;     NA</span></pre></body></html></div>
 <p>Here it returns <code>NA</code> because the first parent is an <code>Internode</code>, and the first node with symbol “Axis” (<code>node_2</code>) has no values for “Length”, see by yourself:</p>
 <div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length</span>
