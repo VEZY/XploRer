@@ -10,6 +10,9 @@
 #'  column from the MTG classes).
 #' @param scale An integer vector for filtering the MTG scale of the parent (i.e. the SCALE
 #'  column from the MTG classes).
+#' @param link A character vector for filtering the `.link` with the descendant
+#' @param filter_fun Any filtering function taking a node as input, e.g. [data.tree::isLeaf()]
+#'
 #' @param recursive If a parent is not of the right `scale`, continue until the `scale`
 #' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
@@ -30,7 +33,8 @@
 #' MTG = read_mtg(filepath)
 #' get_parent_value(Length,  node = extract_node(MTG, "node_5"))
 #' get_parent_value("Length",  node = extract_node(MTG, "node_5"))
-get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL, recursive = TRUE) {
+get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+                            link = NULL, filter_fun = NULL, recursive = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
   attribute = attribute_as_name(attribute_expr)
@@ -51,7 +55,12 @@ get_parent_value = function(attribute, node = NULL, scale = NULL, symbol = NULL,
   # Is there any filter happening for the parent node?:
   is_scale_filtered = !is.null(scale) && !parent$.scale %in% scale
   is_symbol_filtered = !is.null(symbol) && !parent$.symbol %in% symbol
-  is_filtered = is_scale_filtered || is_symbol_filtered
+  is_branching = !is.null(link) && !parent$.link %in% link
+  is_filter_fun = !is.null(filter_fun) && !filter_fun(parent)
+
+  is_filtered = is_scale_filtered || is_symbol_filtered || is_filter_fun || is_branching
+
+
 
   if(node$isRoot){
     vals = NA
@@ -272,7 +281,8 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 
   while (!data.tree::isRoot(node_current)){
     parent_val = get_parent_value(!!attribute_expr, node = node_current,
-                                  scale = scale,symbol = symbol)
+                                  scale = scale,symbol = symbol,
+                                  link = NULL,filter_fun = NULL)
     node_current = node_current$parent
 
     # Is there any filter happening for the parent node?:
