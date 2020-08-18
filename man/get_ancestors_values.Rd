@@ -9,7 +9,10 @@ get_ancestors_values(
   node = NULL,
   scale = NULL,
   symbol = NULL,
-  self = FALSE
+  self = FALSE,
+  link = NULL,
+  filter_fun = NULL,
+  recursive = TRUE
 )
 }
 \arguments{
@@ -24,6 +27,14 @@ from the MTG classes).}
 column from the MTG classes).}
 
 \item{self}{Return the value of the current node (\code{TRUE}), or the ancestors only (\code{FALSE}, the default)}
+
+\item{link}{A character vector for filtering the \code{.link} with the descendant}
+
+\item{filter_fun}{Any filtering function taking a node as input, e.g. \code{\link[data.tree:isLeaf]{data.tree::isLeaf()}}}
+
+\item{recursive}{Boolean. \code{TRUE}: if a descendant is not of the right \code{scale},\code{symbol}, or \code{link}, continue with its own children
+until finding a child that meets the filter conditions. \code{FALSE}: stop the search for a child if it
+does not meet the filtering conditions.}
 }
 \value{
 The attribute values from the ancestors of the node (from first parent to farther ancestor)

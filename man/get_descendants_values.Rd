@@ -11,7 +11,8 @@ get_descendants_values(
   symbol = NULL,
   link = NULL,
   recursive = TRUE,
-  self = FALSE
+  self = FALSE,
+  filter_fun = NULL
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ until finding a child that meets the filter conditions. \code{FALSE}: stop the s
 does not meet the filtering conditions.}
 
 \item{self}{Return the value of the current node (\code{TRUE}), or the ancestors only (\code{FALSE}, the default)}
+
+\item{filter_fun}{Any filtering function taking a node as input, e.g. \code{\link[data.tree:isLeaf]{data.tree::isLeaf()}}}
 }
 \value{
 The attribute values from the descendant(s) of the node
@@ -63,6 +66,9 @@ get_descendants_values(attribute = "length", node = node_8, symbol = "S",
 # branching (e.g. for an axis):
 get_descendants_values(attribute = "length", node = node_8, symbol = "S",
                        link = c("/","<"), recursive = FALSE)
+
+# To get the values for the leaves (i.e. the last node) only:
+get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
 
 # Length were observed at the "S" scale (S = segment of an axis between two branches),
 # but we need the length at the axis scale, to do so:
