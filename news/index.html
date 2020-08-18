@@ -121,7 +121,7 @@
 <h1 class="page-header" data-toc-text="0.7.0">
 <a href="#xplorer-070" class="anchor"></a>XploRer 0.7.0</h1>
 <ul>
-<li><p><code><a href="../reference/get_parent_value.html">get_parent_value()</a></code>, <code><a href="../reference/get_children_values.html">get_children_values()</a></code> and <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> all accept expressions as attribute argument. Use <code>node$variable</code> to be sure to use the value from the node (as for <code><a href="https://rlang.r-lib.org/reference/tidyeval-data.html">rlang::.data</a></code> is used in <code>dplyr</code>)</p></li>
+<li><p><code>get_parent_value()</code>, <code><a href="../reference/get_children_values.html">get_children_values()</a></code> and <code>get_ancestors_values()</code> all accept expressions as attribute argument. Use <code>node$variable</code> to be sure to use the value from the node (as for <code><a href="https://rlang.r-lib.org/reference/tidyeval-data.html">rlang::.data</a></code> is used in <code>dplyr</code>)</p></li>
 <li><p>replace fieldsAll by attributesAll in nodes following data.tree 1.0.0</p></li>
 <li><p>add Getting started vignette</p></li>
 <li><p>add contributing + code of conduct + issue template</p></li>
@@ -132,16 +132,16 @@
 <a href="#xplorer-060" class="anchor"></a>XploRer 0.6.0</h1>
 <ul>
 <li><p>improve doc in readme</p></li>
-<li><p>add a recursive argument to <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code></p></li>
-<li><p>get_children_values and <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> now return the node name</p></li>
-<li><p>fix issues with <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> (didn’t work properly when called from <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code>)</p></li>
+<li><p>add a recursive argument to <code>get_parent_value()</code></p></li>
+<li><p>get_children_values and <code>get_ancestors_values()</code> now return the node name</p></li>
+<li><p>fix issues with <code>get_ancestors_values()</code> (didn’t work properly when called from <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code>)</p></li>
 </ul>
 </div>
     <div id="xplorer-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#xplorer-050" class="anchor"></a>XploRer 0.5.0</h1>
 <ul>
-<li>Add <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> to get all values from the ancestors of a node (with or without the values of the current node, see <code>self</code> argument)</li>
+<li>Add <code>get_ancestors_values()</code> to get all values from the ancestors of a node (with or without the values of the current node, see <code>self</code> argument)</li>
 </ul>
 </div>
     <div id="xplorer-040" class="section level1">
@@ -157,9 +157,9 @@
 <h1 class="page-header" data-toc-text="0.3.0">
 <a href="#xplorer-030" class="anchor"></a>XploRer 0.3.0</h1>
 <ul>
-<li><p><code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> was added to get the variables of the parent of a node</p></li>
+<li><p><code>get_parent_value()</code> was added to get the variables of the parent of a node</p></li>
 <li><p><code><a href="../reference/get_children_values.html">get_children_values()</a></code> was added to get the variables of the children of a node</p></li>
-<li><p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> can use both <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code></p></li>
+<li><p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> can use both <code>get_parent_value()</code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code></p></li>
 <li><p>It is now possible to add any variable to the tooltip on hoover of a node in <code><a href="../reference/plotly_MTG.html">plotly_mtg()</a></code>, e.g.: <code><a href="../reference/plotly_MTG.html">plotly_mtg(MTG,Length,Width)</a></code></p></li>
 </ul>
 </div>

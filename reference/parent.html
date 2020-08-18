@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get children value — get_children_values • XploRer</title>
+<title>Get parent value — parent • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Get children value — get_children_values" />
-<meta property="og:description" content="Get attribute values from the children of a node." />
+<meta property="og:title" content="Get parent value — parent" />
+<meta property="og:description" content="Get the value of one or several variables from the parent node. This is a helper
+function that is usually used as input to mutate_mtg() to get the values of the parent node
+for all nodes." />
 
 
 
@@ -114,16 +116,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get children value</h1>
+    <h1>Get parent value</h1>
     <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_getters_shortcuts.R'><code>R/mtg_getters_shortcuts.R</code></a></small>
-    <div class="hidden name"><code>get_children_values.Rd</code></div>
+    <div class="hidden name"><code>parent.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get attribute values from the children of a node.</p>
+    <p>Get the value of one or several variables from the parent node. This is a helper
+function that is usually used as input to <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> to get the values of the parent node
+for all nodes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_children_values</span>(
+    <pre class="usage"><span class='fu'>parent</span>(
   <span class='no'>attribute</span>,
   <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -138,25 +142,25 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>attribute</th>
-      <td><p>Any node attribute (as a character)</p></td>
+      <td><p>Any node attribute (as a character, an expression or a node callm see details)</p></td>
     </tr>
     <tr>
       <th>node</th>
-      <td><p>The MTG node</p></td>
+      <td><p>The node (do not put something when used from <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>)</p></td>
     </tr>
     <tr>
       <th>scale</th>
-      <td><p>An integer vector for filtering the <code>.scale</code> of the children (i.e. the SCALE
+      <td><p>An integer vector for filtering the MTG scale of the parent (i.e. the SCALE
 column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>symbol</th>
-      <td><p>A character vector for filtering the children by the name of their <code>.symbol</code> (i.e. the SYMBOL
+      <td><p>A character vector for filtering the names of the MTG symbol required for the parent (i.e. the SYMBOL
 column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>link</th>
-      <td><p>A character vector for filtering the <code>.link</code> with the children</p></td>
+      <td><p>A character vector for filtering the <code>.link</code> with the descendant</p></td>
     </tr>
     <tr>
       <th>filter_fun</th>
@@ -164,63 +168,30 @@ column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>continue</th>
-      <td><p>If a child is not of the right <code>scale</code>, continue until the <code>scale</code>
+      <td><p>If a parent is not of the right <code>scale</code>, continue until the <code>scale</code>
 required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The attribute values from the children of the node</p>
+    <p>The attribute values from the parent of a node</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is mainly intended to be used with <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>. In this case,
-the <code>node</code> argument can be left empty (or you can put <code>node = node</code> equivalently).</p>
+    <p>The <code>attribute</code> argument can be given as a string (<em>e.g.</em> attribute = "Length"), an
+expression (<em>e.g.</em> attribute = Length) or a call to a node (<em>e.g.</em> attribute = node$Length).
+All are equivalent because they evaluate the node given by the user or by the calling function.
+This behavior is set to homogenize the grammar used in the calls of <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>This function returns the values of any attribute of the parent of a node. It is
+mainly intended to be used in a call to <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> (see <code><a href='mutate_mtg.html'>mutate_mtg()</a></code> doc for examples).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
 <span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
-<span class='co'># node_6 has one child:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>))</div><div class='output co'>#&gt; node_7 
-#&gt;     12 </div><div class='input'>
-<span class='co'># Using node 4 as reference now:</span>
-<span class='no'>node_4</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_4"</span>)
-<span class='co'># node_4 has two children, returns two values:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_4</span>)</div><div class='output co'>#&gt; node_5 node_6 
-#&gt;     10      6 </div><div class='input'><span class='co'># To get the names of those children:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"name"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_4</span>)</div><div class='output co'>#&gt;   node_5   node_6 
-#&gt; "node_5" "node_6" </div><div class='input'>
-<span class='co'># The width is not available for one child ("node_6"):</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_4</span>)</div><div class='output co'>#&gt; node_5 node_6 
-#&gt;      6     NA </div><div class='input'>
-<span class='co'># We can filter by scale if we need to return the values for some scales only:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_4</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; node_5 node_7 
-#&gt;      6      7 </div><div class='input'><span class='co'># Here we get the value of node_7 also, because its parent "node_6" is not of scale</span>
-<span class='co'># "Leaf", so it was filtered out. It you need the values for one scale, but not</span>
-<span class='co'># making a recursive search from one scale to another until finding the required scale,</span>
-<span class='co'># you can put the `continue` argument to `FALSE`:</span>
-
-<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_4</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(recursivity_level) &amp;&amp; recursivity_level == 0) return(val): missing value where TRUE/FALSE needed</span></div><div class='input'>
-<span class='co'># To get the values of the children of each node:</span>
-<span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width</span> <span class='kw'>=</span> <span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width
-#&gt; 1 node_1                        NA               
-#&gt; 2  °--node_2                    NA               
-#&gt; 3      °--node_3                NA              1
-#&gt; 4          °--node_4             1          6, NA
-#&gt; 5              ¦--node_5         6               
-#&gt; 6              °--node_6        NA              7
-#&gt; 7                  °--node_7     7               </div><div class='input'>
-<span class='co'># And using only the bodes with symbol "Leaf":</span>
-<span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width2</span> <span class='kw'>=</span> <span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; <span class='error'>Error in if (!is.null(recursivity_level) &amp;&amp; recursivity_level == 0) return(val): missing value where TRUE/FALSE needed</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width2"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width2
-#&gt; 1 node_1                        NA              NA
-#&gt; 2  °--node_2                    NA              NA
-#&gt; 3      °--node_3                NA              NA
-#&gt; 4          °--node_4             1              NA
-#&gt; 5              ¦--node_5         6              NA
-#&gt; 6              °--node_6        NA              NA
-#&gt; 7                  °--node_7     7              NA</div></pre>
+<span class='fu'>parent</span>(<span class='no'>Length</span>,  <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_5"</span>))</div><div class='output co'>#&gt; node_4 
+#&gt;      4 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
