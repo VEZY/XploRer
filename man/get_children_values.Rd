@@ -10,7 +10,7 @@ get_children_values(
   scale = NULL,
   symbol = NULL,
   link = NULL,
-  filter_fun = filter_fun,
+  filter_fun = NULL,
   continue = TRUE
 )
 }
@@ -46,32 +46,33 @@ the \code{node} argument can be left empty (or you can put \code{node = node} eq
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 
-# node_5 has one child:
-get_children_values("Length", node = extract_node(MTG, "node_5"))
+# node_6 has one child:
+get_children_values("Length", node = extract_node(MTG, "node_6"))
 
-# Using node 3 as reference now:
-node_3 = extract_node(MTG, "node_3")
-# node_3 has two children, returns two values:
-get_children_values("Length", node = node_3)
+# Using node 4 as reference now:
+node_4 = extract_node(MTG, "node_4")
+# node_4 has two children, returns two values:
+get_children_values("Length", node = node_4)
 # To get the names of those children:
-get_children_values("name", node = node_3)
+get_children_values("name", node = node_4)
 
-# The width is not available for one child ("node_5"):
-get_children_values("Width", node = node_3)
+# The width is not available for one child ("node_6"):
+get_children_values("Width", node = node_4)
 
 # We can filter by scale if we need to return the values for some scales only:
-get_children_values("Width", node = node_3, scale = "Leaf")
-# Here we get the value of node_6 also, because its parent "node_5" is not of scale
+get_children_values("Width", node = node_4, symbol = "Leaf")
+# Here we get the value of node_7 also, because its parent "node_6" is not of scale
 # "Leaf", so it was filtered out. It you need the values for one scale, but not
 # making a recursive search from one scale to another until finding the required scale,
 # you can put the `continue` argument to `FALSE`:
 
-# We can also get the values recursively until finding the right value:
-get_children_values("Width", node = node_3, scale = "Leaf", continue = FALSE)
-
+get_children_values("Width", node = node_4, symbol = "Leaf", continue = FALSE)
 
 # To get the values of the children of each node:
 mutate_mtg(MTG, children_width = get_children_values("Width"))
 print(MTG$MTG, "Width", "children_width")
 
+# And using only the bodes with symbol "Leaf":
+mutate_mtg(MTG, children_width2 = get_children_values("Width", symbol = "Leaf", continue = FALSE))
+print(MTG$MTG, "Width", "children_width2")
 }

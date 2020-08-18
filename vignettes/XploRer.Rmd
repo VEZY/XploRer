@@ -140,7 +140,7 @@ print(MTG$MTG,".symbol","Length","Length_parent","total_length")
 To get the children values of a node, use `get_children_values()`. This function returns the values of a field for all children of a node:
 
 ```{r}
-get_children_values(attribute = Length, node = extract_node(MTG, "node_3"))
+get_children_values(attribute = "Length", node = extract_node(MTG, "node_3"))
 ```
 
 It can be used to get *e.g.* the average length of the children:

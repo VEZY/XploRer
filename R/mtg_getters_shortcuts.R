@@ -97,21 +97,22 @@ parent = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #'
 #' # We can filter by scale if we need to return the values for some scales only:
 #' get_children_values("Width", node = node_4, symbol = "Leaf")
-#' # Here we get the value of node_6 also, because its parent "node_5" is not of scale
+#' # Here we get the value of node_7 also, because its parent "node_6" is not of scale
 #' # "Leaf", so it was filtered out. It you need the values for one scale, but not
 #' # making a recursive search from one scale to another until finding the required scale,
 #' # you can put the `continue` argument to `FALSE`:
 #'
-#' # We can also get the values recursively until finding the right value:
-#' get_children_values("Width", node = node_3, symbol = "Leaf", continue = FALSE)
-#'
+#' get_children_values("Width", node = node_4, symbol = "Leaf", continue = FALSE)
 #'
 #' # To get the values of the children of each node:
 #' mutate_mtg(MTG, children_width = get_children_values("Width"))
 #' print(MTG$MTG, "Width", "children_width")
 #'
+#' # And using only the bodes with symbol "Leaf":
+#' mutate_mtg(MTG, children_width2 = get_children_values("Width", symbol = "Leaf", continue = FALSE))
+#' print(MTG$MTG, "Width", "children_width2")
 get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
-                               link = NULL, filter_fun = filter_fun,
+                               link = NULL, filter_fun = NULL,
                                continue = TRUE) {
 
   attribute_expr = rlang::enexpr(attribute)
@@ -127,7 +128,7 @@ get_children_values = function(attribute, node = NULL, scale = NULL, symbol = NU
     }
   }
 
-  descendants(!!attribute_expr, node = node, scale = scale, symbol = symbol,
+  descendants(attribute = !!attribute_expr, node = node, scale = scale, symbol = symbol,
               link = link, filter_fun = filter_fun,
               continue = continue, recursivity_level = 1)
 }

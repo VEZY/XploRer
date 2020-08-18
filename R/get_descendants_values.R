@@ -154,10 +154,10 @@ descendants = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 
     vals_children =
       mapply(function(x,recurs){
-        descendants(!!attribute_expr, node = x, symbol = symbol, link = link,
-                               continue = continue, self = FALSE,
-                               filter_fun = filter_fun,
-                               recursivity_level = recurs)
+        descendants(!!attribute_expr, node = x, symbol = symbol, scale = scale,
+                    link = link, continue = continue, self = FALSE,
+                    filter_fun = filter_fun,
+                    recursivity_level = recurs)
       }, children, recurs = recursivity_level, SIMPLIFY = FALSE)
   }else{
     vals_children =
