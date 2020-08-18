@@ -294,19 +294,20 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
     is_filtered = is_scale_filtered || is_symbol_filtered || is_branching || is_filter_fun
 
 
-    if(node_current$isRoot){
-      parent_val = NULL
-    }else if(!is_filtered){
+    if(!is_filtered){
       parent_val = node_current[[attribute]]
     }else if(isTRUE(continue)){
       next()
     }else{
-      parent_val = NULL
+      # Here we stop when a parent is filtered out
+      return(val)
     }
 
-    if(!is.null(parent_val)){
-      names(parent_val) = node_current$name
+    if(is.null(parent_val)){
+      parent_val = NA
     }
+
+    names(parent_val) = node_current$name
 
     val = c(val, parent_val)
   }
