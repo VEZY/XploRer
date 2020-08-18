@@ -280,9 +280,9 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
   node_current = node
 
   while (!data.tree::isRoot(node_current)){
-    parent_val = get_parent_value(!!attribute_expr, node = node_current,
-                                  scale = scale,symbol = symbol,
-                                  link = NULL,filter_fun = NULL)
+    # parent_val = get_parent_value(!!attribute_expr, node = node_current,
+    #                               scale = scale,symbol = symbol,
+    #                               link = NULL,filter_fun = NULL)
     node_current = node_current$parent
 
     # Is there any filter happening for the parent node?:
@@ -293,14 +293,21 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
 
     is_filtered = is_scale_filtered || is_symbol_filtered || is_branching || is_filter_fun
 
-    if(is_filtered){
-      if(recursive){
-        next()
-      }else{
-        return(val)
-      }
+
+    if(node_current$isRoot){
+      parent_val = NULL
+    }else if(!is_filtered){
+      parent_val = node_current[[attribute]]
+    }else if(isTRUE(recursive)){
+      next()
+    }else{
+      parent_val = NULL
     }
-    names(parent_val) = node_current$name
+
+    if(!is.null(parent_val)){
+      names(parent_val) = node_current$name
+    }
+
     val = c(val, parent_val)
   }
 

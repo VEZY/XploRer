@@ -9,6 +9,8 @@ get_parent_value(
   node = NULL,
   scale = NULL,
   symbol = NULL,
+  link = NULL,
+  filter_fun = NULL,
   recursive = TRUE
 )
 }
@@ -22,6 +24,10 @@ column from the MTG classes).}
 
 \item{symbol}{A character vector for filtering the names of the MTG symbol required for the parent (i.e. the SYMBOL
 column from the MTG classes).}
+
+\item{link}{A character vector for filtering the \code{.link} with the descendant}
+
+\item{filter_fun}{Any filtering function taking a node as input, e.g. \code{\link[data.tree:isLeaf]{data.tree::isLeaf()}}}
 
 \item{recursive}{If a parent is not of the right \code{scale}, continue until the \code{scale}
 required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
