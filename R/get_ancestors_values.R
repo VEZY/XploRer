@@ -29,24 +29,24 @@
 #' MTG = read_mtg(filepath)
 #'
 #' # node_6 has four ancestors:
-#' get_ancestors_values("Length", node = extract_node(MTG, "node_6"))
+#' ancestors("Length", node = extract_node(MTG, "node_6"))
 #' # Two of them have no values for Length
 #'
 #' # If the value of node_6 is also needed:
-#' get_ancestors_values("Length", node = extract_node(MTG, "node_6"), self = TRUE)
+#' ancestors("Length", node = extract_node(MTG, "node_6"), self = TRUE)
 #'
 #' # If we only need the value of the first parent:
-#' get_ancestors_values("Length", node = extract_node(MTG, "node_6"), recursivity_level = 1)
+#' ancestors("Length", node = extract_node(MTG, "node_6"), recursivity_level = 1)
 #'
 #' # We can filter by symbol if we need to return the values for some symbols only:
-#' get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Internode")
+#' ancestors("Width", node = extract_node(MTG, "node_6"), symbol = "Internode")
 #'
 #' # The values are only returned for the ancestors with the required symbol
 #' # For example we know that a leaf cannot be an ancestor because it cannot bear anything:
-#' get_ancestors_values("Width", node = extract_node(MTG, "node_6"), symbol = "Leaf")
+#' ancestors("Width", node = extract_node(MTG, "node_6"), symbol = "Leaf")
 #' # In this case it returns a length 0 vector.
 #'
-get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+ancestors  = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                                  link = NULL, filter_fun = NULL,self = FALSE,
                                  continue = TRUE, recursivity_level = NULL){
 
@@ -64,7 +64,7 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
     if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
       node = eval(quote(node), parent.frame())
     }else{
-      stop("node should be given when 'get_ancestors_values()' is used interactively")
+      stop("node should be given when 'ancestors()' is used interactively")
     }
   }
 
@@ -85,6 +85,8 @@ get_ancestors_values  = function(attribute, node = NULL, scale = NULL, symbol = 
   }else{
     val = vector()
   }
+
+  if(data.tree::isRoot(node)) return()
 
   node_current = node
   level = 1 # Index of the ancestor (e.g. parent = 1, grand-parent = 2...)

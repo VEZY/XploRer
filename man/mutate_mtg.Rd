@@ -83,7 +83,7 @@ read_mtg(filepath)\%>\%
 }
 
 # Or even function:
-mutate_mtg(MTG, Length_parent = get_parent_value("Length"))
+mutate_mtg(MTG, Length_parent = parent("Length"))
 
 # And more complex associations. Here is an example were we need the sum of
 # the section_surface of children of each node:

@@ -29,41 +29,41 @@
 #' MTG = read_mtg(filepath)
 #' node_8 = extract_node(MTG,"node_8")
 #' # getting all descendants of node_8
-#' get_descendants_values(attribute = "length", node = node_8)
+#' descendants(attribute = "length", node = node_8)
 #'
 #' # getting all descendants of node_8, but only the nodes with symbol "S":
-#' get_descendants_values(attribute = "length", node = node_8, symbol = "S")
+#' descendants(attribute = "length", node = node_8, symbol = "S")
 #'
 #' # getting all descendants of node_8, but only the nodes with symbol "S", and not
 #' # recursively, i.e. we stop the search for a child if it is filtered out (we don't
 #' # go to its own children)
-#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#' descendants(attribute = "length", node = node_8, symbol = "S",
 #'                        continue = FALSE)
 #'
 #' # getting the children of node_8 (and not below):
-#' get_descendants_values(attribute = "length", node = node_8, recursivity_level = 1)
+#' descendants(attribute = "length", node = node_8, recursivity_level = 1)
 #' # getting the children of node_8 and their children:
-#' get_descendants_values(attribute = "length", node = node_8, recursivity_level = 2)
+#' descendants(attribute = "length", node = node_8, recursivity_level = 2)
 #' # getting the children of node_8 and their children, and filter for "S":
-#' get_descendants_values(attribute = "length", node = node_8, symbol = "S", recursivity_level = 2)
+#' descendants(attribute = "length", node = node_8, symbol = "S", recursivity_level = 2)
 #' # The function returns until node_12 because node_10 is not an "S" and is then filtered out
 #' # which makes node_12 two levels below node.
 #'
 #' # To get the descendants of a node but only for the nodes following it, not
 #' # branching (e.g. for an axis):
-#' get_descendants_values(attribute = "length", node = node_8, symbol = "S",
+#' descendants(attribute = "length", node = node_8, symbol = "S",
 #'                        link = c("/","<"), continue = FALSE)
 #'
 #' # To get the values for the leaves (i.e. the last node) only:
-#' get_descendants_values(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
+#' descendants(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
 #'
 #' # Length were observed at the "S" scale (S = segment of an axis between two branches),
 #' # but we need the length at the axis scale, to do so:
 #' mutate_mtg(MTG,
-#'            axis_length = sum(get_descendants_values(attribute = "length", symbol = "S",
+#'            axis_length = sum(descendants(attribute = "length", symbol = "S",
 #'                                                    link = c("/","<"), continue = FALSE)),
 #'            .symbol = "A")
-get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol = NULL,
+descendants = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                                   link = NULL, continue = TRUE, self = FALSE,
                                   filter_fun = NULL, recursivity_level = NULL){
 
@@ -77,7 +77,7 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
     if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
       node = eval(quote(node), parent.frame())
     }else{
-      stop("node should be given when 'get_descendants_values()' is used interactively")
+      stop("node should be given when 'descendants()' is used interactively")
     }
   }
 
@@ -154,7 +154,7 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
 
     vals_children =
       mapply(function(x,recurs){
-        get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+        descendants(!!attribute_expr, node = x, symbol = symbol, link = link,
                                continue = continue, self = FALSE,
                                filter_fun = filter_fun,
                                recursivity_level = recurs)
@@ -162,7 +162,7 @@ get_descendants_values = function(attribute, node = NULL, scale = NULL, symbol =
   }else{
     vals_children =
       lapply(children, function(x,recurs){
-        get_descendants_values(!!attribute_expr, node = x, symbol = symbol, link = link,
+        descendants(!!attribute_expr, node = x, symbol = symbol, link = link,
                                continue = continue, self = FALSE,
                                filter_fun = filter_fun,
                                recursivity_level = recursivity_level)

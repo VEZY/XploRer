@@ -116,7 +116,7 @@ Please note that the XploRer project is released with a [Contributor Code of Con
 
 To do before v1:
 
-- [x] Make mtg helpers (`get_parent_value()`, `get_children_values()` and `get_ancestors_values()`) use NSE format to homogenize with `mutate_mtg()`
+- [x] Make mtg helpers (`parent()`, `get_children_values()` and `ancestors()`) use NSE format to homogenize with `mutate_mtg()`
 
 - [x] Add a "Get started" vignette (add the basic info on what we can do with the package)
 

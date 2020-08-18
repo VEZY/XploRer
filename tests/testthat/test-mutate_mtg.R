@@ -22,7 +22,7 @@ test_that("mutate_mtg works in all its glory", {
 
   mutate_mtg(MTG,
              section_surface = pi * ((node$Width / 2)^2),
-             Width_parent = get_parent_value("Width",  node = node)[[1]],
+             Width_parent = parent("Width",  node = node)[[1]],
              section_surface_parent = pi * (node$Width_parent / 2)^2)
   mtg_df =
     data.tree::ToDataFrameTree(MTG$MTG,"Width","Width_parent","section_surface",

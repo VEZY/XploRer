@@ -20,29 +20,29 @@ A4$MTG = extract_node(tree1h, "node_6")
 
 
 
-test_that("get_parent_value: requesting an attribute", {
-  test = get_parent_value("Length", node = node_7)
-  expect_equal(test,6.0)
-  test_2 = get_parent_value("Length", node = node_7_2)
-  expect_equal(test_2,4.0)
+test_that("parent: requesting an attribute", {
+  test = parent("Length", node = node_7)
+  expect_equal(test,c(node_6 = 6.0))
+  test_2 = parent("Length", node = node_7_2)
+  expect_equal(test_2,c(node_6 = 4.0))
 })
 
-test_that("get_parent_value: requesting an attributes that is missing", {
-  test = get_parent_value("test", node = node_6)
+test_that("parent: requesting an attributes that is missing", {
+  test = parent("test", node = node_6)
   expect_true(is.na(test))
 })
 
-test_that("get_parent_value: test root node", {
-  test = get_parent_value("Length", node = MTG$MTG)
-  expect_length(test, 1)
-  expect_true(is.na(test))
+test_that("parent: test root node", {
+  test = parent("Length", node = MTG$MTG)
+  expect_length(test, 0)
+  expect_true(is.null(test))
 })
 
-test_that("get_parent_value: test filters", {
-  test = get_parent_value(attribute = ".symbol",
+test_that("parent: test filters", {
+  test = parent(attribute = ".symbol",
                           node = extract_node(MTG2,'node_4'),
                           scale = 2)
-  expect_equal(test, "Axis")
+  expect_equal(test, c(node_3 = "Axis"))
 })
 
 test_that("get_children_values: requesting an attribute", {
@@ -74,92 +74,92 @@ test_that("get_children_values: test filter", {
   expect_equal(test3,c(node_4 = "Internode"))
 })
 
-test_that("get_ancestors_values: requesting an attribute", {
-  test = get_ancestors_values(attribute = "Length", node = node_6)
-  expect_equal(setNames(test[1],NULL),get_parent_value("Length", node = node_6))
+test_that("ancestors: requesting an attribute", {
+  test = ancestors(attribute = "Length", node = node_6)
+  expect_equal(test[1],parent("Length", node = node_6))
   expect_equal(test,c(node_4 = 4, node_3 = NA, node_2 = NA, node_1 = NA))
 })
 
-test_that("get_ancestors_values: get an attribute with self", {
-  test = get_ancestors_values(attribute = "Length", node = node_6, self = TRUE)
+test_that("ancestors: get an attribute with self", {
+  test = ancestors(attribute = "Length", node = node_6, self = TRUE)
   expect_equal(setNames(test[1],NULL),node_6$Length)
-  expect_equal(setNames(test[2],NULL),get_parent_value("Length", node = node_6))
+  expect_equal(test[2],parent("Length", node = node_6))
 
   expect_equal(test,c(node_6 = 6, node_4 = 4, node_3 = NA, node_2 = NA, node_1 = NA))
 })
 
-test_that("get_ancestors_values: get an attribute with filter", {
-  test = get_ancestors_values(attribute = "Length", node = node_6, symbol = "Internode")
+test_that("ancestors: get an attribute with filter", {
+  test = ancestors(attribute = "Length", node = node_6, symbol = "Internode")
   expect_length(test,1)
   expect_equal(setNames(test,NULL),4.0)
 
-  test = get_ancestors_values(attribute = "Length", node = node_6, symbol = "Internode", self = TRUE)
+  test = ancestors(attribute = "Length", node = node_6, symbol = "Internode", self = TRUE)
   expect_length(test,2)
   expect_equal(test,c(node_6 = 6, node_4 = 4))
 
-  expect_equal(get_ancestors_values("Width", node = node_7, symbol = "Leaf"), vector())
+  expect_equal(ancestors("Width", node = node_7, symbol = "Leaf"), vector())
 })
 
 
-test_that("get_descendants_values: requesting an attribute", {
-  test = get_descendants_values(attribute = "Length", node = node_6)
+test_that("descendants: requesting an attribute", {
+  test = descendants(attribute = "Length", node = node_6)
   expect_equal(test,get_children_values("Length", node = node_6))
   expect_equal(test,c(node_7 = 12))
 })
 
 
-test_that("get_descendants_values: requesting an attribute", {
-  test = get_descendants_values(attribute = "Length", node = node_6)
+test_that("descendants: requesting an attribute", {
+  test = descendants(attribute = "Length", node = node_6)
   expect_equal(test,get_children_values("Length", node = node_6))
   expect_equal(test,c(node_7 = 12))
 })
 
 
-test_that("get_descendants_values", {
-  test = get_descendants_values(attribute = "length", node = A4$MTG)
+test_that("descendants", {
+  test = descendants(attribute = "length", node = A4$MTG)
   expect_equal(test,c(node_7 = 27.5, node_8 = NA, node_13 = 6, node_9 = 3.5,
                       node_10 = NA, node_12 = 10.3, node_11 = 5.2, node_14 = NA,
                       node_16 = 19.5, node_15 = 6))
 })
 
-test_that("get_descendants_values: filter by symbol", {
+test_that("descendants: filter by symbol", {
   # By S:
-  test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "S")
+  test = descendants(attribute = "length", node = A4$MTG, symbol = "S")
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 
   # By A:
-  test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "A")
+  test = descendants(attribute = "length", node = A4$MTG, symbol = "A")
   expect_equal(test, c(node_8 = NA_real_, node_10 = NA_real_, node_14 = NA_real_))
 })
 
-test_that("get_descendants_values: no recursivity", {
+test_that("descendants: no recursivity", {
   # By S, non-recursive:
-  test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "S",
+  test = descendants(attribute = "length", node = A4$MTG, symbol = "S",
                                 continue = FALSE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 
   # By A, non-recursive:
-  test = get_descendants_values(attribute = "length", node = A4$MTG, symbol = "A",
+  test = descendants(attribute = "length", node = A4$MTG, symbol = "A",
                                 continue = FALSE)
   expect_null(test)
 })
 
-test_that("get_descendants_values: with self", {
-  test = get_descendants_values(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+test_that("descendants: with self", {
+  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
                                 self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 
   # Without self:
-  test = get_descendants_values(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
                                 self = FALSE)
   expect_equal(test,c(node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 })
 
-test_that("get_descendants_values: not recursive and self", {
-  test = get_descendants_values(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+test_that("descendants: not recursive and self", {
+  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
                                 continue = FALSE, self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 })
