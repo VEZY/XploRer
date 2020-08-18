@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get children value</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_helpers.R'><code>R/mtg_helpers.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/get_descendants_values.R'><code>R/get_descendants_values.R</code></a></small>
     <div class="hidden name"><code>get_children_values.Rd</code></div>
     </div>
 
@@ -128,7 +128,7 @@
   <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -153,7 +153,7 @@ column from the MTG classes).</p></td>
 column from the MTG classes).</p></td>
     </tr>
     <tr>
-      <th>recursive</th>
+      <th>continue</th>
       <td><p>If a child is not of the right <code>scale</code>, continue until the <code>scale</code>
 required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>
@@ -187,10 +187,10 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; [1] NA NA</div><div class='input'><span class='co'># Here we get the value of node_6 also, because its parent "node_5" is not of scale</span>
 <span class='co'># "Leaf", so it was filtered out. It you need the values for one scale, but not</span>
 <span class='co'># making a recursive search from one scale to another until finding the required scale,</span>
-<span class='co'># you can put the `recursive` argument to `FALSE`:</span>
+<span class='co'># you can put the `continue` argument to `FALSE`:</span>
 
 <span class='co'># We can also get the values recursively until finding the right value:</span>
-<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; node_4 
+<span class='fu'>get_children_values</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_3</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; node_4 
 #&gt;     NA </div><div class='input'>
 
 <span class='co'># To get the values of the children of each node:</span>

@@ -117,7 +117,7 @@ for all nodes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get parent value</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_helpers.R'><code>R/mtg_helpers.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/get_ancestors_values.R'><code>R/get_ancestors_values.R</code></a></small>
     <div class="hidden name"><code>get_parent_value.Rd</code></div>
     </div>
 
@@ -132,7 +132,9 @@ for all nodes.</p>
   <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,7 +159,15 @@ column from the MTG classes).</p></td>
 column from the MTG classes).</p></td>
     </tr>
     <tr>
-      <th>recursive</th>
+      <th>link</th>
+      <td><p>A character vector for filtering the <code>.link</code> with the descendant</p></td>
+    </tr>
+    <tr>
+      <th>filter_fun</th>
+      <td><p>Any filtering function taking a node as input, e.g. <code><a href='https://rdrr.io/pkg/data.tree/man/isLeaf.html'>data.tree::isLeaf()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>continue</th>
       <td><p>If a parent is not of the right <code>scale</code>, continue until the <code>scale</code>
 required is met if <code>TRUE</code>, or returns <code>NA</code> if <code>FALSE</code>.</p></td>
     </tr>

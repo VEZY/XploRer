@@ -291,18 +291,18 @@
 <li><p><code><a href="../reference/get_children_values.html">get_children_values()</a></code> looks if the children are of the required symbol. If a child is, it return its value, if not, it will look at the children of the node if any, and repeat the procedure recursively until it finds either a child with the required symbol or a leaf (returns <code>NA</code> in this case).</p></li>
 </ul>
 <p>An easier way to think about this is that when using the symbol or scale argument, functions work on a different tree with only the symbol(s) or scale(s) required.</p>
-<p>The <code>recursive</code> argument can be used in <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code> functions to disable this default behavior of “climbing” or “descending” the tree. If <code>recursive</code> is explicitly set to <code>FALSE</code>, the function returns <code>NA</code> if the first parent is not of the right symbol.</p>
+<p>The <code>continue</code> argument can be used in <code><a href="../reference/get_parent_value.html">get_parent_value()</a></code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code> functions to disable this default behavior of “climbing” or “descending” the tree. If <code>continue</code> is explicitly set to <code>FALSE</code>, the function returns <code>NA</code> if the first parent is not of the right symbol.</p>
 <p>Here is an example with recursive behavior (the default):</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
 <span class="co">#&gt; node_5 node_7 </span>
 <span class="co">#&gt;     10     12</span></pre></body></html></div>
 <p>And without:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">recursive</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/get_children_values.html">get_children_values</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">continue</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; node_3 </span>
 <span class="co">#&gt;     NA</span></pre></body></html></div>
 <p>The function returns <code>NA</code> without the recursive behavior because “node_2” has one child (“node_3”) that is not of the right symbol.</p>
 <blockquote>
-<p>Note that <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> does not have the <code>recursive</code> argument because it is a recursive function by design. So if an ancestor is not of the right symbol, it just jumps to the next ancestor.</p>
+<p>Note that <code><a href="../reference/get_ancestors_values.html">get_ancestors_values()</a></code> does not have the <code>continue</code> argument because it is a recursive function by design. So if an ancestor is not of the right symbol, it just jumps to the next ancestor.</p>
 </blockquote>
 <div id="the--symbol-and-the--scale-arguments-from-mutate_mtg" class="section level5">
 <h5 class="hasAnchor">

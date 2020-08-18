@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get descendant values — get_descendants_values • XploRer</title>
+<title>Get descendants values — get_descendants_values • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Get descendant values — get_descendants_values" />
+<meta property="og:title" content="Get descendants values — get_descendants_values" />
 <meta property="og:description" content="Get attribute values from the descendants (acropetal)." />
 
 
@@ -114,8 +114,8 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get descendant values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_helpers.R'><code>R/mtg_helpers.R</code></a></small>
+    <h1>Get descendants values</h1>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/get_descendants_values.R'><code>R/get_descendants_values.R</code></a></small>
     <div class="hidden name"><code>get_descendants_values.Rd</code></div>
     </div>
 
@@ -129,8 +129,10 @@
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,14 +161,23 @@ column from the MTG classes).</p></td>
       <td><p>A character vector for filtering the <code>.link</code> with the descendant</p></td>
     </tr>
     <tr>
-      <th>recursive</th>
-      <td><p>Boolean. <code>TRUE</code>: if a descendant is not of the right <code>scale</code>,<code>symbol</code>, or <code>link</code>, continue with its own children
-until finding a child that meets the filter conditions. <code>FALSE</code>: stop the search for a child if it
-does not meet the filtering conditions.</p></td>
+      <th>continue</th>
+      <td><p>Boolean. If <code>TRUE</code>, the function returns all nodes that are not filtered. If <code>FALSE</code>, stop
+at the first node that is filtered out.</p></td>
     </tr>
     <tr>
       <th>self</th>
       <td><p>Return the value of the current node (<code>TRUE</code>), or the ancestors only (<code>FALSE</code>, the default)</p></td>
+    </tr>
+    <tr>
+      <th>filter_fun</th>
+      <td><p>Any filtering function taking a node as input, e.g. <code><a href='https://rdrr.io/pkg/data.tree/man/isLeaf.html'>data.tree::isLeaf()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>recursivity_level</th>
+      <td><p>The maximum number of recursions allowed (considering filters). E.g. to get only the
+children, <code>recursivity_level = 1</code>, if children + their children: <code>recursivity_level = 2</code>.
+If <code>NULL</code> (the default), the function returns all values from the node to the root.</p></td>
     </tr>
     </table>
 
@@ -192,18 +203,30 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='co'># recursively, i.e. we stop the search for a child if it is filtered out (we don't</span>
 <span class='co'># go to its own children)</span>
 <span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"S"</span>,
-                       <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  node_9 node_12 
+                       <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  node_9 node_12 
 #&gt;     3.5    10.3 </div><div class='input'>
+<span class='co'># getting the children of node_8 (and not below):</span>
+<span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; node_9 
+#&gt;    3.5 </div><div class='input'><span class='co'># getting the children of node_8 and their children:</span>
+<span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;  node_9 node_10 node_12 
+#&gt;     3.5      NA    10.3 </div><div class='input'><span class='co'># getting the children of node_8 and their children, and filter for "S":</span>
+<span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"S"</span>, <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;  node_9 node_12 node_11 
+#&gt;     3.5    10.3     5.2 </div><div class='input'><span class='co'># The function returns until node_12 because node_10 is not an "S" and is then filtered out</span>
+<span class='co'># which makes node_12 two levels below node.</span>
+
 <span class='co'># To get the descendants of a node but only for the nodes following it, not</span>
 <span class='co'># branching (e.g. for an axis):</span>
 <span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"S"</span>,
-                       <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"/"</span>,<span class='st'>"&lt;"</span>), <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  node_9 node_12 
+                       <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"/"</span>,<span class='st'>"&lt;"</span>), <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  node_9 node_12 
 #&gt;     3.5    10.3 </div><div class='input'>
+<span class='co'># To get the values for the leaves (i.e. the last node) only:</span>
+<span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/data.tree/man/isLeaf.html'>isLeaf</a></span>)</div><div class='output co'>#&gt; node_12 node_11 
+#&gt;    10.3     5.2 </div><div class='input'>
 <span class='co'># Length were observed at the "S" scale (S = segment of an axis between two branches),</span>
 <span class='co'># but we need the length at the axis scale, to do so:</span>
 <span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>,
            <span class='kw'>axis_length</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'>get_descendants_values</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"S"</span>,
-                                                   <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"/"</span>,<span class='st'>"&lt;"</span>), <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)),
+                                                   <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"/"</span>,<span class='st'>"&lt;"</span>), <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)),
            <span class='kw'>.symbol</span> <span class='kw'>=</span> <span class='st'>"A"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
