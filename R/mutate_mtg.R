@@ -69,7 +69,7 @@
 #' # And more complex associations. Here is an example were we need the sum of
 #' # the section_surface of children of each node:
 #' mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
-#'            s_surf_child_sum = sum(get_children_values("section_surface"),na.rm=TRUE))
+#'            s_surf_child_sum = sum(children("section_surface"),na.rm=TRUE))
 #'
 #'
 #' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",

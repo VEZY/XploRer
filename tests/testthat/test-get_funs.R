@@ -45,31 +45,31 @@ test_that("parent: test filters", {
   expect_equal(test, c(node_3 = "Axis"))
 })
 
-test_that("get_children_values: requesting an attribute", {
-  test = get_children_values(attribute = "Length", node = node_6)
+test_that("children: requesting an attribute", {
+  test = children(attribute = "Length", node = node_6)
   expect_equal(test,c(node_7 = 12.0))
 
-  test2 = get_children_values(attribute = "Length", node = MTG2$MTG$node_2$node_3$node_4)
+  test2 = children(attribute = "Length", node = MTG2$MTG$node_2$node_3$node_4)
   expect_equal(test2,c(node_5 = NA, node_8 = 6.0))
 })
 
-test_that("get_children_values: requesting an attributes that is missing", {
-  test = get_children_values("test", node = node_6)
+test_that("children: requesting an attributes that is missing", {
+  test = children("test", node = node_6)
   expect_true(is.na(test))
 })
 
-test_that("get_children_values: test filter", {
-  test = get_children_values(attribute = ".symbol",
+test_that("children: test filter", {
+  test = children(attribute = ".symbol",
                              node = extract_node(MTG2,"node_3"),
                              scale = 2)
   expect_equal(test,c(node_5 = "Axis", node_9 = "Axis"))
 
-  test2 = get_children_values(attribute = ".symbol",
+  test2 = children(attribute = ".symbol",
                              node = extract_node(MTG2,"node_3"),
                              symbol = "Leaf")
   expect_equal(test2,c(node_7 = "Leaf", node_11 = "Leaf"))
 
-  test3 = get_children_values(attribute = ".symbol",
+  test3 = children(attribute = ".symbol",
                               node = extract_node(MTG2,"node_3"))
   expect_equal(test3,c(node_4 = "Internode"))
 })
@@ -103,14 +103,14 @@ test_that("ancestors: get an attribute with filter", {
 
 test_that("descendants: requesting an attribute", {
   test = descendants(attribute = "Length", node = node_6)
-  expect_equal(test,get_children_values("Length", node = node_6))
+  expect_equal(test,children("Length", node = node_6))
   expect_equal(test,c(node_7 = 12))
 })
 
 
 test_that("descendants: requesting an attribute", {
   test = descendants(attribute = "Length", node = node_6)
-  expect_equal(test,get_children_values("Length", node = node_6))
+  expect_equal(test,children("Length", node = node_6))
   expect_equal(test,c(node_7 = 12))
 })
 

@@ -162,10 +162,10 @@ descendants = function(attribute, node = NULL, scale = NULL, symbol = NULL,
   }else{
     vals_children =
       lapply(children, function(x,recurs){
-        descendants(!!attribute_expr, node = x, symbol = symbol, link = link,
-                               continue = continue, self = FALSE,
-                               filter_fun = filter_fun,
-                               recursivity_level = recursivity_level)
+        descendants(!!attribute_expr, node = x, symbol = symbol, scale = scale,
+                    link = link, continue = continue, self = FALSE,
+                    filter_fun = filter_fun,
+                    recursivity_level = recursivity_level)
       })
   }
 

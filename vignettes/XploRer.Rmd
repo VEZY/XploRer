@@ -115,7 +115,7 @@ This is allowed because the function returns the results invisibly. Note that it
 
 ### Use parent values
 
-You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see `parent()`, `get_children_values()` and `ancestors()`). Here is an example were we define a new variable called `Length_parent` that is the length of the node's parent:
+You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see `parent()`, `children()` and `ancestors()`). Here is an example were we define a new variable called `Length_parent` that is the length of the node's parent:
 
 ```{r}
 mutate_mtg(MTG, Length_parent = parent(node$Length))
@@ -137,16 +137,16 @@ print(MTG$MTG,".symbol","Length","Length_parent","total_length")
 
 ### Use children values
 
-To get the children values of a node, use `get_children_values()`. This function returns the values of a field for all children of a node:
+To get the children values of a node, use `children()`. This function returns the values of a field for all children of a node:
 
 ```{r}
-get_children_values(attribute = "Length", node = extract_node(MTG, "node_3"))
+children(attribute = "Length", node = extract_node(MTG, "node_3"))
 ```
 
 It can be used to get *e.g.* the average length of the children:
 
 ```{r}
-mutate_mtg(MTG, children_length = mean(get_children_values(node$Length), na.rm = TRUE))
+mutate_mtg(MTG, children_length = mean(children(node$Length), na.rm = TRUE))
 print(MTG$MTG, ".symbol", "Length","children_length")
 ```
 
@@ -156,7 +156,7 @@ We can also make more complex associations. Here is an example were we need the 
 
 ```{r}
 mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
-           s_surf_child_sum = sum(get_children_values(node$section_surface),na.rm=TRUE))
+           s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE))
 ```
 
 We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. The `s_surf_child_sum` variable uses the `section_surface` variable that was just created before.
@@ -183,7 +183,7 @@ MTG$MTG$.scale
 
 #### The scale and symbol arguments from the helper functions
 
-`parent()` and `get_children_values()` implement the `scale` and `symbol` arguments to filter by scale or symbol. It allows to tell the function to only consider the scales/symbols passed to this argument, ignoring all others.
+`parent()` and `children()` implement the `scale` and `symbol` arguments to filter by scale or symbol. It allows to tell the function to only consider the scales/symbols passed to this argument, ignoring all others.
 
 For example we can filter the parent node by its symbol using the `symbol` argument with `parent()`:
 
@@ -201,22 +201,22 @@ By default, the function will search for the first node which satisfies the symb
 
 - `parent()` looks if the parent node is of the required symbol, if it is, it returns its value, if not, it looks at the parent of the parent. And it does this recursively until either finding an ancestor with the required symbol, or finding the root node (returns `NA` in this case). 
 
-- `get_children_values()` looks if the children are of the required symbol. If a child is, it return its value, if not, it will look at the children of the node if any, and repeat the procedure recursively until it finds either a child with the required symbol or a leaf (returns `NA` in this case).
+- `children()` looks if the children are of the required symbol. If a child is, it return its value, if not, it will look at the children of the node if any, and repeat the procedure recursively until it finds either a child with the required symbol or a leaf (returns `NA` in this case).
 
 An easier way to think about this is that when using the symbol or scale argument, functions work on a different tree with only the symbol(s) or scale(s) required.
 
-The `continue` argument can be used in `parent()` and `get_children_values()` functions to disable this default behavior of "climbing" or "descending" the tree. If `continue` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right symbol.
+The `continue` argument can be used in `parent()` and `children()` functions to disable this default behavior of "climbing" or "descending" the tree. If `continue` is explicitly set to `FALSE`, the function returns `NA` if the first parent is not of the right symbol.
 
 Here is an example with recursive behavior (the default):
 
 ```{r}
-get_children_values(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf")
+children(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf")
 ```
 
 And without:
 
 ```{r}
-get_children_values(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf", continue = FALSE)
+children(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf", continue = FALSE)
 ```
 
 The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right symbol. 
