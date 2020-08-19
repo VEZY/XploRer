@@ -1,3 +1,33 @@
+# XploRer 0.8.0
+
+* simplification of the package for mtg computations:
+
+  - two main functions are exported: `descendants()` and `ancestors()`. The first help get values from parent to parent, and the other from children to children. They share the same arguments to simplify their usage, with filters for the scale, the symbol, the link, and also for user-defined filters (`filter_fun`). These functions are very powerfull but they can be hard to master. 
+  
+  - several helpers: `children()`, `parents()` and `leaves()`. They are wrappers around the previous functions designed to help the user make basic computations in a simple way.
+
+* add new example: `simple_plant_2.mtg`. It is a plant that is a little bit more complex than `simple_plant.mtg`. Use the following code to use it:
+
+  ```r
+  filepath= system.file("extdata", "simple_plant_2.mtg", package = "XploRer")
+  MTG2 = read_mtg(filepath)
+  ```
+
+* add `.symbol` argument to `mutate_mtg()` and .`scale` argument is now used for the scale.
+
+* Fix bug when reading mtg with trailing/leading white space in column names
+
+* Fix bug when reading mtg for classes defined with spaces before ":", e.g. "CODE :…"
+
+* Make the package compatible with scenes (several trees in a scene)
+
+* `read_mtg()` is more explicit when an error occurs in the mtg
+
+* `recursive` argument now became `continue` for all functions used to compute variables in the mtg
+
+* Add `recursivity_level` argument to the functions for computing variables in the mtg. It is used to stop the recursive search at a given level. It also takes into account the scale, meaning traversing a scale that is filtered out does not count as a level
+
+
 # XploRer 0.7.0
 
 * `get_parent_value()`, `get_children_values()` and `get_ancestors_values()` all accept expressions as attribute argument. Use `node$variable` to be sure to use the value from the node (as for `rlang::.data` is used in `dplyr`)
