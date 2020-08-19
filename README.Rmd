@@ -66,11 +66,11 @@ Mutate the MTG to add/recompute node attributes:
 
 ```{r}
 MTG%>%
-  mutate_mtg(section_surface = pi * ((node$Width / 2)^2),.scale = "Internode")%>%
+  mutate_mtg(section_surface = pi * ((node$Width / 2)^2), .symbol = "Internode")%>%
   mutate_mtg(s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE),
-             .scale = "Internode")
+             .symbol = "Internode")
 
-print(MTG$MTG, ".symbol", "section_surface", "s_surf_child_sum")
+print(MTG$MTG, ".symbol", "Width","section_surface", "s_surf_child_sum")
 ```
 
 ### 2.3 Plot

@@ -68,18 +68,19 @@ Mutate the MTG to add/recompute node attributes:
 
 ``` r
 MTG%>%
-  mutate_mtg(section_surface = pi * ((node$Width / 2)^2),
-             s_surf_child_sum = sum(get_children_values(node$section_surface),na.rm=TRUE),
-             .scale = "Internode")
+  mutate_mtg(section_surface = pi * ((node$Width / 2)^2), .symbol = "Internode")%>%
+  mutate_mtg(s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE),
+             .symbol = "Internode")
 
-print(MTG$MTG, ".symbol", "section_surface", "s_surf_child_sum")
-#>                levelName    .symbol section_surface s_surf_child_sum
-#> 1 node_1                 Individual              NA               NA
-#> 2  °--node_2                   Axis              NA               NA
-#> 3      °--node_3          Internode       0.7853982                0
-#> 4          ¦--node_4           Leaf              NA               NA
-#> 5          °--node_5      Internode              NA                0
-#> 6              °--node_6       Leaf              NA               NA
+print(MTG$MTG, ".symbol", "Width","section_surface", "s_surf_child_sum")
+#>                    levelName    .symbol Width section_surface s_surf_child_sum
+#> 1 node_1                          Scene    NA              NA               NA
+#> 2  °--node_2                 Individual    NA              NA               NA
+#> 3      °--node_3                   Axis    NA              NA               NA
+#> 4          °--node_4          Internode     1       0.7853982                0
+#> 5              ¦--node_5           Leaf     6              NA               NA
+#> 6              °--node_6      Internode    NA              NA                0
+#> 7                  °--node_7       Leaf     7              NA               NA
 ```
 
 ### 2.3 Plot
@@ -146,9 +147,8 @@ By contributing to this project, you agree to abide by its terms.
 
 To do before v1:
 
-  - [x] Make mtg helpers (`get_parent_value()`, `get_children_values()`
-    and `get_ancestors_values()`) use NSE format to homogenize with
-    `mutate_mtg()`
+  - [x] Make mtg helpers (`parent()`, `children()` and `ancestors()`)
+    use NSE format to homogenize with `mutate_mtg()`
 
   - [x] Add a “Get started” vignette (add the basic info on what we can
     do with the package)
@@ -173,7 +173,15 @@ To do before v1:
         [waldo](https://waldo.r-lib.org/)
 
   - [ ] Return the mtg with class data.tree + mtg and remove the
-    sections (not a list anymore). This wil make the mtg more usable
+    sections (not a list anymore). This will make the mtg more usable
+
+  - [ ] Read mtg from XLSX
+
+  - [x] Replace node name by .symbol name:
+
+  - [x] Use scale on actual scale, and add a new filter for symbol.
+
+  - [x] Put back the scene node
 
 In a more distant future (v2):
 
