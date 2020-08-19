@@ -10,15 +10,23 @@ reference:
 - contents:
   - autoplot.mtg
   - plotly_mtg
-- title: "Compute"
-  desc: "Functions for computing/extracting data from the MTG"
+
+- title: "Computations: Mutate the MTG"
+  desc: "Compute/extract data from the whole MTG or sub-trees"
 - contents:
   - mutate_mtg
+- title: "Computations: helpers at node scale"
+  desc: "main functions"
+- contents:
+  - ancestors
+  - descendants
   - topological_order
-  - get_parent_value
-  - get_children_values
-  - get_ancestors_values
-  - get_descendants_values
+- title: "Computations: wrappers for helpers at node scale"
+  desc: "Simple wrappers around the ancestors() and descendants() functions"
+- contents:
+  - parent
+  - children
+  - leaves
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:
