@@ -121,7 +121,7 @@
 <h1 class="page-header" data-toc-text="0.7.0">
 <a href="#xplorer-070" class="anchor"></a>XploRer 0.7.0</h1>
 <ul>
-<li><p><code>get_parent_value()</code>, <code><a href="../reference/get_children_values.html">get_children_values()</a></code> and <code>get_ancestors_values()</code> all accept expressions as attribute argument. Use <code>node$variable</code> to be sure to use the value from the node (as for <code><a href="https://rlang.r-lib.org/reference/tidyeval-data.html">rlang::.data</a></code> is used in <code>dplyr</code>)</p></li>
+<li><p><code>get_parent_value()</code>, <code>get_children_values()</code> and <code>get_ancestors_values()</code> all accept expressions as attribute argument. Use <code>node$variable</code> to be sure to use the value from the node (as for <code><a href="https://rlang.r-lib.org/reference/tidyeval-data.html">rlang::.data</a></code> is used in <code>dplyr</code>)</p></li>
 <li><p>replace fieldsAll by attributesAll in nodes following data.tree 1.0.0</p></li>
 <li><p>add Getting started vignette</p></li>
 <li><p>add contributing + code of conduct + issue template</p></li>
@@ -148,7 +148,7 @@
 <h1 class="page-header" data-toc-text="0.4.0">
 <a href="#xplorer-040" class="anchor"></a>XploRer 0.4.0</h1>
 <ul>
-<li><p>Fix issue in <code><a href="../reference/get_children_values.html">get_children_values()</a></code> when requiring a particular scale</p></li>
+<li><p>Fix issue in <code>get_children_values()</code> when requiring a particular scale</p></li>
 <li><p>Fix issue in tooltip for <code><a href="../reference/plotly_MTG.html">plotly_mtg()</a></code> when requiring several user variables</p></li>
 <li><p>Rename <code>.scale</code> in <code>scale</code> for helpers (they don’t use ellipsis anymore)</p></li>
 </ul>
@@ -158,8 +158,8 @@
 <a href="#xplorer-030" class="anchor"></a>XploRer 0.3.0</h1>
 <ul>
 <li><p><code>get_parent_value()</code> was added to get the variables of the parent of a node</p></li>
-<li><p><code><a href="../reference/get_children_values.html">get_children_values()</a></code> was added to get the variables of the children of a node</p></li>
-<li><p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> can use both <code>get_parent_value()</code> and <code><a href="../reference/get_children_values.html">get_children_values()</a></code></p></li>
+<li><p><code>get_children_values()</code> was added to get the variables of the children of a node</p></li>
+<li><p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> can use both <code>get_parent_value()</code> and <code>get_children_values()</code></p></li>
 <li><p>It is now possible to add any variable to the tooltip on hoover of a node in <code><a href="../reference/plotly_MTG.html">plotly_mtg()</a></code>, e.g.: <code><a href="../reference/plotly_MTG.html">plotly_mtg(MTG,Length,Width)</a></code></p></li>
 </ul>
 </div>

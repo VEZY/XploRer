@@ -19,6 +19,9 @@
     <loc>https://vezy.github.io/XploRer/reference/check_sections.html</loc>
   </url>
   <url>
+    <loc>https://vezy.github.io/XploRer/reference/children.html</loc>
+  </url>
+  <url>
     <loc>https://vezy.github.io/XploRer/reference/descendants.html</loc>
   </url>
   <url>
@@ -34,7 +37,7 @@
     <loc>https://vezy.github.io/XploRer/reference/find_MTG_node_column.html</loc>
   </url>
   <url>
-    <loc>https://vezy.github.io/XploRer/reference/get_children_values.html</loc>
+    <loc>https://vezy.github.io/XploRer/reference/leaves.html</loc>
   </url>
   <url>
     <loc>https://vezy.github.io/XploRer/reference/mutate_mtg.html</loc>

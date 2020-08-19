@@ -226,7 +226,7 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 <span class='co'># And more complex associations. Here is an example were we need the sum of</span>
 <span class='co'># the section_surface of children of each node:</span>
 <span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>section_surface</span> <span class='kw'>=</span> <span class='no'>pi</span> * ((<span class='no'>node</span>$<span class='no'>Width</span> / <span class='fl'>2</span>)^<span class='fl'>2</span>),
-           <span class='kw'>s_surf_child_sum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='get_children_values.html'>get_children_values</a></span>(<span class='st'>"section_surface"</span>),<span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+           <span class='kw'>s_surf_child_sum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"section_surface"</span>),<span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
 
 
 <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>,

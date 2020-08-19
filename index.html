@@ -126,7 +126,7 @@
 <p>Mutate the MTG to add/recompute node attributes:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">MTG</span><span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-             <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/get_children_values.html">get_children_values</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
+             <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu">get_children_values</span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
              <span class="kw">.scale</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
@@ -183,7 +183,7 @@
 <p>To do before v1:</p>
 <ul>
 <li><p><input type="checkbox" disabled checked>
-Make mtg helpers (<code>get_parent_value()</code>, <code><a href="reference/get_children_values.html">get_children_values()</a></code> and <code>get_ancestors_values()</code>) use NSE format to homogenize with <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code></p></li>
+Make mtg helpers (<code>get_parent_value()</code>, <code>get_children_values()</code> and <code>get_ancestors_values()</code>) use NSE format to homogenize with <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code></p></li>
 <li><p><input type="checkbox" disabled checked>
 Add a “Get started” vignette (add the basic info on what we can do with the package)</p></li>
 <li><p><input type="checkbox" disabled checked>
