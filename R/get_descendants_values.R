@@ -121,6 +121,7 @@ descendants = function(attribute, node = NULL, scale = NULL, symbol = NULL,
   if(isFALSE(continue)){
     # If not recursive, prune the tree where filtered
     children = children[which(!is_children_filtered)]
+    is_children_filtered = is_children_filtered[which(!is_children_filtered)]
   }
 
   if(length(children) == 0){

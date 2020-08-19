@@ -147,8 +147,6 @@ children = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #'  column from the MTG classes).
 #' @param link A character vector for filtering the `.link` with the children
 #' @param filter_fun Any filtering function taking a node as input.
-#' @param continue If a child is not of the right `scale`, continue until the `scale`
-#' required is met if `TRUE`, or returns `NA` if `FALSE`.
 #'
 #' @note This function is mainly intended to be used with [mutate_mtg()]. In this case,
 #' the `node` argument can be left empty (or you can put `node = node` equivalently).

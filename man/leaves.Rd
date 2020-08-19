@@ -27,9 +27,6 @@ column from the MTG classes).}
 \item{link}{A character vector for filtering the \code{.link} with the children}
 
 \item{filter_fun}{Any filtering function taking a node as input.}
-
-\item{continue}{If a child is not of the right \code{scale}, continue until the \code{scale}
-required is met if \code{TRUE}, or returns \code{NA} if \code{FALSE}.}
 }
 \value{
 The attribute values from the children of the node

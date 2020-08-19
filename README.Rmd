@@ -66,8 +66,8 @@ Mutate the MTG to add/recompute node attributes:
 
 ```{r}
 MTG%>%
-  mutate_mtg(section_surface = pi * ((node$Width / 2)^2),
-             s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE),
+  mutate_mtg(section_surface = pi * ((node$Width / 2)^2),.scale = "Internode")%>%
+  mutate_mtg(s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE),
              .scale = "Internode")
 
 print(MTG$MTG, ".symbol", "section_surface", "s_surf_child_sum")
@@ -138,11 +138,11 @@ To do before v1:
 
 - [ ] Read mtg from XLSX
 
-- [ ] Replace node name by .symbol name:
+- [x] Replace node name by .symbol name:
 
-- [ ] Use scale on actual scale, and add a new filter for symbol.
+- [x] Use scale on actual scale, and add a new filter for symbol.
 
-- [ ] Put back the scene node
+- [x] Put back the scene node
 
 In a more distant future (v2):
 
