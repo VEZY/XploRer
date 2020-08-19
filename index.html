@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -125,18 +125,19 @@
 <a href="#22-mutate" class="anchor"></a>2.2 Mutate</h3>
 <p>Mutate the MTG to add/recompute node attributes:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">MTG</span><span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-             <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu">get_children_values</span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
-             <span class="kw">.scale</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>), <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)<span class="kw">%&gt;%</span>
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/children.html">children</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
+             <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
-<span class="co">#&gt;                levelName    .symbol section_surface s_surf_child_sum</span>
-<span class="co">#&gt; 1 node_1                 Individual              NA               NA</span>
-<span class="co">#&gt; 2  °--node_2                   Axis              NA               NA</span>
-<span class="co">#&gt; 3      °--node_3          Internode       0.7853982                0</span>
-<span class="co">#&gt; 4          ¦--node_4           Leaf              NA               NA</span>
-<span class="co">#&gt; 5          °--node_5      Internode              NA                0</span>
-<span class="co">#&gt; 6              °--node_6       Leaf              NA               NA</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
+<span class="co">#&gt;                    levelName    .symbol Width section_surface s_surf_child_sum</span>
+<span class="co">#&gt; 1 node_1                          Scene    NA              NA               NA</span>
+<span class="co">#&gt; 2  °--node_2                 Individual    NA              NA               NA</span>
+<span class="co">#&gt; 3      °--node_3                   Axis    NA              NA               NA</span>
+<span class="co">#&gt; 4          °--node_4          Internode     1       0.7853982                0</span>
+<span class="co">#&gt; 5              ¦--node_5           Leaf     6              NA               NA</span>
+<span class="co">#&gt; 6              °--node_6      Internode    NA              NA                0</span>
+<span class="co">#&gt; 7                  °--node_7       Leaf     7              NA               NA</span></pre></div>
 </div>
 <div id="23-plot" class="section level3">
 <h3 class="hasAnchor">
@@ -183,7 +184,7 @@
 <p>To do before v1:</p>
 <ul>
 <li><p><input type="checkbox" disabled checked>
-Make mtg helpers (<code>get_parent_value()</code>, <code>get_children_values()</code> and <code>get_ancestors_values()</code>) use NSE format to homogenize with <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code></p></li>
+Make mtg helpers (<code><a href="reference/parent.html">parent()</a></code>, <code><a href="reference/children.html">children()</a></code> and <code><a href="reference/ancestors.html">ancestors()</a></code>) use NSE format to homogenize with <code><a href="reference/mutate_mtg.html">mutate_mtg()</a></code></p></li>
 <li><p><input type="checkbox" disabled checked>
 Add a “Get started” vignette (add the basic info on what we can do with the package)</p></li>
 <li><p><input type="checkbox" disabled checked>
@@ -211,7 +212,15 @@ Print the problems nicely using <a href="https://cli.r-lib.org/">cli</a> and/or 
 </ul>
 </li>
 <li><p><input type="checkbox" disabled>
-Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This wil make the mtg more usable</p></li>
+Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This will make the mtg more usable</p></li>
+<li><p><input type="checkbox" disabled>
+Read mtg from XLSX</p></li>
+<li><p><input type="checkbox" disabled checked>
+Replace node name by .symbol name:</p></li>
+<li><p><input type="checkbox" disabled checked>
+Use scale on actual scale, and add a new filter for symbol.</p></li>
+<li><p><input type="checkbox" disabled checked>
+Put back the scene node</p></li>
 </ul>
 <p>In a more distant future (v2):</p>
 <ul>

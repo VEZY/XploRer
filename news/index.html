@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">XploRer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
       </span>
     </div>
 
@@ -117,6 +117,31 @@
       <small>Source: <a href='https://github.com/VEZY/XploRer/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="xplorer-080" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.0">
+<a href="#xplorer-080" class="anchor"></a>XploRer 0.8.0</h1>
+<ul>
+<li>
+<p>simplification of the package for mtg computations:</p>
+<ul>
+<li><p>two main functions are exported: <code><a href="../reference/descendants.html">descendants()</a></code> and <code><a href="../reference/ancestors.html">ancestors()</a></code>. The first help get values from parent to parent, and the other from children to children. They share the same arguments to simplify their usage, with filters for the scale, the symbol, the link, and also for user-defined filters (<code>filter_fun</code>). These functions are very powerfull but they can be hard to master.</p></li>
+<li><p>several helpers: <code><a href="../reference/children.html">children()</a></code>, <code>parents()</code> and <code><a href="../reference/leaves.html">leaves()</a></code>. They are wrappers around the previous functions designed to help the user make basic computations in a simple way.</p></li>
+</ul>
+</li>
+<li>
+<p>add new example: <code>simple_plant_2.mtg</code>. It is a plant that is a little bit more complex than <code>simple_plant.mtg</code>. Use the following code to use it:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="no">filepath</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"simple_plant_2.mtg"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"XploRer"</span>)
+<span class="no">MTG2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)</pre></div>
+</li>
+<li><p>add <code>.symbol</code> argument to <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> and .<code>scale</code> argument is now used for the scale.</p></li>
+<li><p>Fix bug when reading mtg with trailing/leading white space in column names</p></li>
+<li><p>Fix bug when reading mtg for classes defined with spaces before “:”, e.g. “CODE :…”</p></li>
+<li><p>Make the package compatible with scenes (several trees in a scene)</p></li>
+<li><p><code><a href="../reference/read_MTG.html">read_mtg()</a></code> is more explicit when an error occurs in the mtg</p></li>
+<li><p><code>recursive</code> argument now became <code>continue</code> for all functions used to compute variables in the mtg</p></li>
+<li><p>Add <code>recursivity_level</code> argument to the functions for computing variables in the mtg. It is used to stop the recursive search at a given level. It also takes into account the scale, meaning traversing a scale that is filtered out does not count as a level</p></li>
+</ul>
+</div>
     <div id="xplorer-070" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.0">
 <a href="#xplorer-070" class="anchor"></a>XploRer 0.7.0</h1>
