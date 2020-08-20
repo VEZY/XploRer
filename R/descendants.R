@@ -82,6 +82,8 @@ descendants = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     }
   }
 
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
+
   # Is there any filter happening for the current node?:
   is_branching = !is.null(link) && !node$.link %in% link
   is_symbol_filtered = !is.null(symbol) && !node$.symbol %in% symbol

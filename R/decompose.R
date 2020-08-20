@@ -58,6 +58,8 @@ decompose = function(attribute, node = NULL, decomp_type = c("symbol","scale"), 
     }
   }
 
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
+
   decomp_type = match.arg(arg = decomp_type, choices = c("symbol","scale"), several.ok = FALSE)
 
   decompose_(!!attribute_expr, node = node, ref_node = node, symbol = symbol, scale = scale,

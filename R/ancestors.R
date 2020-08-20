@@ -68,6 +68,8 @@ ancestors  = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     }
   }
 
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
+
   # Is there any filter happening for the current node?:
   is_scale_filtered = !is.null(scale) && !node$.scale %in% scale
   is_symbol_filtered = !is.null(symbol) && !node$.symbol %in% symbol

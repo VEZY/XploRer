@@ -48,6 +48,8 @@ parent = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     }
   }
 
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
+
   ancestors(!!attribute_expr, node = node, scale = scale, symbol = symbol,
                        link = link, filter_fun = filter_fun, self = FALSE,
                        continue = continue, recursivity_level = 1)
@@ -128,6 +130,8 @@ children = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     }
   }
 
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
+
   descendants(attribute = !!attribute_expr, node = node, scale = scale, symbol = symbol,
               link = link, filter_fun = filter_fun,
               continue = continue, recursivity_level = 1)
@@ -196,6 +200,8 @@ leaves = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                                                              scale = scale, symbol = symbol,
                                                              link = link,
                                                              filter_fun = filter_fun)) == 0))
+
+  check_filters(node = node, scale = scale, symbol = symbol, link = link)
 
   descendants(attribute = !!attribute_expr, node = node, scale = scale, symbol = symbol,
               link = link, filter_fun = filt,

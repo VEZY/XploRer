@@ -59,3 +59,58 @@ attribute_as_name = function(attribute){
 extract_node = function(mtg,name){
   data.tree::FindNode(mtg$MTG,name)
 }
+
+
+#' Check filters
+#'
+#' Check the consistency of the filters
+#'
+#' @param node The node
+#' @param symbol A character vector of `.symbol` to filter (should match the symbols given by the SYMBOL
+#'  column from the MTG classes).
+#' @param scale An integer vector of `.scale` to filter (should match the scales given by the SCALE
+#'  column from the MTG classes).
+#' @param link A character vector of `.link` to filter
+#'
+#' @return Nothing. Return an error if anything went wrong.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
+#' MTG = read_mtg(filepath)
+#' check_filters(node = extract_node(MTG, "node_5"), scale = 1, symbol = "Individual",link = "/")
+#' }
+check_filters = function(node = NULL, scale = NULL, symbol = NULL,
+                         link = NULL){
+
+  if(!is.null(scale)){
+    if(!is.numeric(scale)) stop("The scale argument should be a numeric")
+
+    if(!scale %in% node$root$.scales){
+      stop("The scale argument should be one of: ",
+           paste(unique(node$root$.scales), collapse = ", "))
+    }
+  }
+
+  if(!is.null(symbol)){
+    if(!is.character(symbol)){
+      stop("The symbol argument should be a character")
+    }
+
+    if(!symbol %in% node$root$.symbols){
+      stop("The symbol argument should be one of: ",
+           paste(unique(node$root$.symbols), collapse = ", "))
+    }
+  }
+
+  if(!is.null(link)){
+    if(!is.character(link)){
+      stop("The link argument should be a character")
+    }
+    if(!link %in% c("/","<","+")){
+      stop("The symbol argument should be one of: /, < or +")
+    }
+  }
+}
+

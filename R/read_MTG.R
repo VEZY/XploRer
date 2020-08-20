@@ -276,6 +276,8 @@ parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
 
   # Create the root node (the first one):
   node_1 = data.tree::Node$new(name = paste0("node_",1))
+  node_1$.symbols = classes$SYMBOL
+  node_1$.scales = classes$SCALE
 
   # Assign the attributes to the root :
   for(i in names(node_1_attr)){
