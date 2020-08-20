@@ -87,7 +87,7 @@ check_filters = function(node = NULL, scale = NULL, symbol = NULL,
   if(!is.null(scale)){
     if(!is.numeric(scale)) stop("The scale argument should be a numeric")
 
-    if(!scale %in% node$root$.scales){
+    if(!all(scale %in% node$root$.scales)){
       stop("The scale argument should be one of: ",
            paste(unique(node$root$.scales), collapse = ", "))
     }
@@ -98,7 +98,7 @@ check_filters = function(node = NULL, scale = NULL, symbol = NULL,
       stop("The symbol argument should be a character")
     }
 
-    if(!symbol %in% node$root$.symbols){
+    if(!all(symbol %in% node$root$.symbols)){
       stop("The symbol argument should be one of: ",
            paste(unique(node$root$.symbols), collapse = ", "))
     }
@@ -108,7 +108,7 @@ check_filters = function(node = NULL, scale = NULL, symbol = NULL,
     if(!is.character(link)){
       stop("The link argument should be a character")
     }
-    if(!link %in% c("/","<","+")){
+    if(!all(link %in% c("/","<","+"))){
       stop("The symbol argument should be one of: /, < or +")
     }
   }
