@@ -204,8 +204,8 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4      node_5      node_9 
 #&gt; "Internode"      "Leaf" "Internode" </div><div class='input'>
 <span class='co'># using filters to remove nodes that we don't need:</span>
-<span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>, <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4 
-#&gt; "Internode" </div><div class='input'>
+<span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>, <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4      node_9 
+#&gt; "Internode" "Internode" </div><div class='input'>
 <span class='co'># We can check the function worked well by printing the symbols of each nodes:</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                              levelName    .symbol
 #&gt; 1  node_1                                   Scene
