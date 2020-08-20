@@ -67,8 +67,8 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 
   tree_df =
     tree_df%>%
-    dplyr::left_join(data.frame(SYMBOL = attr(mtg,"classes")$SYMBOL,
-                                SCALE = attr(mtg,"classes")$SCALE,
+    dplyr::left_join(data.frame(SYMBOL = mtg$root$.symbols,
+                                SCALE = mtg$root$.scales,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
     dplyr::group_by(.data$topological_order)%>%
@@ -138,6 +138,13 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
     ggplot2::labs(color = "Topological order")
 }
 
+#' @rdname autoplot.mtg
+#' @export
+autoplot.Node = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
+  class(mtg) = append(class(mtg), "mtg")
+  autoplot.mtg(mtg)
+}
+
 #' Plot an interactive MTG
 #'
 #' @param mtg An MTG, as from [read_mtg()]
@@ -170,7 +177,7 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 #' plotly_mtg(MTG, node_width = Width)
 #' # Here the tooltip will show the Width, labeled as "node_width"
 #'
-plotly_mtg = function(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
+plotly_mtg.mtg = function(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
   mtg_plot = autoplot.mtg(mtg, scale = .scale, angle = .angle, phylotaxy = .phylotaxy,...)
 
   dots = rlang::enexprs(...)
@@ -180,6 +187,20 @@ plotly_mtg = function(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
   dot_names[not_named] = auto_named_dots[not_named]
 
   plotly::ggplotly(p = mtg_plot, tooltip= c("name", ".link", ".symbol", ".index",dot_names))
+}
+
+
+#' @rdname plotly_mtg.mtg
+#' @export
+plotly_mtg.Node = function(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE){
+  class(mtg) = append(class(mtg), "mtg")
+  plotly_mtg.mtg(mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE)
+}
+
+#' @rdname plotly_mtg.mtg
+#' @export
+plotly_mtg = function (mtg, ..., .scale = NULL, .angle = 45, .phylotaxy = TRUE) {
+  UseMethod("plotly_mtg", mtg)
 }
 
 #' Rotate coordinates

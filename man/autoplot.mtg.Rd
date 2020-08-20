@@ -2,9 +2,12 @@
 % Please edit documentation in R/plot_MTG.R
 \name{autoplot.mtg}
 \alias{autoplot.mtg}
+\alias{autoplot.Node}
 \title{Plot an MTG}
 \usage{
 \method{autoplot}{mtg}(mtg, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
+
+\method{autoplot}{Node}(mtg, scale = NULL, angle = 45, phylotaxy = TRUE, ...)
 }
 \arguments{
 \item{mtg}{An MTG, as from \code{\link[=read_mtg]{read_mtg()}}}
