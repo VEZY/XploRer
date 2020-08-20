@@ -2,7 +2,7 @@
 % Please edit documentation in R/mtg_getters_shortcuts.R
 \name{children}
 \alias{children}
-\title{Get children value}
+\title{Get children values}
 \usage{
 children(
   attribute,

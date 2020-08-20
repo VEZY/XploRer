@@ -1,4 +1,4 @@
-#' Get ancestors value
+#' Get ancestors values
 #'
 #' @description Get attribute values from all ancestors (basipetal).
 #'

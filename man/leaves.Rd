@@ -2,7 +2,7 @@
 % Please edit documentation in R/mtg_getters_shortcuts.R
 \name{leaves}
 \alias{leaves}
-\title{Get leaves value}
+\title{Get leaves values}
 \usage{
 leaves(
   attribute,

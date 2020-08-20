@@ -56,7 +56,7 @@ parent = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 
 
 
-#' Get children value
+#' Get children values
 #'
 #' @description Get attribute values from the children of a node.
 #'
@@ -134,7 +134,7 @@ children = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 }
 
 
-#' Get leaves value
+#' Get leaves values
 #'
 #' @description Get attribute values from the terminal nodes of the descendants sub-tree of a
 #' node (i.e. the "leaves" in computer science terms).
@@ -183,7 +183,7 @@ leaves = function(attribute, node = NULL, scale = NULL, symbol = NULL,
     if(!environmentName(env = parent.frame()) == "R_GlobalEnv"){
       node = eval(quote(node), parent.frame())
     }else{
-      stop("node should be given when 'children()' is used interactively")
+      stop("node should be given when 'leaves()' is used interactively")
     }
   }
 

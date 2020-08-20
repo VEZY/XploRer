@@ -163,3 +163,16 @@ test_that("descendants: not recursive and self", {
                                 continue = FALSE, self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 })
+
+test_that("leaves", {
+  expect_equal(leaves("length", node = A4$MTG),
+               c(node_12 = 10.3, node_11 = 5.2, node_16 = 19.5, node_15 = 6))
+})
+
+
+test_that("leaves: using filters", {
+  expect_equal(leaves("ID", node = A4$MTG, scale = 2),
+               c(node_10 = 643, node_14 = 647))
+  expect_equal(leaves("ID", node = A4$MTG, symbol = "A"),
+               c(node_10 = 643, node_14 = 647))
+})

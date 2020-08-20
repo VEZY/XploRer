@@ -20,13 +20,16 @@ reference:
 - contents:
   - ancestors
   - descendants
-  - topological_order
 - title: "Computations: wrappers for helpers at node scale"
   desc: "Simple wrappers around the ancestors() and descendants() functions"
 - contents:
   - parent
   - children
   - leaves
+  - decompose
+- title: "Computations: topological order"
+- contents:
+  - topological_order
 # - title: "Analyze"
 #   desc: "Functions for plotting the MTG"
 # - contents:

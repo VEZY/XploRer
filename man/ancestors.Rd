@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_ancestors_values.R
 \name{ancestors}
 \alias{ancestors}
-\title{Get ancestors value}
+\title{Get ancestors values}
 \usage{
 ancestors(
   attribute,

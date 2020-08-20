@@ -28,4 +28,3 @@ test = "Length"
 attribute_as_name(rlang::expr(test))
 }
 }
-\keyword{internal}

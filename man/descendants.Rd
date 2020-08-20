@@ -80,8 +80,9 @@ descendants(attribute = "length", node = node_8, symbol = "S", recursivity_level
 descendants(attribute = "length", node = node_8, symbol = "S",
                        link = c("/","<"), continue = FALSE)
 
-# To get the values for the leaves (i.e. the last node) only:
+# To get the values for the leaves (i.e. the terminal node) only:
 descendants(attribute = "length", node = node_8, filter_fun = data.tree::isLeaf)
+# Note: prefer using leaves() instead as it takes scales into account.
 
 # Length were observed at the "S" scale (S = segment of an axis between two branches),
 # but we need the length at the axis scale, to do so:
