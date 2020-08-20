@@ -37,8 +37,10 @@ read_mtg = function(file) {
 
   MTG = parse_MTG_MTG(MTG_file,classes,description,features,MTG_section_begin)
 
-  MTG = list(classes = classes, description = description,
-             features = features,MTG = MTG)
+  attr(MTG, which = "classes") = classes
+  attr(MTG, which = "description") = description
+  attr(MTG, which = "features") = features
+
   class(MTG) = append(class(MTG), "mtg")
   return(MTG)
 }

@@ -13,9 +13,9 @@
 #' filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 #' MTG= read_mtg(filepath)
 #' topological_order(MTG)
-#' print(MTG$MTG, "topological_order")
+#' print(MTG, "topological_order")
 topological_order = function(MTG, ascend = FALSE){
-  MTG$MTG$Do(
+  MTG$Do(
     function(node){
       parent_order = node$parent$topological_order
       if(is.null(parent_order)){
@@ -30,7 +30,7 @@ topological_order = function(MTG, ascend = FALSE){
 
   if(!ascend){
     # Reverse the order of the topology orders
-    orders = MTG$MTG$Get("topological_order")
+    orders = MTG$Get("topological_order")
     descend_orders = rep(NA_integer_, length(orders))
 
     ascend_orders = unique(orders)
@@ -40,6 +40,6 @@ topological_order = function(MTG, ascend = FALSE){
       descend_orders[orders == ascend_orders[i]] = rev_orders[i]
     }
 
-    MTG$MTG$Set(topological_order = descend_orders)
+    MTG$Set(topological_order = descend_orders)
   }
 }

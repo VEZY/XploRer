@@ -72,7 +72,7 @@
 #'            s_surf_child_sum = sum(children("section_surface"),na.rm=TRUE))
 #'
 #'
-#' data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
+#' data.tree::ToDataFrameTree(MTG,"Length","Length2","Length3",
 #' "Length_parent","section_surface","s_surf_child_sum")
 mutate_mtg = function(data,..., .scale = NULL, .symbol = NULL,
                       .traversal = c("pre-order", "post-order",
@@ -118,7 +118,7 @@ mutate_mtg = function(data,..., .scale = NULL, .symbol = NULL,
   }
 
   # Actually applying the functions to all nodes:
-  data$MTG$Do(fun = function(node){lapply(dot_funs, do.call, list(node = node))},
+  data$Do(fun = function(node){lapply(dot_funs, do.call, list(node = node))},
               traversal = .traversal,
               pruneFun = .pruneFun,
               filterFun = filterFun)

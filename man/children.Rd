@@ -70,9 +70,9 @@ children("Width", node = node_4, symbol = "Leaf", continue = FALSE)
 
 # To get the values of the children of each node:
 mutate_mtg(MTG, children_width = children("Width"))
-print(MTG$MTG, "Width", "children_width")
+print(MTG, "Width", "children_width")
 
 # And using only the bodes with symbol "Leaf":
 mutate_mtg(MTG, children_width2 = children("Width", symbol = "Leaf", continue = FALSE))
-print(MTG$MTG, "Width", "children_width2")
+print(MTG, "Width", "children_width2")
 }

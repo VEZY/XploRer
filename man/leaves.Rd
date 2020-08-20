@@ -44,15 +44,15 @@ filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG = read_mtg(filepath)
 
 # The MTG has two leaves (node_5 and node_7):
-leaves("Length", node = MTG$MTG)
+leaves("Length", node = MTG)
 # We can check the function worked well by printing the symbols of each nodes:
-print(MTG$MTG, ".symbol")
+print(MTG, ".symbol")
 
 # If we need the terminal Internodes:
-leaves("Length", node = MTG$MTG, symbol = "Internode")
+leaves("Length", node = MTG, symbol = "Internode")
 
 # Or the leaves at a given scale:
-print(MTG$MTG, ".scale")
-leaves("Length", node = MTG$MTG, scale = 2)
+print(MTG, ".scale")
+leaves("Length", node = MTG, scale = 2)
 
 }

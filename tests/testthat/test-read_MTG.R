@@ -54,7 +54,6 @@ test_that("Parse MTG", {
 
 test_that("Read MTG file", {
   MTG = read_mtg(filepath)
-  expect_length(MTG,4)
-  expect_equal(names(MTG),c("classes","description","features","MTG"))
-  expect_equal(MTG$MTG,parse_MTG_MTG(MTG_file,classes,description,features))
+  expect_equal(names(attributes(MTG)),c("class","classes","description","features"))
+  expect_equal(MTG,parse_MTG_MTG(MTG_file,classes,description,features))
 })

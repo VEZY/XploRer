@@ -22,5 +22,5 @@ Compute the topological order of a tree
 filepath= system.file("extdata", "simple_plant.mtg", package = "XploRer")
 MTG= read_mtg(filepath)
 topological_order(MTG)
-print(MTG$MTG, "topological_order")
+print(MTG, "topological_order")
 }

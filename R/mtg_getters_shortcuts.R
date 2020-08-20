@@ -108,11 +108,11 @@ parent = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #'
 #' # To get the values of the children of each node:
 #' mutate_mtg(MTG, children_width = children("Width"))
-#' print(MTG$MTG, "Width", "children_width")
+#' print(MTG, "Width", "children_width")
 #'
 #' # And using only the bodes with symbol "Leaf":
 #' mutate_mtg(MTG, children_width2 = children("Width", symbol = "Leaf", continue = FALSE))
-#' print(MTG$MTG, "Width", "children_width2")
+#' print(MTG, "Width", "children_width2")
 children = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                                link = NULL, filter_fun = NULL,
                                continue = TRUE) {
@@ -164,16 +164,16 @@ children = function(attribute, node = NULL, scale = NULL, symbol = NULL,
 #' MTG = read_mtg(filepath)
 #'
 #' # The MTG has two leaves (node_5 and node_7):
-#' leaves("Length", node = MTG$MTG)
+#' leaves("Length", node = MTG)
 #' # We can check the function worked well by printing the symbols of each nodes:
-#' print(MTG$MTG, ".symbol")
+#' print(MTG, ".symbol")
 #'
 #' # If we need the terminal Internodes:
-#' leaves("Length", node = MTG$MTG, symbol = "Internode")
+#' leaves("Length", node = MTG, symbol = "Internode")
 #'
 #' # Or the leaves at a given scale:
-#' print(MTG$MTG, ".scale")
-#' leaves("Length", node = MTG$MTG, scale = 2)
+#' print(MTG, ".scale")
+#' leaves("Length", node = MTG, scale = 2)
 #'
 leaves = function(attribute, node = NULL, scale = NULL, symbol = NULL,
                   link = NULL, filter_fun = NULL){

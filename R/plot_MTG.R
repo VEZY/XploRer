@@ -37,13 +37,13 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
   names(dots) = dot_names
 
   # Compute the topological order if missing from the mtg:
-  if(!"topological_order" %in% mtg$MTG$attributesAll){
+  if(!"topological_order" %in% mtg$attributesAll){
     topological_order(mtg)
   }
 
   if(length(dots) == 0){
     tree_df =
-      data.tree::ToDataFrameNetwork(mtg$MTG, "name", ".link", ".symbol", ".index",
+      data.tree::ToDataFrameNetwork(mtg, "name", ".link", ".symbol", ".index",
                                     "topological_order")
   }else{
     name_list = as.character(dots)
@@ -51,7 +51,7 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 
     tree_df =
       do.call(data.tree::ToDataFrameNetwork, args =
-                c(list(x = mtg$MTG,
+                c(list(x = mtg,
                      "name", ".link", ".symbol", ".index",
                      "topological_order"),as.character(dots)))%>%
       dplyr::rename(!!!name_list)
@@ -67,7 +67,8 @@ autoplot.mtg = function(mtg, scale = NULL, angle = 45, phylotaxy = TRUE,...){
 
   tree_df =
     tree_df%>%
-    dplyr::left_join(data.frame(SYMBOL = mtg$classes$SYMBOL, SCALE = mtg$classes$SCALE,
+    dplyr::left_join(data.frame(SYMBOL = attr(mtg,"classes")$SYMBOL,
+                                SCALE = attr(mtg,"classes")$SCALE,
                                 stringsAsFactors = FALSE),
                      by = c(".symbol" = "SYMBOL"))%>%
     dplyr::group_by(.data$topological_order)%>%

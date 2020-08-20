@@ -91,7 +91,7 @@ mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
            s_surf_child_sum = sum(children("section_surface"),na.rm=TRUE))
 
 
-data.tree::ToDataFrameTree(MTG$MTG,"Length","Length2","Length3",
+data.tree::ToDataFrameTree(MTG,"Length","Length2","Length3",
 "Length_parent","section_surface","s_surf_child_sum")
 }
 \seealso{

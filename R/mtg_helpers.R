@@ -57,7 +57,7 @@ attribute_as_name = function(attribute){
 #' MTG = read_mtg(filepath)
 #' extract_node(MTG,"node_6")
 extract_node = function(mtg,name){
-  data.tree::FindNode(mtg$MTG,name)
+  data.tree::FindNode(mtg,name)
 }
 
 

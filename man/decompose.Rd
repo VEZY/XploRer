@@ -62,6 +62,6 @@ decompose(".symbol", node = extract_node(MTG,"node_3"), symbol = "Internode",
           decomp_type = "symbol")
 
 # We can check the function worked properly by printing the symbols of each nodes:
-print(MTG$MTG, ".symbol")
+print(MTG, ".symbol")
 
 }

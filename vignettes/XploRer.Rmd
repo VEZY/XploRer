@@ -43,25 +43,25 @@ The `read_mtg()` function returns a list of 4:
 - classes: a `data.frame` that holds information about the type of nodes used in the MTG (e.g. Internode, Leaf, etc...), the MTG scale for each one, and some more details. Here is the classes `data.frame` from our example:
 
     ```{r}
-    MTG$classes
+    attr(MTG,which = "classes")
     ```
 
 - description: a `data.frame` defining the potential topological constraints existing between nodes. Here is the description `data.frame` from our example:
 
     ```{r}
-    MTG$description
+    attr(MTG,which = "description")
     ```
 
 - features: a `data.frame` listing all attributes present in the file and their associated type. Here is the features `data.frame` from our example:
 
     ```{r}
-    MTG$features
+    attr(MTG,which = "features")
     ```
 
 - MTG: a `data.tree` structure defining all nodes, their attributes and their relationships:
 
     ```{r}
-    MTG$MTG
+    MTG
     ```
 
 ## Print/extract variables
@@ -69,14 +69,14 @@ The `read_mtg()` function returns a list of 4:
 The variables / attributes of an MTG can be printed using the `print()` function on the MTG field, *e.g.*:
 
 ```{r}
-print(MTG$MTG, ".symbol", "Length")
+print(MTG, ".symbol", "Length")
 ```
 
 
 The variables can also be extracted in a `data.frame()` using the functions from the `data.tree` package *e.g.*:
 
 ```{r}
-data.tree::ToDataFrameTree(MTG$MTG,"Length","Width")
+data.tree::ToDataFrameTree(MTG,"Length","Width")
 ```
 
 
@@ -95,7 +95,7 @@ MTG = read_mtg(filepath)
 # And mutate it by adding two new variables, Length2 and Length3:
 mutate_mtg(MTG, Length2 = node$Length + 2, Length3 = node$Length2 * 2)
 
-print(MTG$MTG, ".symbol", "Length", "Length2", "Length3")
+print(MTG, ".symbol", "Length", "Length2", "Length3")
 ```
 
 We can note two things here:
@@ -132,7 +132,7 @@ mutate_mtg(MTG, total_length = sum(ancestors(Length,self = TRUE),na.rm = TRUE))
 Here are the results for both:
 
 ```{r}
-print(MTG$MTG,".symbol","Length","Length_parent","total_length")
+print(MTG,".symbol","Length","Length_parent","total_length")
 ```
 
 ### Use children values
@@ -147,7 +147,7 @@ It can be used to get *e.g.* the average length of the children:
 
 ```{r}
 mutate_mtg(MTG, children_length = mean(children(node$Length), na.rm = TRUE))
-print(MTG$MTG, ".symbol", "Length","children_length")
+print(MTG, ".symbol", "Length","children_length")
 ```
 
 ### Combine values
@@ -176,8 +176,8 @@ MTG$classes
 To get the actual symbol of a node use the `.symbol` field on a node, and the `.scale` field for the scale. Here is an example for the root node of the mtg:
 
 ```{r}
-MTG$MTG$.symbol
-MTG$MTG$.scale
+MTG$.symbol
+MTG$.scale
 ```
 
 
@@ -194,7 +194,7 @@ parent(attribute = "Length", node = extract_node(MTG, "node_6"), symbol = "Axis"
 Here it returns `NA` because the first parent is an `Internode`, and the first node with symbol "Axis" (`node_2`) has no values for "Length", see by yourself:
 
 ```{r}
-print(MTG$MTG, ".symbol", "Length")
+print(MTG, ".symbol", "Length")
 ```
 
 By default, the function will search for the first node which satisfies the symbol required by the user and return its value:
@@ -210,13 +210,13 @@ The `continue` argument can be used in `parent()` and `children()` functions to 
 Here is an example with recursive behavior (the default):
 
 ```{r}
-children(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf")
+children(attribute = Length, node = MTG$node_2, symbol = "Leaf")
 ```
 
 And without:
 
 ```{r}
-children(attribute = Length, node = MTG$MTG$node_2, symbol = "Leaf", continue = FALSE)
+children(attribute = Length, node = MTG$node_2, symbol = "Leaf", continue = FALSE)
 ```
 
 The function returns `NA` without the recursive behavior because "node_2" has one child ("node_3") that is not of the right symbol. 
@@ -236,7 +236,7 @@ mutate_mtg(MTG, section_surface = pi * ((node$Width / 2)^2),
           .symbol = "Internode")%>%
 mutate_mtg(area = node$Width * node$Length, .symbol = "Leaf")
 
-print(MTG$MTG, ".symbol", "Width","section_surface", "area")
+print(MTG, ".symbol", "Width","section_surface", "area")
 ```
 
 ## Plotting a plant

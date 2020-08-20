@@ -16,7 +16,7 @@ filepath3= system.file("extdata", "tree1h.mtg", package = "XploRer")
 tree1h = read_mtg(file = filepath3)
 # Taking only a sub-part here:
 A4 = list()
-A4$MTG = extract_node(tree1h, "node_6")
+A4 = extract_node(tree1h, "node_6")
 
 # File 4: A simple plant with a leaf added on the first internode
 filepath4= system.file("extdata", "simple_plant_3.mtg", package = "XploRer")
@@ -37,7 +37,7 @@ test_that("parent: requesting an attributes that is missing", {
 })
 
 test_that("parent: test root node", {
-  test = parent("Length", node = MTG$MTG)
+  test = parent("Length", node = MTG)
   expect_length(test, 0)
   expect_true(is.null(test))
 })
@@ -53,7 +53,7 @@ test_that("children: requesting an attribute", {
   test = children(attribute = "Length", node = node_6)
   expect_equal(test,c(node_7 = 12.0))
 
-  test2 = children(attribute = "Length", node = MTG2$MTG$node_2$node_3$node_4)
+  test2 = children(attribute = "Length", node = MTG2$node_2$node_3$node_4)
   expect_equal(test2,c(node_5 = NA, node_8 = 6.0))
 })
 
@@ -120,7 +120,7 @@ test_that("descendants: requesting an attribute", {
 
 
 test_that("descendants", {
-  test = descendants(attribute = "length", node = A4$MTG)
+  test = descendants(attribute = "length", node = A4)
   expect_equal(test,c(node_7 = 27.5, node_8 = NA, node_13 = 6, node_9 = 3.5,
                       node_10 = NA, node_12 = 10.3, node_11 = 5.2, node_14 = NA,
                       node_16 = 19.5, node_15 = 6))
@@ -128,62 +128,62 @@ test_that("descendants", {
 
 test_that("descendants: filter by symbol", {
   # By S:
-  test = descendants(attribute = "length", node = A4$MTG, symbol = "S")
+  test = descendants(attribute = "length", node = A4, symbol = "S")
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 
   # By A:
-  test = descendants(attribute = "length", node = A4$MTG, symbol = "A")
+  test = descendants(attribute = "length", node = A4, symbol = "A")
   expect_equal(test, c(node_8 = NA_real_, node_10 = NA_real_, node_14 = NA_real_))
 })
 
 test_that("descendants: no recursivity", {
   # By S, non-recursive:
-  test = descendants(attribute = "length", node = A4$MTG, symbol = "S",
+  test = descendants(attribute = "length", node = A4, symbol = "S",
                                 continue = FALSE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 
   # By A, non-recursive:
-  test = descendants(attribute = "length", node = A4$MTG, symbol = "A",
+  test = descendants(attribute = "length", node = A4, symbol = "A",
                                 continue = FALSE)
   expect_null(test)
 })
 
 test_that("descendants: with self", {
-  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+  test = descendants(attribute = "length", node = A4$node_7, symbol = "S",
                                 self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 
   # Without self:
-  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+  test = descendants(attribute = "length", node = A4$node_7, symbol = "S",
                                 self = FALSE)
   expect_equal(test,c(node_13 = 6, node_9 = 3.5, node_12 = 10.3,
                       node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 })
 
 test_that("descendants: not recursive and self", {
-  test = descendants(attribute = "length", node = A4$MTG$node_7, symbol = "S",
+  test = descendants(attribute = "length", node = A4$node_7, symbol = "S",
                                 continue = FALSE, self = TRUE)
   expect_equal(test,c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 })
 
 test_that("leaves", {
-  expect_equal(leaves("length", node = A4$MTG),
+  expect_equal(leaves("length", node = A4),
                c(node_12 = 10.3, node_11 = 5.2, node_16 = 19.5, node_15 = 6))
 })
 
 
 test_that("leaves: using filters", {
-  expect_equal(leaves("ID", node = A4$MTG, scale = 2),
+  expect_equal(leaves("ID", node = A4, scale = 2),
                c(node_10 = 643, node_14 = 647))
-  expect_equal(leaves("ID", node = A4$MTG, symbol = "A"),
+  expect_equal(leaves("ID", node = A4, symbol = "A"),
                c(node_10 = 643, node_14 = 647))
 })
 
 
 test_that("decompose", {
-  expect_equal(decompose("length", node = A4$MTG),
+  expect_equal(decompose("length", node = A4),
                c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
 })
 

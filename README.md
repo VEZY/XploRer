@@ -58,6 +58,11 @@ Read a simple MTG file:
 
 ``` r
 library(XploRer)
+#> 
+#> Attaching package: 'XploRer'
+#> The following object is masked from 'package:stats':
+#> 
+#>     decompose
 
 MTG = read_mtg("https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg")
 ```
@@ -72,7 +77,7 @@ MTG%>%
   mutate_mtg(s_surf_child_sum = sum(children(node$section_surface),na.rm=TRUE),
              .symbol = "Internode")
 
-print(MTG$MTG, ".symbol", "Width","section_surface", "s_surf_child_sum")
+print(MTG, ".symbol", "Width","section_surface", "s_surf_child_sum")
 #>                    levelName    .symbol Width section_surface s_surf_child_sum
 #> 1 node_1                          Scene    NA              NA               NA
 #> 2  °--node_2                 Individual    NA              NA               NA
@@ -156,9 +161,6 @@ To do before v1:
   - [x] Update the readme to display only very basic information about
     the package, and about contributions (very welcome)
 
-  - [ ] Add a vignette about the mtg format, and on the basics
-    (navigate, get value…)
-
   - [ ] Add a vignette about mutating the mtg
 
   - [ ] Add a vignette about plotting the mtg (e.g. add attributes on
@@ -172,7 +174,7 @@ To do before v1:
         [cli](https://cli.r-lib.org/) and/or
         [waldo](https://waldo.r-lib.org/)
 
-  - [ ] Return the mtg with class data.tree + mtg and remove the
+  - [x] Return the mtg with class data.tree + mtg and remove the
     sections (not a list anymore). This will make the mtg more usable
 
   - [ ] Read mtg from XLSX
@@ -184,6 +186,9 @@ To do before v1:
   - [x] Put back the scene node
 
 In a more distant future (v2):
+
+  - [ ] Add a vignette about the mtg format, and on the basics
+    (navigate, get value…)
 
   - [ ] Add 3d plotting when geometry attributes are available. Make it
     compatible with XPlo and OpenAlea.

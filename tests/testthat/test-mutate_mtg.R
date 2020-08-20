@@ -3,13 +3,13 @@ MTG = read_mtg(filepath)
 
 test_that("adding a variable with mutate_mtg works", {
   mutate_mtg(MTG, test = 0+1)
-  mtg_df = data.tree::ToDataFrameTree(MTG$MTG,"test")
+  mtg_df = data.tree::ToDataFrameTree(MTG,"test")
   expect_equal(mtg_df$test, rep(1,7))
 })
 
 test_that("adding a variable with mutate_mtg using another node attribute works", {
   mutate_mtg(MTG, test = node$Width + 1)
-  mtg_df = data.tree::ToDataFrameTree(MTG$MTG,"test","Width")
+  mtg_df = data.tree::ToDataFrameTree(MTG,"test","Width")
   expect_equal(mtg_df$test, mtg_df$Width + 1)
 })
 
@@ -25,7 +25,7 @@ test_that("mutate_mtg works in all its glory", {
              Width_parent = parent("Width",  node = node)[[1]],
              section_surface_parent = pi * (node$Width_parent / 2)^2)
   mtg_df =
-    data.tree::ToDataFrameTree(MTG$MTG,"Width","Width_parent","section_surface",
+    data.tree::ToDataFrameTree(MTG,"Width","Width_parent","section_surface",
                                "section_surface_parent")
 
   expect_equal(mtg_df$section_surface, pi * ((mtg_df$Width / 2)^2))
