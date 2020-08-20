@@ -5,10 +5,13 @@
 #'
 #' @param attribute Any node attribute (as a character)
 #' @param node The MTG node
+#' @param decomp_type Match the node scale or symbol for decomposition ? If symbol, the function will return all descendants
+#' until matching the same symbol than the node, if scale it will do the same until matching the same scale.
 #' @param symbol A character vector for filtering the decomposing nodes by the name of their `.symbol` (i.e. the SYMBOL
 #'  column from the MTG classes).
 #' @param scale An integer vector for filtering the `.scale` of the decomposing nodes (i.e. the SCALE
 #'  column from the MTG classes).
+#' @param link A character vector for filtering the `.link` with the descendant.
 #' @param filter_fun Any filtering function taking a node as input.
 #'
 #' @details This function is mainly used to summarize attributes at a higher scale when they were measured
@@ -32,7 +35,8 @@
 #' decompose(".symbol", node = extract_node(MTG,"node_3"), decomp_type = "symbol")
 #'
 #' # using filters to remove nodes that we don't need:
-#' decompose(".symbol", node = extract_node(MTG,"node_3"), symbol = "Internode", decomp_type = "symbol")
+#' decompose(".symbol", node = extract_node(MTG,"node_3"), symbol = "Internode",
+#'           decomp_type = "symbol")
 #'
 #' # We can check the function worked properly by printing the symbols of each nodes:
 #' print(MTG$MTG, ".symbol")

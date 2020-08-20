@@ -3,7 +3,6 @@
 S3method(autoplot,mtg)
 export("%>%")
 export(ancestors)
-export(attribute_as_name)
 export(children)
 export(decompose)
 export(descendants)

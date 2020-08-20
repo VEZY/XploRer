@@ -18,6 +18,10 @@ tree1h = read_mtg(file = filepath3)
 A4 = list()
 A4$MTG = extract_node(tree1h, "node_6")
 
+# File 4: A simple plant with a leaf added on the first internode
+filepath4= system.file("extdata", "simple_plant_3.mtg", package = "XploRer")
+MTG4 = read_mtg(filepath4)
+node_3_4 = extract_node(MTG4, "node_3")
 
 
 test_that("parent: requesting an attribute", {
@@ -176,3 +180,18 @@ test_that("leaves: using filters", {
   expect_equal(leaves("ID", node = A4$MTG, symbol = "A"),
                c(node_10 = 643, node_14 = 647))
 })
+
+
+test_that("decompose", {
+  expect_equal(decompose("length", node = A4$MTG),
+               c(node_7 = 27.5, node_13 = 6, node_16 = 19.5))
+})
+
+test_that("decompose: use filter", {
+  expect_equal(decompose(".symbol", node = node_3_4),
+               c(node_4 = 'Internode', node_5 = 'Leaf', node_9 = 'Internode'))
+
+  expect_equal(decompose(".symbol", node = node_3_4, symbol = "Internode"),
+               c(node_4 = 'Internode', node_9 = 'Internode'))
+})
+
