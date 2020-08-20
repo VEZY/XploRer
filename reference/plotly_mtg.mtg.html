@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot an MTG — autoplot.mtg • XploRer</title>
+<title>Plot an interactive MTG — plotly_mtg.mtg • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Plot an MTG — autoplot.mtg" />
-<meta property="og:description" content="Plot an MTG" />
+<meta property="og:title" content="Plot an interactive MTG — plotly_mtg.mtg" />
+<meta property="og:description" content="Plot an interactive MTG" />
 
 
 
@@ -114,20 +114,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot an MTG</h1>
+    <h1>Plot an interactive MTG</h1>
     <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/plot_MTG.R'><code>R/plot_MTG.R</code></a></small>
-    <div class="hidden name"><code>autoplot.mtg.Rd</code></div>
+    <div class="hidden name"><code>plotly_mtg.mtg.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot an MTG</p>
+    <p>Plot an interactive MTG</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for mtg</span>
-<span class='fu'>autoplot</span>(<span class='no'>mtg</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>plotly_mtg</span>(<span class='no'>mtg</span>, <span class='no'>...</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>.phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for Node</span>
-<span class='fu'>autoplot</span>(<span class='no'>mtg</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>plotly_mtg</span>(<span class='no'>mtg</span>, <span class='no'>...</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>.phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>plotly_mtg</span>(<span class='no'>mtg</span>, <span class='no'>...</span>, <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>.phylotaxy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,38 +139,48 @@
       <td><p>An MTG, as from <code><a href='read_MTG.html'>read_mtg()</a></code></p></td>
     </tr>
     <tr>
-      <th>scale</th>
+      <th>...</th>
+      <td><p>Names of the variables to be added to the tooltip (see details and examples).</p></td>
+    </tr>
+    <tr>
+      <th>.scale</th>
       <td><p>The scale required for plotting</p></td>
     </tr>
     <tr>
-      <th>angle</th>
+      <th>.angle</th>
       <td><p>Insertion angle when branching</p></td>
     </tr>
     <tr>
-      <th>phylotaxy</th>
+      <th>.phylotaxy</th>
       <td><p>Is phylotaxy required ? Uses 180 degrees if <code>TRUE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments. <code><a href='plotly_mtg.mtg.html'>plotly_mtg()</a></code> uses this to add variables to the output data.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot of the MTG</p>
+    <p>A plotly object of the MTG</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function needs the topological orders as attributes in the MTG. If they
-are not present, it uses <code><a href='topological_order.html'>topological_order()</a></code> to compute it with descending order.
-If you need ascending order, please use <code><a href='topological_order.html'>topological_order(MTG, ascend = TRUE)</a></code> before
-plotting.</p>
+    <p>The name of each argument in <code>...</code> will be the name of a the variable given in the tooltip,
+and the value will be the value of the corresponding variable given as value. The arguments in <code>...</code> are
+automatically quoted and evaluated in the context of the <code>mtg</code>. They support unquoting and splicing. See
+the chapter about <a href='https://adv-r.hadley.nz/metaprogramming.html'>metaprogramming</a> in the book "Advanced R"
+from H. Wickham for an introduction to these concepts.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='mutate_mtg.html'>mutate_mtg()</a></code> to compute variables and add it to the tooltip with <code>...</code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
-<span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
+    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
 <span class='no'>MTG</span><span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>MTG</span>)</div><div class='img'><img src='autoplot.mtg-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>plotly_mtg</span>(<span class='no'>MTG</span>)
+
+<span class='co'># We can add more information to the tooltip, e.g. the values of the Length column:</span>
+<span class='fu'>plotly_mtg</span>(<span class='no'>MTG</span>, <span class='no'>Length</span>)
+
+<span class='co'># We can also use custom names for the variable in the tooltip:</span>
+<span class='fu'>plotly_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>node_width</span> <span class='kw'>=</span> <span class='no'>Width</span>)
+<span class='co'># Here the tooltip will show the Width, labeled as "node_width"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
