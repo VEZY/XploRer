@@ -3,7 +3,7 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   XploRer: XploRer.html
-last_built: 2020-08-20T12:25Z
+last_built: 2020-08-20T14:58Z
 urls:
   reference: https://vezy.github.io/XploRer/reference
   article: https://vezy.github.io/XploRer/articles
