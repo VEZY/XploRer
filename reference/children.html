@@ -205,7 +205,7 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 #&gt;      6 </div><div class='input'>
 <span class='co'># To get the values of the children of each node:</span>
 <span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width</span> <span class='kw'>=</span> <span class='fu'>children</span>(<span class='st'>"Width"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width
 #&gt; 1 node_1                        NA               
 #&gt; 2  °--node_2                    NA               
 #&gt; 3      °--node_3                NA              1
@@ -215,7 +215,7 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 #&gt; 7                  °--node_7     7               </div><div class='input'>
 <span class='co'># And using only the bodes with symbol "Leaf":</span>
 <span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>, <span class='kw'>children_width2</span> <span class='kw'>=</span> <span class='fu'>children</span>(<span class='st'>"Width"</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width2"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width2
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>"Width"</span>, <span class='st'>"children_width2"</span>)</div><div class='output co'>#&gt;                    levelName Width children_width2
 #&gt; 1 node_1                        NA              NA
 #&gt; 2  °--node_2                    NA              NA
 #&gt; 3      °--node_3                NA              NA

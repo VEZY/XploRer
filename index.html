@@ -117,6 +117,11 @@
 <a href="#21-read-a-file" class="anchor"></a>2.1 Read a file</h3>
 <p>Read a simple MTG file:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">XploRer</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'XploRer'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     decompose</span>
 
 <span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span>)</pre></div>
 </div>
@@ -129,7 +134,7 @@
   <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/children.html">children</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
              <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
 <span class="co">#&gt;                    levelName    .symbol Width section_surface s_surf_child_sum</span>
 <span class="co">#&gt; 1 node_1                          Scene    NA              NA               NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual    NA              NA               NA</span>
@@ -190,8 +195,6 @@ Add a “Get started” vignette (add the basic info on what we can do with the 
 <li><p><input type="checkbox" disabled checked>
 Update the readme to display only very basic information about the package, and about contributions (very welcome)</p></li>
 <li><p><input type="checkbox" disabled>
-Add a vignette about the mtg format, and on the basics (navigate, get value…)</p></li>
-<li><p><input type="checkbox" disabled>
 Add a vignette about mutating the mtg</p></li>
 <li><p><input type="checkbox" disabled>
 Add a vignette about plotting the mtg (e.g. add attributes on hover)</p></li>
@@ -211,7 +214,7 @@ Print the problems nicely using <a href="https://cli.r-lib.org/">cli</a> and/or 
 </li>
 </ul>
 </li>
-<li><p><input type="checkbox" disabled>
+<li><p><input type="checkbox" disabled checked>
 Return the mtg with class data.tree + mtg and remove the sections (not a list anymore). This will make the mtg more usable</p></li>
 <li><p><input type="checkbox" disabled>
 Read mtg from XLSX</p></li>
@@ -224,6 +227,8 @@ Put back the scene node</p></li>
 </ul>
 <p>In a more distant future (v2):</p>
 <ul>
+<li><p><input type="checkbox" disabled>
+Add a vignette about the mtg format, and on the basics (navigate, get value…)</p></li>
 <li><p><input type="checkbox" disabled>
 Add 3d plotting when geometry attributes are available. Make it compatible with XPlo and OpenAlea.</p></li>
 <li><p><input type="checkbox" disabled>

@@ -178,9 +178,9 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
 
 <span class='co'># The MTG has two leaves (node_5 and node_7):</span>
-<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>)</div><div class='output co'>#&gt; node_5 node_7 
+<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>)</div><div class='output co'>#&gt; node_5 node_7 
 #&gt;     10     12 </div><div class='input'><span class='co'># We can check the function worked well by printing the symbols of each nodes:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                    levelName    .symbol
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                    levelName    .symbol
 #&gt; 1 node_1                          Scene
 #&gt; 2  °--node_2                 Individual
 #&gt; 3      °--node_3                   Axis
@@ -189,17 +189,17 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 #&gt; 6              °--node_6      Internode
 #&gt; 7                  °--node_7       Leaf</div><div class='input'>
 <span class='co'># If we need the terminal Internodes:</span>
-<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_6 
+<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_6 
 #&gt;      6 </div><div class='input'>
 <span class='co'># Or the leaves at a given scale:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".scale"</span>)</div><div class='output co'>#&gt;                    levelName .scale
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>".scale"</span>)</div><div class='output co'>#&gt;                    levelName .scale
 #&gt; 1 node_1                         NA
 #&gt; 2  °--node_2                      1
 #&gt; 3      °--node_3                  2
 #&gt; 4          °--node_4              3
 #&gt; 5              ¦--node_5          3
 #&gt; 6              °--node_6          3
-#&gt; 7                  °--node_7      3</div><div class='input'><span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; node_3 
+#&gt; 7                  °--node_7      3</div><div class='input'><span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; node_3 
 #&gt;     NA </div><div class='input'>
 </div></pre>
   </div>

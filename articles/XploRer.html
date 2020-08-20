@@ -107,7 +107,7 @@
 <ul>
 <li>
 <p>classes: a <code>data.frame</code> that holds information about the type of nodes used in the MTG (e.g. Internode, Leaf, etc…), the MTG scale for each one, and some more details. Here is the classes <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">classes</span>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"classes"</span>)
 <span class="co">#&gt;       SYMBOL SCALE DECOMPOSITION INDEXATION DEFINITION</span>
 <span class="co">#&gt; 1          $     0          FREE       FREE   IMPLICIT</span>
 <span class="co">#&gt; 2 Individual     1          FREE       FREE   IMPLICIT</span>
@@ -117,14 +117,14 @@
 </li>
 <li>
 <p>description: a <code>data.frame</code> defining the potential topological constraints existing between nodes. Here is the description <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">description</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"description"</span>)
 <span class="co">#&gt;        LEFT           RIGHT RELTYPE MAX</span>
 <span class="co">#&gt; 1 Internode Internode, Leaf       +   ?</span>
 <span class="co">#&gt; 2 Internode Internode, Leaf       &lt;   ?</span></pre></body></html></div>
 </li>
 <li>
 <p>features: a <code>data.frame</code> listing all attributes present in the file and their associated type. Here is the features <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">features</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"features"</span>)
 <span class="co">#&gt;       NAME  TYPE</span>
 <span class="co">#&gt; 1       XX  REAL</span>
 <span class="co">#&gt; 2       YY  REAL</span>
@@ -136,7 +136,7 @@
 </li>
 <li>
 <p>MTG: a <code>data.tree</code> structure defining all nodes, their attributes and their relationships:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">MTG</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">MTG</span>
 <span class="co">#&gt;                    levelName</span>
 <span class="co">#&gt; 1 node_1                    </span>
 <span class="co">#&gt; 2  °--node_2                </span>
@@ -152,7 +152,7 @@
 <h2 class="hasAnchor">
 <a href="#printextract-variables" class="anchor"></a>Print/extract variables</h2>
 <p>The variables / attributes of an MTG can be printed using the <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> function on the MTG field, <em>e.g.</em>:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA</span>
@@ -162,7 +162,7 @@
 <span class="co">#&gt; 6              °--node_6      Internode      6</span>
 <span class="co">#&gt; 7                  °--node_7       Leaf     12</span></pre></body></html></div>
 <p>The variables can also be extracted in a <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> using the functions from the <code>data.tree</code> package <em>e.g.</em>:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html">ToDataFrameTree</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>,<span class="st">"Length"</span>,<span class="st">"Width"</span>)
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html">ToDataFrameTree</a></span>(<span class="no">MTG</span>,<span class="st">"Length"</span>,<span class="st">"Width"</span>)
 <span class="co">#&gt;                    levelName Length Width</span>
 <span class="co">#&gt; 1 node_1                         NA    NA</span>
 <span class="co">#&gt; 2  °--node_2                     NA    NA</span>
@@ -187,7 +187,7 @@
 <span class="co"># And mutate it by adding two new variables, Length2 and Length3:</span>
 <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>, <span class="kw">Length3</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length2</span> * <span class="fl">2</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>, <span class="st">"Length2"</span>, <span class="st">"Length3"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>, <span class="st">"Length2"</span>, <span class="st">"Length3"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length Length2 Length3</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA      NA      NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA      NA      NA</span>
@@ -215,7 +215,7 @@
 <p>If we need the values of all ancestors of a node along the tree, we can use <code><a href="../reference/ancestors.html">ancestors()</a></code> instead:</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">total_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/ancestors.html">ancestors</a></span>(<span class="no">Length</span>,<span class="kw">self</span> <span class="kw">=</span> <span class="fl">TRUE</span>),<span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))</pre></body></html></div>
 <p>Here are the results for both:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>,<span class="st">".symbol"</span>,<span class="st">"Length"</span>,<span class="st">"Length_parent"</span>,<span class="st">"total_length"</span>)
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>,<span class="st">".symbol"</span>,<span class="st">"Length"</span>,<span class="st">"Length_parent"</span>,<span class="st">"total_length"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length Length_parent total_length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA            NA            0</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA            NA            0</span>
@@ -239,7 +239,7 @@
 
 <span class="co">#&gt; Warning in mean.default(children(node$Length), na.rm = TRUE): argument is not</span>
 <span class="co">#&gt; numeric or logical: returning NA</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>,<span class="st">"children_length"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>,<span class="st">"children_length"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length children_length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA             NaN</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA             NaN</span>
@@ -266,16 +266,11 @@
 <p>We can also filter the nodes by scale (<em>i.e.</em> the value of the SCALE column in the MTG classes), or by symbol (<em>i.e.</em> the name of the SYMBOL column), which corresponds to the <code>.scale</code> and <code>.symbol</code> values in the node respectively.</p>
 <p>To get all the possible values in an MTG, we can print the classes section:</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">classes</span>
-<span class="co">#&gt;       SYMBOL SCALE DECOMPOSITION INDEXATION DEFINITION</span>
-<span class="co">#&gt; 1          $     0          FREE       FREE   IMPLICIT</span>
-<span class="co">#&gt; 2 Individual     1          FREE       FREE   IMPLICIT</span>
-<span class="co">#&gt; 3       Axis     2          FREE       FREE   IMPLICIT</span>
-<span class="co">#&gt; 4  Internode     3          FREE       FREE   IMPLICIT</span>
-<span class="co">#&gt; 5       Leaf     3          FREE       FREE   IMPLICIT</span></pre></body></html></div>
+<span class="co">#&gt; NULL</span></pre></body></html></div>
 <p>To get the actual symbol of a node use the <code>.symbol</code> field on a node, and the <code>.scale</code> field for the scale. Here is an example for the root node of the mtg:</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">.symbol</span>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">.symbol</span>
 <span class="co">#&gt; [1] "Scene"</span>
-<span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">.scale</span>
+<span class="no">MTG</span>$<span class="no">.scale</span>
 <span class="co">#&gt; NULL</span></pre></body></html></div>
 </div>
 <div id="the-scale-and-symbol-arguments-from-the-helper-functions" class="section level4">
@@ -287,7 +282,7 @@
 <span class="co">#&gt; node_3 </span>
 <span class="co">#&gt;     NA</span></pre></body></html></div>
 <p>Here it returns <code>NA</code> because the first parent is an <code>Internode</code>, and the first node with symbol “Axis” (<code>node_2</code>) has no values for “Length”, see by yourself:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
 <span class="co">#&gt;                    levelName    .symbol Length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA</span>
@@ -304,11 +299,11 @@
 <p>An easier way to think about this is that when using the symbol or scale argument, functions work on a different tree with only the symbol(s) or scale(s) required.</p>
 <p>The <code>continue</code> argument can be used in <code><a href="../reference/parent.html">parent()</a></code> and <code><a href="../reference/children.html">children()</a></code> functions to disable this default behavior of “climbing” or “descending” the tree. If <code>continue</code> is explicitly set to <code>FALSE</code>, the function returns <code>NA</code> if the first parent is not of the right symbol.</p>
 <p>Here is an example with recursive behavior (the default):</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
 <span class="co">#&gt; node_5 node_7 </span>
 <span class="co">#&gt;     10     12</span></pre></body></html></div>
 <p>And without:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">continue</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">continue</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; NULL</span></pre></body></html></div>
 <p>The function returns <code>NA</code> without the recursive behavior because “node_2” has one child (“node_3”) that is not of the right symbol.</p>
 <blockquote>
@@ -324,7 +319,7 @@
           <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)<span class="kw">%&gt;%</span>
 <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">area</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Width</span> * <span class="no">node</span>$<span class="no">Length</span>, <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>$<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"area"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"area"</span>)
 <span class="co">#&gt;                    levelName    .symbol Width section_surface area</span>
 <span class="co">#&gt; 1 node_1                          Scene    NA              NA   NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual    NA              NA   NA</span>
