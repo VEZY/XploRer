@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get ancestors values — ancestors • XploRer</title>
+<title>Get decomposing nodes recursively — decompose_ • XploRer</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get ancestors values — ancestors" />
-<meta property="og:description" content="Get attribute values from all ancestors (basipetal)." />
+<meta property="og:title" content="Get decomposing nodes recursively — decompose_" />
+<meta property="og:description" content="This is the function actually doing the hard work for [decompose()]." />
 
 
 
@@ -114,25 +114,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get ancestors values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/get_ancestors_values.R'><code>R/get_ancestors_values.R</code></a></small>
-    <div class="hidden name"><code>ancestors.Rd</code></div>
+    <h1>Get decomposing nodes recursively</h1>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/decompose.R'><code>R/decompose.R</code></a></small>
+    <div class="hidden name"><code>decompose_.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get attribute values from all ancestors (basipetal).</p>
+    <p>This is the function actually doing the hard work for <code>[decompose()]</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ancestors</span>(
+    <pre class="usage"><span class='fu'>decompose_</span>(
   <span class='no'>attribute</span>,
   <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ref_node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"scale"</span>, <span class='st'>"symbol"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -147,70 +146,37 @@
       <td><p>The MTG node</p></td>
     </tr>
     <tr>
+      <th>ref_node</th>
+      <td><p>The reference node to match the scale or symbol</p></td>
+    </tr>
+    <tr>
       <th>scale</th>
-      <td><p>Integer vector for filtering ancestors by their <code>.scale</code> (i.e. the SCALE
-from the MTG classes).</p></td>
+      <td><p>An integer vector for filtering the <code>.scale</code> of the decomposing nodes (i.e. the SCALE
+column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>symbol</th>
-      <td><p>A character vector for filtering the ancestors by their <code>.symbol</code> (i.e. the SYMBOL
+      <td><p>A character vector for filtering the decomposing nodes by the name of their <code>.symbol</code> (i.e. the SYMBOL
 column from the MTG classes).</p></td>
     </tr>
     <tr>
       <th>link</th>
-      <td><p>A character vector for filtering the <code>.link</code> with the parent (e.g. not a branch)</p></td>
+      <td><p>A character vector for filtering the <code>.link</code> with the descendant</p></td>
     </tr>
     <tr>
       <th>filter_fun</th>
-      <td><p>Any filtering function taking a node as input, e.g. <code><a href='https://rdrr.io/pkg/data.tree/man/isLeaf.html'>data.tree::isLeaf()</a></code></p></td>
+      <td><p>Any filtering function taking a node as input.</p></td>
     </tr>
     <tr>
-      <th>self</th>
-      <td><p>Return the value of the current node (<code>TRUE</code>), or the ancestors only (<code>FALSE</code>, the default)</p></td>
-    </tr>
-    <tr>
-      <th>continue</th>
-      <td><p>Boolean. If <code>TRUE</code>, the function returns all nodes that are not filtered. If <code>FALSE</code>, stop
-at the first node that is filtered out.</p></td>
-    </tr>
-    <tr>
-      <th>recursivity_level</th>
-      <td><p>The maximum number of recursions allowed (considering filters). E.g. to get the
-parent only: <code>recursivity_level = 1</code>, for parent + grand-parent: <code>recursivity_level = 2</code>.
-If <code>NULL</code> (the default), the function returns all values from the node to the root.</p></td>
+      <th>decomp_type</th>
+      <td><p>The type of scale to use for decomposition, either the scale or the symbol of the node.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The attribute values from the ancestors of the node (from first parent to farther ancestor)</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>The attributes of the nodes decomposing the reference node.</p>
 
-    <p>This function is mainly intended to be used with <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>. In this case,
-the <code>node</code> argument can be left empty (or <code>node = node</code> equivalently).</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
-<span class='co'># node_6 has four ancestors:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>))</div><div class='output co'>#&gt; node_4 node_3 node_2 node_1 
-#&gt;      4     NA     NA     NA </div><div class='input'><span class='co'># Two of them have no values for Length</span>
-
-<span class='co'># If the value of node_6 is also needed:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; node_6 node_4 node_3 node_2 node_1 
-#&gt;      6      4     NA     NA     NA </div><div class='input'>
-<span class='co'># If we only need the value of the first parent:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; node_4 
-#&gt;      4 </div><div class='input'>
-<span class='co'># We can filter by symbol if we need to return the values for some symbols only:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_4 
-#&gt;      1 </div><div class='input'>
-<span class='co'># The values are only returned for the ancestors with the required symbol</span>
-<span class='co'># For example we know that a leaf cannot be an ancestor because it cannot bear anything:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; logical(0)</div><div class='input'># In this case it returns a length 0 vector.
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

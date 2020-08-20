@@ -219,9 +219,10 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='fu'>descendants</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"S"</span>,
                        <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"/"</span>,<span class='st'>"&lt;"</span>), <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;  node_9 node_12 
 #&gt;     3.5    10.3 </div><div class='input'>
-<span class='co'># To get the values for the leaves (i.e. the last node) only:</span>
+<span class='co'># To get the values for the leaves (i.e. the terminal node) only:</span>
 <span class='fu'>descendants</span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>node_8</span>, <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/data.tree/man/isLeaf.html'>isLeaf</a></span>)</div><div class='output co'>#&gt; node_12 node_11 
-#&gt;    10.3     5.2 </div><div class='input'>
+#&gt;    10.3     5.2 </div><div class='input'><span class='co'># Note: prefer using leaves() instead as it takes scales into account.</span>
+
 <span class='co'># Length were observed at the "S" scale (S = segment of an axis between two branches),</span>
 <span class='co'># but we need the length at the axis scale, to do so:</span>
 <span class='fu'><a href='mutate_mtg.html'>mutate_mtg</a></span>(<span class='no'>MTG</span>,
