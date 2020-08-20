@@ -41,8 +41,6 @@
 
 <meta property="og:title" content="Get decomposing nodes — decompose" />
 <meta property="og:description" content="Get attribute values from the nodes that are decomposing a node (e.g. the growing
-units decomposing an axis).
-Get attribute values from the nodes that are decomposing a node (e.g. the growing
 units decomposing an axis)." />
 
 
@@ -118,30 +116,22 @@ units decomposing an axis)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get decomposing nodes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/decompose.R'><code>R/decompose.R</code></a>, <a href='https://github.com/VEZY/XploRer/blob/master/R/mtg_getters_shortcuts.R'><code>R/mtg_getters_shortcuts.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/VEZY/XploRer/blob/master/R/decompose.R'><code>R/decompose.R</code></a></small>
     <div class="hidden name"><code>decompose.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Get attribute values from the nodes that are decomposing a node (e.g. the growing
 units decomposing an axis).</p>
-<p>Get attribute values from the nodes that are decomposing a node (e.g. the growing
-units decomposing an axis).</p>
     </div>
 
     <pre class="usage"><span class='fu'>decompose</span>(
   <span class='no'>attribute</span>,
   <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"symbol"</span>, <span class='st'>"scale"</span>),
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
-
-<span class='fu'>decompose</span>(
-  <span class='no'>attribute</span>,
-  <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
@@ -157,6 +147,11 @@ units decomposing an axis).</p>
       <td><p>The MTG node</p></td>
     </tr>
     <tr>
+      <th>decomp_type</th>
+      <td><p>Match the node scale or symbol for decomposition ? If symbol, the function will return all descendants
+until matching the same symbol than the node, if scale it will do the same until matching the same scale.</p></td>
+    </tr>
+    <tr>
       <th>scale</th>
       <td><p>An integer vector for filtering the <code>.scale</code> of the decomposing nodes (i.e. the SCALE
 column from the MTG classes).</p></td>
@@ -167,6 +162,10 @@ column from the MTG classes).</p></td>
 column from the MTG classes).</p></td>
     </tr>
     <tr>
+      <th>link</th>
+      <td><p>A character vector for filtering the <code>.link</code> with the descendant.</p></td>
+    </tr>
+    <tr>
       <th>filter_fun</th>
       <td><p>Any filtering function taking a node as input.</p></td>
     </tr>
@@ -175,16 +174,9 @@ column from the MTG classes).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The attribute values from the nodes decomposing the input node</p>
-<p>The attribute values from the nodes decomposing the input node</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is mainly used to summarize attributes at a higher scale when they were measured
-at a lower scale. For example we can think of an mtg where the length was measured at the internode scale only,
-so this function can be used to summarize it at e.g. axis scale. The filters are used to get the nodes of interest only.
-For example an axis can be made of internodes and leaves, but the length of an axis is made from the cumulative
-length of the internodes only (not the leaves). A second example would be to summarize the total leaf area per axis, where
-we would only want to use the area of the leaves (not the internodes).</p>
-<p>This function is mainly used to summarize attributes at a higher scale when they were measured
 at a lower scale. For example we can think of an mtg where the length was measured at the internode scale only,
 so this function can be used to summarize it at e.g. axis scale. The filters are used to get the nodes of interest only.
 For example an axis can be made of internodes and leaves, but the length of an axis is made from the cumulative
@@ -194,8 +186,6 @@ we would only want to use the area of the leaves (not the internodes).</p>
 
     <p>This function is mainly intended to be used with <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>. In this case,
 the <code>node</code> argument can be left empty (or you can put <code>node = node</code> equivalently).</p>
-<p>This function is mainly intended to be used with <code><a href='mutate_mtg.html'>mutate_mtg()</a></code>. In this case,
-the <code>node</code> argument can be left empty (or you can put <code>node = node</code> equivalently).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant_3.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
@@ -204,9 +194,10 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 <span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4      node_5      node_9 
 #&gt; "Internode"      "Leaf" "Internode" </div><div class='input'>
 <span class='co'># using filters to remove nodes that we don't need:</span>
-<span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>, <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4      node_9 
+<span class='fu'>decompose</span>(<span class='st'>".symbol"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>,
+          <span class='kw'>decomp_type</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>)</div><div class='output co'>#&gt;      node_4      node_9 
 #&gt; "Internode" "Internode" </div><div class='input'>
-<span class='co'># We can check the function worked well by printing the symbols of each nodes:</span>
+<span class='co'># We can check the function worked properly by printing the symbols of each nodes:</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                              levelName    .symbol
 #&gt; 1  node_1                                   Scene
 #&gt; 2   °--node_2                          Individual
@@ -220,44 +211,6 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 #&gt; 10                  °--node_10               Axis
 #&gt; 11                      °--node_11      Internode
 #&gt; 12                          °--node_12       Leaf</div><div class='input'>
-<span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant_3.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in axis(attribute = "length", node = extract_node(MTG, "node_3"),     symbol = "Leaf"): argument "side" is missing, with no default</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='kw'>attribute</span> <span class='kw'>=</span> <span class='st'>"name"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>,<span class='st'>"node_3"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in axis(attribute = "name", node = extract_node(MTG, "node_3"),     symbol = "Internode"): argument "side" is missing, with no default</span></div><div class='input'>
-<span class='co'># The MTG has two leaves (node_5 and node_7):</span>
-<span class='fu'><a href='leaves.html'>leaves</a></span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>)</div><div class='output co'>#&gt;  node_5  node_8 node_12 
-#&gt;      NA      10      10 </div><div class='input'><span class='co'># We can check the function worked well by printing the symbols of each nodes:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                              levelName    .symbol
-#&gt; 1  node_1                                   Scene
-#&gt; 2   °--node_2                          Individual
-#&gt; 3       °--node_3                            Axis
-#&gt; 4           °--node_4                   Internode
-#&gt; 5               ¦--node_5                    Leaf
-#&gt; 6               ¦--node_6                    Axis
-#&gt; 7               ¦   °--node_7           Internode
-#&gt; 8               ¦       °--node_8            Leaf
-#&gt; 9               °--node_9               Internode
-#&gt; 10                  °--node_10               Axis
-#&gt; 11                      °--node_11      Internode
-#&gt; 12                          °--node_12       Leaf</div><div class='input'>
-<span class='co'># If we need the terminal Internodes:</span>
-<span class='fu'><a href='leaves.html'>leaves</a></span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt;  node_7 node_11 
-#&gt;       4       4 </div><div class='input'>
-<span class='co'># Or the leaves at a given scale:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='st'>".scale"</span>)</div><div class='output co'>#&gt;                              levelName .scale
-#&gt; 1  node_1                                  NA
-#&gt; 2   °--node_2                               1
-#&gt; 3       °--node_3                           2
-#&gt; 4           °--node_4                       3
-#&gt; 5               ¦--node_5                   3
-#&gt; 6               ¦--node_6                   2
-#&gt; 7               ¦   °--node_7               3
-#&gt; 8               ¦       °--node_8           3
-#&gt; 9               °--node_9                   3
-#&gt; 10                  °--node_10              2
-#&gt; 11                      °--node_11          3
-#&gt; 12                          °--node_12      3</div><div class='input'><span class='fu'><a href='leaves.html'>leaves</a></span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>$<span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;  node_6 node_10 
-#&gt;      NA      NA </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
