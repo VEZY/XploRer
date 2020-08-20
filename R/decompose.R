@@ -34,7 +34,7 @@
 #' # using filters to remove nodes that we don't need:
 #' decompose(".symbol", node = extract_node(MTG,"node_3"), symbol = "Internode", decomp_type = "symbol")
 #'
-#' # We can check the function worked well by printing the symbols of each nodes:
+#' # We can check the function worked properly by printing the symbols of each nodes:
 #' print(MTG$MTG, ".symbol")
 #'
 decompose = function(attribute, node = NULL, decomp_type = c("symbol","scale"), scale = NULL,
@@ -53,6 +53,8 @@ decompose = function(attribute, node = NULL, decomp_type = c("symbol","scale"), 
       stop("node should be given when 'decompose()' is used interactively")
     }
   }
+
+  decomp_type = match.arg(arg = decomp_type, choices = c("symbol","scale"), several.ok = FALSE)
 
   decompose_(!!attribute_expr, node = node, ref_node = node, symbol = symbol, scale = scale,
              link = link, filter_fun = filter_fun, decomp_type = decomp_type)
@@ -115,8 +117,8 @@ decompose_ = function(attribute, node = NULL, ref_node = NULL, scale = NULL, sym
 
   # Prune the tree if any children is of the same scale (or symbol) than the node
   children = children[which(!is_children_ref)]
-  is_children_ref = is_children_ref[which(!is_children_ref)]
   is_children_filtered = is_children_filtered[which(!is_children_ref)]
+  is_children_ref = is_children_ref[which(!is_children_ref)]
 
   vals_ = unlist(lapply(children, function(x){
     x = x[[attribute]]
