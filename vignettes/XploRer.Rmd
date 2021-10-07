@@ -263,12 +263,12 @@ read_mtg(filepath)%>%
 The same plot can be rendered as an interactive plot using: 
 
 ```{r eval=FALSE}
-plotly_MTG(MTG)
+plotly_mtg(MTG)
 ```
 
 ![Interactive plot](https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif)
 
-`plotly_MTG()` uses the [plotly API](https://plotly.com/) under the hood. 
+`plotly_mtg()` uses the [plotly API](https://plotly.com/) under the hood. 
 
 It is also possible to add any variable in the tooltip appearing on hover of a node by adding it to the call. For example if we need the `Length` and the `Width` of the nodes, we would write:
 

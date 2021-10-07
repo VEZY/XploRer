@@ -1,7 +1,7 @@
 #' Read MTG
 #'
 #' @description Read an MTG file.
-#' @param file  The path to the MTG file
+#' @param file  The path to the MTG file (assumed UTF-8 encoded)
 #'
 #' @note See the documentation for the MTG format from the
 #' [OpenAlea webpage](http://openalea.gforge.inria.fr/doc/vplants/newmtg/doc/_build/html/user/intro.html#mtg-a-plant-architecture-databases)
@@ -18,7 +18,7 @@
 #' read_mtg(filepath)
 #' }
 read_mtg = function(file) {
-  MTG_file = readLines(file)
+  MTG_file = readLines(file, encoding = "UTF-8")
   MTG_file = strip_comments(MTG_file)
 
   # Find MTG index in file to be able to return the true line at which there is an error
@@ -304,7 +304,9 @@ parse_MTG_MTG = function(MTG,classes,description,features,first_line = 1){
     node_attr_column_start = attr_column_start - node_column + 1
     node = split_MTG_elements(node_data[1])
     node = expand_node(node)
-
+    if(is.na(node)){
+      stop("Error in MTG at line ",i+first_line+1,": Did you made a typo such as +/ instead of ^/ ?")
+    }
     # Get node attributes:
     node_attr = parse_MTG_node_attr(node_data,features,node_attr_column_start,
                                     line = i+first_line+1)
@@ -417,6 +419,9 @@ expand_node = function(x){
     index = unlist(lapply(MTG_node_parsed, function(x) x$index))
     link = unlist(lapply(MTG_node_parsed, function(x) x$link))
 
+    if(any(is.na(index) | symbol == "")){
+      return(NA)
+    }
     for(i in seq_along(x[node_to_expand])){
       expanded_index =
         (index[node_to_expand - 1][i]+1):
@@ -450,6 +455,7 @@ expand_node = function(x){
 #' @param MTG_line An MTG line (e.g. "/P1/A1")
 #' @param features The features data.frame
 #' @param attr_column_start The index of the column of the first attribute
+#' @param line The line of the mtg file
 #'
 #' @return A list of attributes
 #'

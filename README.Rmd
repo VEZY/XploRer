@@ -89,7 +89,7 @@ autoplot(MTG)
 The same plot can be rendered as an interactive plot using: 
 
 ```{r eval=FALSE}
-plotly_MTG(MTG)
+plotly_mtg(MTG)
 ```
 
 ![Interactive plot](https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif)

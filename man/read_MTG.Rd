@@ -7,7 +7,7 @@
 read_mtg(file)
 }
 \arguments{
-\item{file}{The path to the MTG file}
+\item{file}{The path to the MTG file (assumed UTF-8 encoded)}
 }
 \value{
 A named list of four sections: the MTG classes, description, features,
