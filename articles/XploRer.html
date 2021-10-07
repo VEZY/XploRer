@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -56,7 +56,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -83,49 +83,66 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">XploRer</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vezy.github.io/XploRer/">XploRer</a></span><span class="op">)</span>
 <span class="co">#&gt; Learn XploRer at: https://vezy.github.io/XploRer</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'XploRer'</span>
 <span class="co">#&gt; The following object is masked from 'package:stats':</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     decompose</span></pre></body></html></div>
+<span class="co">#&gt;     decompose</span></code></pre></div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>you can install the release version of XploRer from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"VEZY/XploRer"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"VEZY/XploRer"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="read-a-file" class="section level2">
 <h2 class="hasAnchor">
 <a href="#read-a-file" class="anchor"></a>Read a file</h2>
 <p>Read a simple MTG file:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">XploRer</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vezy.github.io/XploRer/">XploRer</a></span><span class="op">)</span>
 
-<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span>)</pre></body></html></div>
-<p>The <code><a href="../reference/read_MTG.html">read_mtg()</a></code> function returns a list of 4:</p>
+<span class="va">MTG</span> <span class="op">=</span> <span class="fu"><a href="../reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span></code></pre></div>
+<p>The <code><a href="../reference/read_mtg.html">read_mtg()</a></code> function returns a list of 4:</p>
 <ul>
 <li>
 <p>classes: a <code>data.frame</code> that holds information about the type of nodes used in the MTG (e.g. Internode, Leaf, etc…), the MTG scale for each one, and some more details. Here is the classes <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"classes"</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">MTG</span>,which <span class="op">=</span> <span class="st">"classes"</span><span class="op">)</span>
 <span class="co">#&gt;       SYMBOL SCALE DECOMPOSITION INDEXATION DEFINITION</span>
 <span class="co">#&gt; 1          $     0          FREE       FREE   IMPLICIT</span>
 <span class="co">#&gt; 2 Individual     1          FREE       FREE   IMPLICIT</span>
 <span class="co">#&gt; 3       Axis     2          FREE       FREE   IMPLICIT</span>
 <span class="co">#&gt; 4  Internode     3          FREE       FREE   IMPLICIT</span>
-<span class="co">#&gt; 5       Leaf     3          FREE       FREE   IMPLICIT</span></pre></body></html></div>
+<span class="co">#&gt; 5       Leaf     3          FREE       FREE   IMPLICIT</span></code></pre></div>
 </li>
 <li>
 <p>description: a <code>data.frame</code> defining the potential topological constraints existing between nodes. Here is the description <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"description"</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">MTG</span>,which <span class="op">=</span> <span class="st">"description"</span><span class="op">)</span>
 <span class="co">#&gt;        LEFT           RIGHT RELTYPE MAX</span>
 <span class="co">#&gt; 1 Internode Internode, Leaf       +   ?</span>
-<span class="co">#&gt; 2 Internode Internode, Leaf       &lt;   ?</span></pre></body></html></div>
+<span class="co">#&gt; 2 Internode Internode, Leaf       &lt;   ?</span></code></pre></div>
 </li>
 <li>
 <p>features: a <code>data.frame</code> listing all attributes present in the file and their associated type. Here is the features <code>data.frame</code> from our example:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">MTG</span>,<span class="kw">which</span> <span class="kw">=</span> <span class="st">"features"</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">MTG</span>,which <span class="op">=</span> <span class="st">"features"</span><span class="op">)</span>
 <span class="co">#&gt;       NAME  TYPE</span>
 <span class="co">#&gt; 1       XX  REAL</span>
 <span class="co">#&gt; 2       YY  REAL</span>
@@ -133,11 +150,12 @@
 <span class="co">#&gt; 4 FileName ALPHA</span>
 <span class="co">#&gt; 5   Length ALPHA</span>
 <span class="co">#&gt; 6    Width ALPHA</span>
-<span class="co">#&gt; 7   XEuler  REAL</span></pre></body></html></div>
+<span class="co">#&gt; 7   XEuler  REAL</span></code></pre></div>
 </li>
 <li>
 <p>MTG: a <code>data.tree</code> structure defining all nodes, their attributes and their relationships:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">MTG</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">MTG</span>
 <span class="co">#&gt;                    levelName</span>
 <span class="co">#&gt; 1 node_1                    </span>
 <span class="co">#&gt; 2  °--node_2                </span>
@@ -145,7 +163,7 @@
 <span class="co">#&gt; 4          °--node_4        </span>
 <span class="co">#&gt; 5              ¦--node_5    </span>
 <span class="co">#&gt; 6              °--node_6    </span>
-<span class="co">#&gt; 7                  °--node_7</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -153,7 +171,8 @@
 <h2 class="hasAnchor">
 <a href="#printextract-variables" class="anchor"></a>Print/extract variables</h2>
 <p>The variables / attributes of an MTG can be printed using the <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> function on the MTG field, <em>e.g.</em>:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA</span>
@@ -161,9 +180,10 @@
 <span class="co">#&gt; 4          °--node_4          Internode      4</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     10</span>
 <span class="co">#&gt; 6              °--node_6      Internode      6</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     12</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     12</span></code></pre></div>
 <p>The variables can also be extracted in a <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> using the functions from the <code>data.tree</code> package <em>e.g.</em>:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="kw pkg">data.tree</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html">ToDataFrameTree</a></span>(<span class="no">MTG</span>,<span class="st">"Length"</span>,<span class="st">"Width"</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">data.tree</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html">ToDataFrameTree</a></span><span class="op">(</span><span class="va">MTG</span>,<span class="st">"Length"</span>,<span class="st">"Width"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName Length Width</span>
 <span class="co">#&gt; 1 node_1                         NA    NA</span>
 <span class="co">#&gt; 2  °--node_2                     NA    NA</span>
@@ -171,7 +191,7 @@
 <span class="co">#&gt; 4          °--node_4              4     1</span>
 <span class="co">#&gt; 5              ¦--node_5         10     6</span>
 <span class="co">#&gt; 6              °--node_6          6    NA</span>
-<span class="co">#&gt; 7                  °--node_7     12     7</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7     12     7</span></code></pre></div>
 </div>
 <div id="mutate-the-mtg" class="section level2">
 <h2 class="hasAnchor">
@@ -181,14 +201,26 @@
 <h3 class="hasAnchor">
 <a href="#compute-new-variables" class="anchor"></a>Compute new variables</h3>
 <p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> borrows its syntax from <code>dplyr</code>. We can compute a new variable based on the values of others:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co"># Import the MTG:</span>
-<span class="no">filepath</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"simple_plant.mtg"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"XploRer"</span>)
-<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Import the MTG:</span>
+<span class="va">filepath</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"simple_plant.mtg"</span>, package <span class="op">=</span> <span class="st">"XploRer"</span><span class="op">)</span>
+<span class="va">MTG</span> <span class="op">=</span> <span class="fu"><a href="../reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span>
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
 
 <span class="co"># And mutate it by adding two new variables, Length2 and Length3:</span>
-<span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>, <span class="kw">Length3</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length2</span> * <span class="fl">2</span>)
+<span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, Length2 <span class="op">=</span> <span class="va">node</span><span class="op">$</span><span class="va">Length</span> <span class="op">+</span> <span class="fl">2</span>, Length3 <span class="op">=</span> <span class="va">node</span><span class="op">$</span><span class="va">Length2</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>, <span class="st">"Length2"</span>, <span class="st">"Length3"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>, <span class="st">"Length2"</span>, <span class="st">"Length3"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Length Length2 Length3</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA      NA      NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA      NA      NA</span>
@@ -196,27 +228,42 @@
 <span class="co">#&gt; 4          °--node_4          Internode      4       6      12</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     10      12      24</span>
 <span class="co">#&gt; 6              °--node_6      Internode      6       8      16</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     12      14      28</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     12      14      28</span></code></pre></div>
 <p>We can note two things here:</p>
 <ol style="list-style-type: decimal">
 <li><p>We use <code>node$</code> to access the values of a variable inside the MTG. This is done to avoid any conflicts between variables from the MTG, and variables from your environment;</p></li>
 <li><p><code>Length3</code> uses the results of <code>Length2</code> before it even exist. This is very powerful to construct several new variables at once. It is allowed thanks to a sequential construction of the variables.</p></li>
 </ol>
 <p>As with <code>dplyr</code> main functions, <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> can be used with pipes:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)<span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span><span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span>Length2 <span class="op">=</span> <span class="va">node</span><span class="op">$</span><span class="va">Length</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span>
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span>
+
+<span class="co">#&gt; Warning in if (is.na(node)) {: the condition has length &gt; 1 and only the first</span>
+<span class="co">#&gt; element will be used</span></code></pre></div>
 <p>This is allowed because the function returns the results invisibly. Note that it is mutating the MTG in place though, so no need to assign the results of <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> to a variable.</p>
 </div>
 <div id="use-parent-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-parent-values" class="anchor"></a>Use parent values</h3>
 <p>You can also use functions inside the call. Some helpers are provided by the package to compute variables based on the ancestors or children of the node (see <code><a href="../reference/parent.html">parent()</a></code>, <code><a href="../reference/children.html">children()</a></code> and <code><a href="../reference/ancestors.html">ancestors()</a></code>). Here is an example were we define a new variable called <code>Length_parent</code> that is the length of the node’s parent:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">Length_parent</span> <span class="kw">=</span> <span class="fu"><a href="../reference/parent.html">parent</a></span>(<span class="no">node</span>$<span class="no">Length</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, Length_parent <span class="op">=</span> <span class="fu"><a href="../reference/parent.html">parent</a></span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">Length</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><code><a href="../reference/parent.html">parent()</a></code> is used to get the value of the “Length” variable from the parent of each node.</p>
 <p>If we need the values of all ancestors of a node along the tree, we can use <code><a href="../reference/ancestors.html">ancestors()</a></code> instead:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">total_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/ancestors.html">ancestors</a></span>(<span class="no">Length</span>,<span class="kw">self</span> <span class="kw">=</span> <span class="fl">TRUE</span>),<span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, total_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="../reference/ancestors.html">ancestors</a></span><span class="op">(</span><span class="va">Length</span>,self <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Here are the results for both:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>,<span class="st">".symbol"</span>,<span class="st">"Length"</span>,<span class="st">"Length_parent"</span>,<span class="st">"total_length"</span>)
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>,<span class="st">".symbol"</span>,<span class="st">"Length"</span>,<span class="st">"Length_parent"</span>,<span class="st">"total_length"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Length Length_parent total_length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA            NA            0</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA            NA            0</span>
@@ -224,23 +271,25 @@
 <span class="co">#&gt; 4          °--node_4          Internode      4            NA            4</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     10             4           14</span>
 <span class="co">#&gt; 6              °--node_6      Internode      6             4           10</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     12             6           22</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     12             6           22</span></code></pre></div>
 </div>
 <div id="use-children-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-children-values" class="anchor"></a>Use children values</h3>
 <p>To get the children values of a node, use <code><a href="../reference/children.html">children()</a></code>. This function returns the values of a field for all children of a node:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="fu"><a href="../reference/extract_node.html">extract_node</a></span>(<span class="no">MTG</span>, <span class="st">"node_3"</span>))
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/children.html">children</a></span><span class="op">(</span>attribute <span class="op">=</span> <span class="st">"Length"</span>, node <span class="op">=</span> <span class="fu"><a href="../reference/extract_node.html">extract_node</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">"node_3"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; node_4 </span>
-<span class="co">#&gt;      4</span></pre></body></html></div>
+<span class="co">#&gt;      4</span></code></pre></div>
 <p>It can be used to get <em>e.g.</em> the average length of the children:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">children_length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="../reference/children.html">children</a></span>(<span class="no">node</span>$<span class="no">Length</span>), <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, children_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="../reference/children.html">children</a></span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">Length</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning in mean.default(children(node$Length), na.rm = TRUE): argument is not</span>
 <span class="co">#&gt; numeric or logical: returning NA</span>
 
 <span class="co">#&gt; Warning in mean.default(children(node$Length), na.rm = TRUE): argument is not</span>
 <span class="co">#&gt; numeric or logical: returning NA</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>,<span class="st">"children_length"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>,<span class="st">"children_length"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Length children_length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA             NaN</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA             NaN</span>
@@ -248,14 +297,15 @@
 <span class="co">#&gt; 4          °--node_4          Internode      4               8</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     10              NA</span>
 <span class="co">#&gt; 6              °--node_6      Internode      6              12</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     12              NA</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     12              NA</span></code></pre></div>
 </div>
 <div id="combine-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#combine-values" class="anchor"></a>Combine values</h3>
 <p>We can also make more complex associations. Here is an example were we need the sum of the surface of the section of all children for the nodes:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-           <span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="../reference/children.html">children</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, section_surface <span class="op">=</span> <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">Width</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,
+           s_surf_child_sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="../reference/children.html">children</a></span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">section_surface</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We first compute the surface of the section of each node, and then we sum the values for all children of the nodes. The <code>s_surf_child_sum</code> variable uses the <code>section_surface</code> variable that was just created before.</p>
 </div>
 <div id="filter-by-scale-or-symbol" class="section level3">
@@ -266,24 +316,28 @@
 <a href="#introduction-on-scale-and-symbol" class="anchor"></a>Introduction on scale and symbol</h4>
 <p>We can also filter the nodes by scale (<em>i.e.</em> the value of the SCALE column in the MTG classes), or by symbol (<em>i.e.</em> the name of the SYMBOL column), which corresponds to the <code>.scale</code> and <code>.symbol</code> values in the node respectively.</p>
 <p>To get all the possible values in an MTG, we can print the classes section:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">classes</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">MTG</span><span class="op">$</span><span class="va">classes</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 <p>To get the actual symbol of a node use the <code>.symbol</code> field on a node, and the <code>.scale</code> field for the scale. Here is an example for the root node of the mtg:</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">MTG</span>$<span class="no">.symbol</span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">MTG</span><span class="op">$</span><span class="va">.symbol</span>
 <span class="co">#&gt; [1] "Scene"</span>
-<span class="no">MTG</span>$<span class="no">.scale</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<span class="va">MTG</span><span class="op">$</span><span class="va">.scale</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 </div>
 <div id="the-scale-and-symbol-arguments-from-the-helper-functions" class="section level4">
 <h4 class="hasAnchor">
 <a href="#the-scale-and-symbol-arguments-from-the-helper-functions" class="anchor"></a>The scale and symbol arguments from the helper functions</h4>
 <p><code><a href="../reference/parent.html">parent()</a></code> and <code><a href="../reference/children.html">children()</a></code> implement the <code>scale</code> and <code>symbol</code> arguments to filter by scale or symbol. It allows to tell the function to only consider the scales/symbols passed to this argument, ignoring all others.</p>
 <p>For example we can filter the parent node by its symbol using the <code>symbol</code> argument with <code><a href="../reference/parent.html">parent()</a></code>:</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/parent.html">parent</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="st">"Length"</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="fu"><a href="../reference/extract_node.html">extract_node</a></span>(<span class="no">MTG</span>, <span class="st">"node_6"</span>), <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Axis"</span>)
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/parent.html">parent</a></span><span class="op">(</span>attribute <span class="op">=</span> <span class="st">"Length"</span>, node <span class="op">=</span> <span class="fu"><a href="../reference/extract_node.html">extract_node</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">"node_6"</span><span class="op">)</span>, symbol <span class="op">=</span> <span class="st">"Axis"</span><span class="op">)</span>
 <span class="co">#&gt; node_3 </span>
-<span class="co">#&gt;     NA</span></pre></body></html></div>
+<span class="co">#&gt;     NA</span></code></pre></div>
 <p>Here it returns <code>NA</code> because the first parent is an <code>Internode</code>, and the first node with symbol “Axis” (<code>node_2</code>) has no values for “Length”, see by yourself:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span>)
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Length"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Length</span>
 <span class="co">#&gt; 1 node_1                          Scene     NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual     NA</span>
@@ -291,7 +345,7 @@
 <span class="co">#&gt; 4          °--node_4          Internode      4</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     10</span>
 <span class="co">#&gt; 6              °--node_6      Internode      6</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     12</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     12</span></code></pre></div>
 <p>By default, the function will search for the first node which satisfies the symbol required by the user and return its value:</p>
 <ul>
 <li><p><code><a href="../reference/parent.html">parent()</a></code> looks if the parent node is of the required symbol, if it is, it returns its value, if not, it looks at the parent of the parent. And it does this recursively until either finding an ancestor with the required symbol, or finding the root node (returns <code>NA</code> in this case).</p></li>
@@ -300,12 +354,14 @@
 <p>An easier way to think about this is that when using the symbol or scale argument, functions work on a different tree with only the symbol(s) or scale(s) required.</p>
 <p>The <code>continue</code> argument can be used in <code><a href="../reference/parent.html">parent()</a></code> and <code><a href="../reference/children.html">children()</a></code> functions to disable this default behavior of “climbing” or “descending” the tree. If <code>continue</code> is explicitly set to <code>FALSE</code>, the function returns <code>NA</code> if the first parent is not of the right symbol.</p>
 <p>Here is an example with recursive behavior (the default):</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/children.html">children</a></span><span class="op">(</span>attribute <span class="op">=</span> <span class="va">Length</span>, node <span class="op">=</span> <span class="va">MTG</span><span class="op">$</span><span class="va">node_2</span>, symbol <span class="op">=</span> <span class="st">"Leaf"</span><span class="op">)</span>
 <span class="co">#&gt; node_5 node_7 </span>
-<span class="co">#&gt;     10     12</span></pre></body></html></div>
+<span class="co">#&gt;     10     12</span></code></pre></div>
 <p>And without:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/children.html">children</a></span>(<span class="kw">attribute</span> <span class="kw">=</span> <span class="no">Length</span>, <span class="kw">node</span> <span class="kw">=</span> <span class="no">MTG</span>$<span class="no">node_2</span>, <span class="kw">symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>, <span class="kw">continue</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/children.html">children</a></span><span class="op">(</span>attribute <span class="op">=</span> <span class="va">Length</span>, node <span class="op">=</span> <span class="va">MTG</span><span class="op">$</span><span class="va">node_2</span>, symbol <span class="op">=</span> <span class="st">"Leaf"</span>, continue <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 <p>The function returns <code>NA</code> without the recursive behavior because “node_2” has one child (“node_3”) that is not of the right symbol.</p>
 <blockquote>
 <p>Note that <code><a href="../reference/ancestors.html">ancestors()</a></code> does not have the <code>continue</code> argument because it is a recursive function by design. So if an ancestor is not of the right symbol, it just jumps to the next ancestor.</p>
@@ -316,11 +372,12 @@
 <p><code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> has a <code>.symbol</code> and a <code>.scale</code> arguments used similarly to the <code>symbol</code> and <code>scale</code> arguments of the other functions. The only difference is that functions inside a <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> call will only be applied to the nodes of the chosen scales, while still having access to the parents and children nodes if needed. The <code>.symbol</code> and <code>.scale</code> arguments are applied to all functions inside the <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> call.</p>
 <p>There can be a benefit in combining those arguments <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> and the ones from the other functions in a single call.</p>
 <p>Be careful though, if you need a computation at one scale for a variable but at another scale for another, or a variable before it is computed, it is preferable to use multiple calls to <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code>, possibly chained using a pipe. For example if we need the section surface for the internodes only, and the surface for the leaves only, we would use two separate calls to <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> with each its own scale filter:</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="no">MTG</span>, <span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>),
-          <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)<span class="kw">%&gt;%</span>
-<span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">area</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Width</span> * <span class="no">node</span>$<span class="no">Length</span>, <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Leaf"</span>)
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, section_surface <span class="op">=</span> <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">Width</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,
+          .symbol <span class="op">=</span> <span class="st">"Internode"</span><span class="op">)</span><span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span>area <span class="op">=</span> <span class="va">node</span><span class="op">$</span><span class="va">Width</span> <span class="op">*</span> <span class="va">node</span><span class="op">$</span><span class="va">Length</span>, .symbol <span class="op">=</span> <span class="st">"Leaf"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"area"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"area"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Width section_surface area</span>
 <span class="co">#&gt; 1 node_1                          Scene    NA              NA   NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual    NA              NA   NA</span>
@@ -328,7 +385,7 @@
 <span class="co">#&gt; 4          °--node_4          Internode     1       0.7853982   NA</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     6      28.2743339   60</span>
 <span class="co">#&gt; 6              °--node_6      Internode    NA              NA   NA</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     7      38.4845100   84</span></pre></body></html></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     7      38.4845100   84</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -340,25 +397,29 @@
 <h3 class="hasAnchor">
 <a href="#static-plot" class="anchor"></a>Static plot</h3>
 <p>The plant topology can be plotted using the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> function. This function is implemented by <code>ggplot2</code> so you’ll need to load this package before-hand:</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">MTG</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">MTG</span><span class="op">)</span></code></pre></div>
 <p><img src="XploRer_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 <p>The function can be used in a pipe, such as:</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)<span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">Length2</span> <span class="kw">=</span> <span class="no">node</span>$<span class="no">Length</span> + <span class="fl">2</span>)<span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">.</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span><span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span>Length2 <span class="op">=</span> <span class="va">node</span><span class="op">$</span><span class="va">Length</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span><span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="interactive-plot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interactive-plot" class="anchor"></a>Interactive plot</h3>
 <p>The same plot can be rendered as an interactive plot using:</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu">plotly_MTG</span>(<span class="no">MTG</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotly_mtg.mtg.html">plotly_mtg</a></span><span class="op">(</span><span class="va">MTG</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif" alt=""><p class="caption">Interactive plot</p>
 </div>
-<p><code>plotly_MTG()</code> uses the <a href="https://plotly.com/">plotly API</a> under the hood.</p>
+<p><code><a href="../reference/plotly_mtg.mtg.html">plotly_mtg()</a></code> uses the <a href="https://plotly.com/">plotly API</a> under the hood.</p>
 <p>It is also possible to add any variable in the tooltip appearing on hover of a node by adding it to the call. For example if we need the <code>Length</code> and the <code>Width</code> of the nodes, we would write:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="../reference/plotly_mtg.mtg.html">plotly_mtg</a></span>(<span class="no">MTG</span>, <span class="no">Length</span>, <span class="no">Width</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotly_mtg.mtg.html">plotly_mtg</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="va">Length</span>, <span class="va">Width</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -378,7 +439,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -81,7 +81,7 @@ the same name." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ the same name." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,21 +125,21 @@ the same name." />
 the same name.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mutate_mtg</span>(
-  <span class='no'>data</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.traversal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pre-order"</span>, <span class='st'>"post-order"</span>, <span class='st'>"in-order"</span>, <span class='st'>"level"</span>, <span class='st'>"ancestor"</span>),
-  <span class='kw'>.pruneFun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mutate_mtg</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>...</span>,
+  .scale <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .symbol <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .traversal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pre-order"</span>, <span class='st'>"post-order"</span>, <span class='st'>"in-order"</span>, <span class='st'>"level"</span>, <span class='st'>"ancestor"</span><span class='op'>)</span>,
+  .pruneFun <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A <code>mtg</code>, as returned by <code><a href='read_MTG.html'>read_mtg()</a></code>.</p></td>
+      <td><p>A <code>mtg</code>, as returned by <code><a href='read_mtg.html'>read_mtg()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -181,7 +181,7 @@ inside de function.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>.traversal</code> and <code>.pruneFun</code> arguments are passed to <a href='https://rdrr.io/pkg/data.tree/man/Traverse.html'>data.tree::Traverse</a>.
-From its documentation: the traversal order is as follows:</p><dl'>
+From its documentation: the traversal order is as follows:</p><dl>
 <dt>pre-order</dt><dd><p>Go to first child, then to its first child, etc.</p></dd>
 <dt>post-order</dt><dd><p>Go to the first branch's leaf, then to its siblings, and work your way back to the root</p></dd>
 <dt>in-order</dt><dd><p>Go to the first branch's leaf, then to its parent, and only then to the leaf's sibling</p></dd>
@@ -202,11 +202,11 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Import the MTG:</span>
-<span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
+<span class='va'>filepath</span><span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, package <span class='op'>=</span> <span class='st'>"XploRer"</span><span class='op'>)</span>
+<span class='va'>MTG</span> <span class='op'>=</span> <span class='fu'><a href='read_mtg.html'>read_mtg</a></span><span class='op'>(</span><span class='va'>filepath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='input'>
 <span class='co'># And mutate it by adding two new variables, Length2 and Length3:</span>
-<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Length2</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length</span> + <span class='fl'>2</span>, <span class='kw'>Length3</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length2</span> * <span class='fl'>2</span>)
+<span class='fu'>mutate_mtg</span><span class='op'>(</span><span class='va'>MTG</span>, Length2 <span class='op'>=</span> <span class='va'>node</span><span class='op'>$</span><span class='va'>Length</span> <span class='op'>+</span> <span class='fl'>2</span>, Length3 <span class='op'>=</span> <span class='va'>node</span><span class='op'>$</span><span class='va'>Length2</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>)</span>
 
 <span class='co'># note two things here:</span>
 <span class='co'># 1/ We use "node$" to access the values of a variable inside the mtg;</span>
@@ -214,23 +214,24 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 <span class='co'># The variables are constructed sequentially.</span>
 
 <span class='co'># We can also use pipes:</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)<span class='kw'>%&gt;%</span>
-  <span class='fu'>mutate_mtg</span>(<span class='kw'>Length2</span> <span class='kw'>=</span> <span class='no'>node</span>$<span class='no'>Length</span> + <span class='fl'>2</span>)<span class='kw'>%&gt;%</span>
-  <span class='fu'>autoplot</span>(<span class='no'>.</span>)
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='read_mtg.html'>read_mtg</a></span><span class='op'>(</span><span class='va'>filepath</span><span class='op'>)</span><span class='op'>%&gt;%</span>
+  <span class='fu'>mutate_mtg</span><span class='op'>(</span>Length2 <span class='op'>=</span> <span class='va'>node</span><span class='op'>$</span><span class='va'>Length</span> <span class='op'>+</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'># Or even function:</span>
-<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>Length_parent</span> <span class='kw'>=</span> <span class='fu'><a href='parent.html'>parent</a></span>(<span class='st'>"Length"</span>))
+<span class='fu'>mutate_mtg</span><span class='op'>(</span><span class='va'>MTG</span>, Length_parent <span class='op'>=</span> <span class='fu'><a href='parent.html'>parent</a></span><span class='op'>(</span><span class='st'>"Length"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># And more complex associations. Here is an example were we need the sum of</span>
 <span class='co'># the section_surface of children of each node:</span>
-<span class='fu'>mutate_mtg</span>(<span class='no'>MTG</span>, <span class='kw'>section_surface</span> <span class='kw'>=</span> <span class='no'>pi</span> * ((<span class='no'>node</span>$<span class='no'>Width</span> / <span class='fl'>2</span>)^<span class='fl'>2</span>),
-           <span class='kw'>s_surf_child_sum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"section_surface"</span>),<span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+<span class='fu'>mutate_mtg</span><span class='op'>(</span><span class='va'>MTG</span>, section_surface <span class='op'>=</span> <span class='va'>pi</span> <span class='op'>*</span> <span class='op'>(</span><span class='op'>(</span><span class='va'>node</span><span class='op'>$</span><span class='va'>Width</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>,
+           s_surf_child_sum <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='children.html'>children</a></span><span class='op'>(</span><span class='st'>"section_surface"</span><span class='op'>)</span>,na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 
 
-<span class='kw pkg'>data.tree</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span>(<span class='no'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>,
-<span class='st'>"Length_parent"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"s_surf_child_sum"</span>)</div><div class='output co'>#&gt;                    levelName Length Length2 Length3 Length_parent
+<span class='fu'>data.tree</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.tree/man/as.data.frame.Node.html'>ToDataFrameTree</a></span><span class='op'>(</span><span class='va'>MTG</span>,<span class='st'>"Length"</span>,<span class='st'>"Length2"</span>,<span class='st'>"Length3"</span>,
+<span class='st'>"Length_parent"</span>,<span class='st'>"section_surface"</span>,<span class='st'>"s_surf_child_sum"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                    levelName Length Length2 Length3 Length_parent
 #&gt; 1 node_1                         NA      NA      NA            NA
 #&gt; 2  °--node_2                     NA      NA      NA            NA
 #&gt; 3      °--node_3                 NA      NA      NA            NA
@@ -261,7 +262,7 @@ evaluation (NSE). It also returns the <code>mtg</code> so it can be used with pi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

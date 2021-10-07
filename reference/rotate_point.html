@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,7 +123,7 @@
     <p>Rotate coordinates</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rotate_point</span>(<span class='no'>x0</span>, <span class='no'>y0</span>, <span class='no'>x1</span>, <span class='no'>y1</span>, <span class='no'>angle</span>)</pre>
+    <pre class="usage"><span class='fu'>rotate_point</span><span class='op'>(</span><span class='va'>x0</span>, <span class='va'>y0</span>, <span class='va'>x1</span>, <span class='va'>y1</span>, <span class='va'>angle</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,15 +155,16 @@
     <p>The new coordinates for the point</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>rotate_point</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>90</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>rotate_point</span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>90</span><span class='op'>)</span>
 
 <span class='co'># Example with a plot:</span>
-<span class='no'>x0</span> <span class='kw'>=</span> <span class='fl'>1</span> ; <span class='no'>y0</span> <span class='kw'>=</span> <span class='fl'>1</span> ; <span class='no'>x1</span><span class='kw'>=</span> <span class='fl'>2</span> ; <span class='no'>y1</span><span class='kw'>=</span> <span class='fl'>2</span> ;<span class='no'>x3</span><span class='kw'>=</span> <span class='fl'>3</span> ; <span class='no'>y3</span><span class='kw'>=</span> <span class='fl'>3</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>x0</span>,<span class='no'>x1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>y0</span>,<span class='no'>y1</span>), <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"l"</span>, <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>3</span>), <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/segments.html'>segments</a></span>(<span class='no'>x1</span>,<span class='no'>y1</span>,<span class='no'>x3</span>,<span class='no'>y3</span>, <span class='kw'>col</span><span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/segments.html'>segments</a></span>(<span class='no'>x1</span>,<span class='no'>y1</span>,<span class='fu'>rotate_point</span>(<span class='no'>x1</span>,<span class='no'>y1</span>,<span class='no'>x3</span>,<span class='no'>y3</span>, <span class='fl'>45</span>)[<span class='fl'>1</span>],<span class='fu'>rotate_point</span>(<span class='no'>x1</span>,<span class='no'>y1</span>,<span class='no'>x3</span>,<span class='no'>y3</span>, <span class='fl'>45</span>)[<span class='fl'>2</span>], <span class='kw'>col</span><span class='kw'>=</span> <span class='fl'>3</span>)
-}</div></pre>
+<span class='va'>x0</span> <span class='op'>=</span> <span class='fl'>1</span> ; <span class='va'>y0</span> <span class='op'>=</span> <span class='fl'>1</span> ; <span class='va'>x1</span><span class='op'>=</span> <span class='fl'>2</span> ; <span class='va'>y1</span><span class='op'>=</span> <span class='fl'>2</span> ;<span class='va'>x3</span><span class='op'>=</span> <span class='fl'>3</span> ; <span class='va'>y3</span><span class='op'>=</span> <span class='fl'>3</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>x0</span>,<span class='va'>x1</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>y0</span>,<span class='va'>y1</span><span class='op'>)</span>, type<span class='op'>=</span><span class='st'>"l"</span>, ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>3</span><span class='op'>)</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/segments.html'>segments</a></span><span class='op'>(</span><span class='va'>x1</span>,<span class='va'>y1</span>,<span class='va'>x3</span>,<span class='va'>y3</span>, col<span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/segments.html'>segments</a></span><span class='op'>(</span><span class='va'>x1</span>,<span class='va'>y1</span>,<span class='fu'>rotate_point</span><span class='op'>(</span><span class='va'>x1</span>,<span class='va'>y1</span>,<span class='va'>x3</span>,<span class='va'>y3</span>, <span class='fl'>45</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,<span class='fu'>rotate_point</span><span class='op'>(</span><span class='va'>x1</span>,<span class='va'>y1</span>,<span class='va'>x3</span>,<span class='va'>y3</span>, <span class='fl'>45</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, col<span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -179,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

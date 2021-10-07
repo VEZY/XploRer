@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,17 +123,17 @@
     <p>Get attribute values from all ancestors (basipetal).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ancestors</span>(
-  <span class='no'>attribute</span>,
-  <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>continue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>ancestors</span><span class='op'>(</span>
+  <span class='va'>attribute</span>,
+  node <span class='op'>=</span> <span class='cn'>NULL</span>,
+  scale <span class='op'>=</span> <span class='cn'>NULL</span>,
+  symbol <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='cn'>NULL</span>,
+  filter_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  self <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  continue <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  recursivity_level <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,25 +190,30 @@ If <code>NULL</code> (the default), the function returns all values from the nod
 the <code>node</code> argument can be left empty (or <code>node = node</code> equivalently).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
+    <pre class="examples"><div class='input'><span class='va'>filepath</span><span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, package <span class='op'>=</span> <span class='st'>"XploRer"</span><span class='op'>)</span>
+<span class='va'>MTG</span> <span class='op'>=</span> <span class='fu'><a href='read_mtg.html'>read_mtg</a></span><span class='op'>(</span><span class='va'>filepath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='input'>
 <span class='co'># node_6 has four ancestors:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>))</div><div class='output co'>#&gt; node_4 node_3 node_2 node_1 
+<span class='fu'>ancestors</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>"node_6"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_4 node_3 node_2 node_1 
 #&gt;      4     NA     NA     NA </div><div class='input'><span class='co'># Two of them have no values for Length</span>
 
 <span class='co'># If the value of node_6 is also needed:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>self</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; node_6 node_4 node_3 node_2 node_1 
+<span class='fu'>ancestors</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>"node_6"</span><span class='op'>)</span>, self <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_6 node_4 node_3 node_2 node_1 
 #&gt;      6      4     NA     NA     NA </div><div class='input'>
 <span class='co'># If we only need the value of the first parent:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>recursivity_level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; node_4 
+<span class='fu'>ancestors</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>"node_6"</span><span class='op'>)</span>, recursivity_level <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_4 
 #&gt;      4 </div><div class='input'>
 <span class='co'># We can filter by symbol if we need to return the values for some symbols only:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_4 
+<span class='fu'>ancestors</span><span class='op'>(</span><span class='st'>"Width"</span>, node <span class='op'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>"node_6"</span><span class='op'>)</span>, symbol <span class='op'>=</span> <span class='st'>"Internode"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_4 
 #&gt;      1 </div><div class='input'>
 <span class='co'># The values are only returned for the ancestors with the required symbol</span>
 <span class='co'># For example we know that a leaf cannot be an ancestor because it cannot bear anything:</span>
-<span class='fu'>ancestors</span>(<span class='st'>"Width"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span>(<span class='no'>MTG</span>, <span class='st'>"node_6"</span>), <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Leaf"</span>)</div><div class='output co'>#&gt; logical(0)</div><div class='input'># In this case it returns a length 0 vector.
+<span class='fu'>ancestors</span><span class='op'>(</span><span class='st'>"Width"</span>, node <span class='op'>=</span> <span class='fu'><a href='extract_node.html'>extract_node</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>"node_6"</span><span class='op'>)</span>, symbol <span class='op'>=</span> <span class='st'>"Leaf"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; logical(0)</div><div class='input'><span class='co'># In this case it returns a length 0 vector.</span>
 
 </div></pre>
   </div>
@@ -226,7 +231,7 @@ the <code>node</code> argument can be left empty (or <code>node = node</code> eq
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

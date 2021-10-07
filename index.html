@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -56,7 +56,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -104,8 +104,9 @@
 <h2 class="hasAnchor">
 <a href="#1-installation" class="anchor"></a>1. Installation</h2>
 <p>You can install the release version of XploRer from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"VEZY/XploRer"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"VEZY/XploRer"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="2-brief-introduction" class="section level2">
 <h2 class="hasAnchor">
@@ -116,25 +117,27 @@
 <h3 class="hasAnchor">
 <a href="#21-read-a-file" class="anchor"></a>2.1 Read a file</h3>
 <p>Read a simple MTG file:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">XploRer</span>)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vezy.github.io/XploRer/">XploRer</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'XploRer'</span>
 <span class="co">#&gt; The following object is masked from 'package:stats':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     decompose</span>
 
-<span class="no">MTG</span> <span class="kw">=</span> <span class="fu"><a href="reference/read_MTG.html">read_mtg</a></span>(<span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span>)</pre></div>
+<span class="va">MTG</span> <span class="op">=</span> <span class="fu"><a href="reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/VEZY/XploRer/master/inst/extdata/simple_plant.mtg"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="22-mutate" class="section level3">
 <h3 class="hasAnchor">
 <a href="#22-mutate" class="anchor"></a>2.2 Mutate</h3>
 <p>Mutate the MTG to add/recompute node attributes:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="no">MTG</span><span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">section_surface</span> <span class="kw">=</span> <span class="no">pi</span> * ((<span class="no">node</span>$<span class="no">Width</span> / <span class="fl">2</span>)^<span class="fl">2</span>), <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)<span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span>(<span class="kw">s_surf_child_sum</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="reference/children.html">children</a></span>(<span class="no">node</span>$<span class="no">section_surface</span>),<span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
-             <span class="kw">.symbol</span> <span class="kw">=</span> <span class="st">"Internode"</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">MTG</span><span class="op">%&gt;%</span>
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span>section_surface <span class="op">=</span> <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">Width</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, .symbol <span class="op">=</span> <span class="st">"Internode"</span><span class="op">)</span><span class="op">%&gt;%</span>
+  <span class="fu"><a href="reference/mutate_mtg.html">mutate_mtg</a></span><span class="op">(</span>s_surf_child_sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="reference/children.html">children</a></span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">section_surface</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
+             .symbol <span class="op">=</span> <span class="st">"Internode"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">MTG</span>, <span class="st">".symbol"</span>, <span class="st">"Width"</span>,<span class="st">"section_surface"</span>, <span class="st">"s_surf_child_sum"</span><span class="op">)</span>
 <span class="co">#&gt;                    levelName    .symbol Width section_surface s_surf_child_sum</span>
 <span class="co">#&gt; 1 node_1                          Scene    NA              NA               NA</span>
 <span class="co">#&gt; 2  °--node_2                 Individual    NA              NA               NA</span>
@@ -142,7 +145,7 @@
 <span class="co">#&gt; 4          °--node_4          Internode     1       0.7853982                0</span>
 <span class="co">#&gt; 5              ¦--node_5           Leaf     6              NA               NA</span>
 <span class="co">#&gt; 6              °--node_6      Internode    NA              NA                0</span>
-<span class="co">#&gt; 7                  °--node_7       Leaf     7              NA               NA</span></pre></div>
+<span class="co">#&gt; 7                  °--node_7       Leaf     7              NA               NA</span></code></pre></div>
 </div>
 <div id="23-plot" class="section level3">
 <h3 class="hasAnchor">
@@ -151,16 +154,18 @@
 <h4 class="hasAnchor">
 <a href="#231-static-plot" class="anchor"></a>2.3.1 Static plot</h4>
 <p>The plant topology can be plotted using the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> function. This function is implemented by <code>ggplot2</code> so you’ll need to load this package before-hand:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="co">#&gt; Warning: package 'ggplot2' was built under R version 3.6.3</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">MTG</span>)</pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">MTG</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 </div>
 <div id="232-interactive-plot" class="section level4">
 <h4 class="hasAnchor">
 <a href="#232-interactive-plot" class="anchor"></a>2.3.2 Interactive plot</h4>
 <p>The same plot can be rendered as an interactive plot using:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu">plotly_MTG</span>(<span class="no">MTG</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">plotly_MTG</span><span class="op">(</span><span class="va">MTG</span><span class="op">)</span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/VEZY/XploRer/master/www/plotly_MTG.gif" alt="Interactive plot"></p>
 </div>
 </div>
@@ -204,7 +209,7 @@ Check the mtg validity:</p>
 <ul>
 <li>
 <input type="checkbox" disabled>
-add all checks on the mtg in <code><a href="reference/read_MTG.html">read_mtg()</a></code> using the sections</li>
+add all checks on the mtg in <code><a href="reference/read_mtg.html">read_mtg()</a></code> using the sections</li>
 <li>
 <input type="checkbox" disabled>
 Add a new argument to remove the checks</li>
@@ -285,7 +290,7 @@ Add an opf writer when the geometry is available (using reference meshes)</p></l
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

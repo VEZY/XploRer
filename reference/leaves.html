@@ -81,7 +81,7 @@ node (i.e. the &quot;leaves&quot; in computer science terms)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ node (i.e. the &quot;leaves&quot; in computer science terms)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,14 +125,14 @@ node (i.e. the &quot;leaves&quot; in computer science terms)." />
 node (i.e. the "leaves" in computer science terms).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>leaves</span>(
-  <span class='no'>attribute</span>,
-  <span class='kw'>node</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>leaves</span><span class='op'>(</span>
+  <span class='va'>attribute</span>,
+  node <span class='op'>=</span> <span class='cn'>NULL</span>,
+  scale <span class='op'>=</span> <span class='cn'>NULL</span>,
+  symbol <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='cn'>NULL</span>,
+  filter_fun <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,13 +174,15 @@ column from the MTG classes).</p></td>
 the <code>node</code> argument can be left empty (or you can put <code>node = node</code> equivalently).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>filepath</span><span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"XploRer"</span>)
-<span class='no'>MTG</span> <span class='kw'>=</span> <span class='fu'><a href='read_MTG.html'>read_mtg</a></span>(<span class='no'>filepath</span>)
-
+    <pre class="examples"><div class='input'><span class='va'>filepath</span><span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"simple_plant.mtg"</span>, package <span class='op'>=</span> <span class='st'>"XploRer"</span><span class='op'>)</span>
+<span class='va'>MTG</span> <span class='op'>=</span> <span class='fu'><a href='read_mtg.html'>read_mtg</a></span><span class='op'>(</span><span class='va'>filepath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='input'>
 <span class='co'># The MTG has two leaves (node_5 and node_7):</span>
-<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>)</div><div class='output co'>#&gt; node_5 node_7 
+<span class='fu'>leaves</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='va'>MTG</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_5 node_7 
 #&gt;     10     12 </div><div class='input'><span class='co'># We can check the function worked well by printing the symbols of each nodes:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>".symbol"</span>)</div><div class='output co'>#&gt;                    levelName    .symbol
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>".symbol"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                    levelName    .symbol
 #&gt; 1 node_1                          Scene
 #&gt; 2  °--node_2                 Individual
 #&gt; 3      °--node_3                   Axis
@@ -189,17 +191,20 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 #&gt; 6              °--node_6      Internode
 #&gt; 7                  °--node_7       Leaf</div><div class='input'>
 <span class='co'># If we need the terminal Internodes:</span>
-<span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>, <span class='kw'>symbol</span> <span class='kw'>=</span> <span class='st'>"Internode"</span>)</div><div class='output co'>#&gt; node_6 
+<span class='fu'>leaves</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='va'>MTG</span>, symbol <span class='op'>=</span> <span class='st'>"Internode"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_6 
 #&gt;      6 </div><div class='input'>
 <span class='co'># Or the leaves at a given scale:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>MTG</span>, <span class='st'>".scale"</span>)</div><div class='output co'>#&gt;                    levelName .scale
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>MTG</span>, <span class='st'>".scale"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                    levelName .scale
 #&gt; 1 node_1                         NA
 #&gt; 2  °--node_2                      1
 #&gt; 3      °--node_3                  2
 #&gt; 4          °--node_4              3
 #&gt; 5              ¦--node_5          3
 #&gt; 6              °--node_6          3
-#&gt; 7                  °--node_7      3</div><div class='input'><span class='fu'>leaves</span>(<span class='st'>"Length"</span>, <span class='kw'>node</span> <span class='kw'>=</span> <span class='no'>MTG</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; node_3 
+#&gt; 7                  °--node_7      3</div><div class='input'><span class='fu'>leaves</span><span class='op'>(</span><span class='st'>"Length"</span>, node <span class='op'>=</span> <span class='va'>MTG</span>, scale <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; node_3 
 #&gt;     NA </div><div class='input'>
 </div></pre>
   </div>
@@ -217,7 +222,7 @@ the <code>node</code> argument can be left empty (or you can put <code>node = no
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

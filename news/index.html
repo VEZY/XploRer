@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +96,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/VEZY/XploRer/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -130,14 +130,16 @@
 </li>
 <li>
 <p>add new example: <code>simple_plant_2.mtg</code>. It is a plant that is a little bit more complex than <code>simple_plant.mtg</code>. Use the following code to use it:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="no">filepath</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"simple_plant_2.mtg"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"XploRer"</span>)
-<span class="no">MTG2</span> <span class="kw">=</span> <span class="fu"><a href="../reference/read_MTG.html">read_mtg</a></span>(<span class="no">filepath</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">filepath</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"simple_plant_2.mtg"</span>, package <span class="op">=</span> <span class="st">"XploRer"</span><span class="op">)</span>
+<span class="va">MTG2</span> <span class="op">=</span> <span class="fu"><a href="../reference/read_mtg.html">read_mtg</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span></code></pre></div>
 </li>
 <li><p>add <code>.symbol</code> argument to <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code> and .<code>scale</code> argument is now used for the scale.</p></li>
 <li><p>Fix bug when reading mtg with trailing/leading white space in column names</p></li>
 <li><p>Fix bug when reading mtg for classes defined with spaces before “:”, e.g. “CODE :…”</p></li>
 <li><p>Make the package compatible with scenes (several trees in a scene)</p></li>
-<li><p><code><a href="../reference/read_MTG.html">read_mtg()</a></code> is more explicit when an error occurs in the mtg</p></li>
+<li><p><code><a href="../reference/read_mtg.html">read_mtg()</a></code> is more explicit when an error occurs in the mtg</p></li>
 <li><p><code>recursive</code> argument now became <code>continue</code> for all functions used to compute variables in the mtg</p></li>
 <li><p>Add <code>recursivity_level</code> argument to the functions for computing variables in the mtg. It is used to stop the recursive search at a given level. It also takes into account the scale, meaning traversing a scale that is filtered out does not count as a level</p></li>
 </ul>
@@ -193,7 +195,7 @@
 <a href="#xplorer-020" class="anchor"></a>XploRer 0.2.0</h1>
 <ul>
 <li><p>Mutating an MTG is now possible using <code><a href="../reference/mutate_mtg.html">mutate_mtg()</a></code>. Its design is close to the one from <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate</a></code></p></li>
-<li><p>Plotting an MTG is now done using <code>autoplot(MTG)</code></p></li>
+<li><p>Plotting an MTG is now done using <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot(MTG)</a></code></p></li>
 <li><p>Interactive plots can be done using <code><a href="../reference/plotly_mtg.mtg.html">plotly_mtg(MTG)</a></code>, which is an interface to the plotly API</p></li>
 </ul>
 </div>
@@ -222,7 +224,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
